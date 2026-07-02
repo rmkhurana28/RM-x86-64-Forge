@@ -1,0 +1,18 @@
+// Sample 3-address optimized code testing all types
+L1:
+param x
+param y
+call foo, 2
+t1 = call bar, 0
+t2 = a + b
+t3 = -t2
+t4 = t3
+goto L2
+L2:
+if t4 < 10 goto L1
+t5 = arr[i]
+arr[j] = t5
+p = &t5
+t6 = *p
+*p = t6
+return t6
