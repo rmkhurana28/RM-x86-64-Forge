@@ -2,6 +2,11 @@
 L1:
 param x
 param y
+param a
+param b
+param c 
+param d
+param e
 call foo, 2
 t1 = call bar, 0
 t2 = a + b

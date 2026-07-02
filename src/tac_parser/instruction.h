@@ -8,21 +8,52 @@ namespace rm_forge {
 
 enum class InstructionType {
     BinaryOperation,
+    // e.g., a = b + c, a = b - c, *, /, %, ==, !=, <, <=, >, >=, &&, ||, &, |, ^, <<, >>
+
     UnaryOperation,
-    Assignment,
-    Label,
-    UnconditionalGoto,
+    // e.g., a = -b, a = !b, a = ~b
+
+    Assignment, // done
+    // e.g., a = b
+
+    Label, // done
+    // e.g., L1:
+
+    UnconditionalGoto, // done
+    // e.g., goto L1
+
     ConditionalGoto,
+    // e.g., if a goto L1, ifFalse a goto L1
+
     Parameter,
+    // e.g., param x (Pushing arguments before a call)
+
     FunctionCall,
+    // e.g., call foo, 2 (Call a function without capturing a return value)
+
     FunctionCallWithReturn,
-    Return,
+    // e.g., a = call foo, 2 (Call a function and save the return value)
+
+    Return, // done
+    // e.g., return a, return
+
     ArrayLoad,
+    // e.g., a = b[i]
+
     ArrayStore,
+    // e.g., a[i] = b
+
     AddressOf,
+    // e.g., a = &b
+
     PointerLoad,
+    // e.g., a = *b (Dereference right side)
+
     PointerStore,
+    // e.g., *a = b (Dereference left side)
+
     Unknown
+    // Fallback for unparseable instructions
 };
 
 class Instruction {
