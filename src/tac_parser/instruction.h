@@ -23,7 +23,16 @@ enum class InstructionType {
     // e.g., goto L1
 
     ConditionalGoto,
-    // e.g., if a goto L1, ifFalse a goto L1
+    // e.g., if a < b goto L1
+    
+    ConditionalGotoIfFalse,
+    // e.g., ifFalse a < b goto L1
+
+    ConditionalGotoSingle,
+    // e.g., if a goto L1
+
+    ConditionalGotoSingleIfFalse,
+    // e.g., ifFalse a goto L1
 
     Parameter, // done
     // e.g., param x (Pushing arguments before a call)

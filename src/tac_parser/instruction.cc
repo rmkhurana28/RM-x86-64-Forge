@@ -10,7 +10,10 @@ std::string Instruction::type_to_string(InstructionType t) {
         case InstructionType::Assignment: return "=";      // Assignment
         case InstructionType::Label: return "L";           // Label
         case InstructionType::UnconditionalGoto: return "G"; // Goto
-        case InstructionType::ConditionalGoto: return "?";   // Conditional Goto
+        case InstructionType::ConditionalGoto: return "?";   // Conditional Goto Binary
+        case InstructionType::ConditionalGotoIfFalse: return "?F"; // Conditional Goto Binary False
+        case InstructionType::ConditionalGotoSingle: return "?"; // Conditional Goto Single
+        case InstructionType::ConditionalGotoSingleIfFalse: return "?F"; // Conditional Goto Single False
         case InstructionType::Parameter: return "P";       // Parameter
         case InstructionType::FunctionCall: return "C";    // Call
         case InstructionType::FunctionCallWithReturn: return "K"; // Call with return
@@ -45,6 +48,15 @@ void Instruction::print() const {
             break;
         case InstructionType::ConditionalGoto:
             std::cout << "if " << arg1_ << " " << op_ << " " << arg2_ << " goto " << result_ << "\n";
+            break;
+        case InstructionType::ConditionalGotoIfFalse:
+            std::cout << "ifFalse " << arg1_ << " " << op_ << " " << arg2_ << " goto " << result_ << "\n";
+            break;
+        case InstructionType::ConditionalGotoSingle:
+            std::cout << "if " << arg1_ << " goto " << result_ << "\n";
+            break;
+        case InstructionType::ConditionalGotoSingleIfFalse:
+            std::cout << "ifFalse " << arg1_ << " goto " << result_ << "\n";
             break;
         case InstructionType::Parameter:
             std::cout << "param " << arg1_ << "\n";

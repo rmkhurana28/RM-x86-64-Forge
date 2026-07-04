@@ -55,14 +55,31 @@ Instruction ThreeAddressCodeParser::parse_line(const std::string& line) const {
         return instr;
     }
 
-    // 2. Conditional Goto: if x relop y goto L
-    std::regex cond_goto_re(R"(^if\s+(.+?)\s+(==|!=|<|>|<=|>=)\s+(.+?)\s+goto\s+([a-zA-Z_][a-zA-Z0-9_]*)$)");
-    if (std::regex_match(line, match, cond_goto_re)) {
-        instr.set_type(InstructionType::ConditionalGoto);
-        instr.set_arg1(match[1]);
-        instr.set_op(match[2]);
-        instr.set_arg2(match[3]);
-        instr.set_result(match[4]);
+    // 2a. Conditional Goto (Binary): if/ifFalse x relop y goto L
+    std::regex cond_goto_bin_re(R"(^(if|ifFalse)\s+(.+?)\s+(==|!=|<|>|<=|>=)\s+(.+?)\s+goto\s+([a-zA-Z_][a-zA-Z0-9_]*)$)");
+    if (std::regex_match(line, match, cond_goto_bin_re)) {
+        if (match[1].str() == "if") {
+            instr.set_type(InstructionType::ConditionalGoto);
+        } else {
+            instr.set_type(InstructionType::ConditionalGotoIfFalse);
+        }
+        instr.set_arg1(match[2]);
+        instr.set_op(match[3]);
+        instr.set_arg2(match[4]);
+        instr.set_result(match[5]);
+        return instr;
+    }
+
+    // 2b. Conditional Goto (Single): if/ifFalse x goto L
+    std::regex cond_goto_single_re(R"(^(if|ifFalse)\s+(.+?)\s+goto\s+([a-zA-Z_][a-zA-Z0-9_]*)$)");
+    if (std::regex_match(line, match, cond_goto_single_re)) {
+        if (match[1].str() == "if") {
+            instr.set_type(InstructionType::ConditionalGotoSingle);
+        } else {
+            instr.set_type(InstructionType::ConditionalGotoSingleIfFalse);
+        }
+        instr.set_arg1(match[2]);
+        instr.set_result(match[3]);
         return instr;
     }
 
@@ -170,7 +187,7 @@ Instruction ThreeAddressCodeParser::parse_line(const std::string& line) const {
         }
 
         // e) Binary Operation: y op z
-        std::regex bin_op_re(R"(^(.+?)\s+([\+\-\*/%&\|\^\<\>]+)\s+(.+)$)");
+        std::regex bin_op_re(R"(^(.+?)\s+(==|!=|<=|>=|<|>|&&|\|\||<<|>>|[\+\-\*/%&\|\^])\s+(.+)$)");
         if (std::regex_match(rhs, rhs_match, bin_op_re)) {
             instr.set_type(InstructionType::BinaryOperation);
             instr.set_arg1(rhs_match[1]);

@@ -1,25 +1,73 @@
-// Sample 3-address optimized code testing all types
-a = b + c
-L1:
-param x
-param y
+a = 5
+b = 10
+c = 15
+d = 20
+
+t1 = a + b
+t2 = t1 * c
+t3 = t2 / d
+t4 = t3 % b
+t5 = t4 & a
+t6 = t5 | c
+t7 = t6 ^ d
+t8 = t7 << 3
+t9 = t8 >> 1
+
+t10 = -t9
+t11 = ~t10
+t12 = !t11
+
+cmp1 = t12 == a
+cmp2 = t12 != b
+cmp3 = t12 < c
+cmp4 = t12 <= d
+cmp5 = t12 > a
+cmp6 = t12 >= b
+
+ptr = &t12
+*ptr = cmp1
+x = *ptr
+
+arr[0] = x
+arr[1] = cmp2
+arr[2] = cmp3
+arr[3] = cmp4
+arr[4] = cmp5
+arr[5] = cmp6
+
+y = arr[5]
+
 param a
 param b
-param c 
+param c
 param d
-param e
-param f
-call foo, 8
-t1 = call bar, 0
-t2 = a + b
-t3 = -t2
-t4 = t3
-goto L2
+param t1
+param t2
+param t3
+param t4
+ret1 = call foo, 8
+
+if cmp1 goto L1
+ifFalse cmp2 goto L2
+if t1 < t2 goto L3
+ifFalse t3 >= t4 goto L4
+
+goto L5
+
+L1:
+return
+
 L2:
-if t4 < 10 goto L1
-t5 = arr[i]
-arr[j] = t5
-p = &t5
-t6 = *p
-*prt = t68
-return t6
+return ret1
+
+L3:
+param x
+call print, 1
+goto L5
+
+L4:
+t13 = arr[3]
+t14 = *ptr
+
+L5:
+return y

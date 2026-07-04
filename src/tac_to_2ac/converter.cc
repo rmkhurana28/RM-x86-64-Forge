@@ -35,7 +35,10 @@ void TacTo2acConverter::convert() {
             handleLabel(&current);
         } else if(current.get_type() == InstructionType::UnconditionalGoto){
             handleUnconditionalGoto(&current);
-        } else if(current.get_type() == InstructionType::ConditionalGoto){
+        } else if(current.get_type() == InstructionType::ConditionalGoto ||
+                  current.get_type() == InstructionType::ConditionalGotoIfFalse ||
+                  current.get_type() == InstructionType::ConditionalGotoSingle ||
+                  current.get_type() == InstructionType::ConditionalGotoSingleIfFalse ){
             handleConditionalGoto(&current);
         } else if(current.get_type() == InstructionType::Parameter){
             unsigned short skip = handleParam(tac_instructions_,i);
@@ -200,13 +203,38 @@ void TacTo2acConverter::handleUnconditionalGoto(Instruction* current){
 }
 
 void TacTo2acConverter::handleConditionalGoto(Instruction* current){
-    emit("CMP" , current->get_arg1() , "0");
+    if(current->get_type() == InstructionType::ConditionalGotoSingle ||
+        current->get_type() == InstructionType::ConditionalGotoSingleIfFalse){
+        
+        emit("CMP" , current->get_arg1() , "0");
 
-    if(current->get_op() == "if"){
-        emit("JNE" , current->get_result());
+        if(current->get_type() == InstructionType::ConditionalGotoSingle){
+            emit("JNE" , current->get_result() , "");
+        } else{
+            emit("JE" , current->get_result() , "");
+        }
+        
     } else{
-        emit("JE" , current->get_result());
-    }
+        emit("CMP" , current->get_arg1() , current->get_arg2());
+
+        if(current->get_type() == InstructionType::ConditionalGoto){
+            if(current->get_op() == "==") emit("JE" , current->get_result() , "");
+            else if(current->get_op() == "!=") emit("JNE" , current->get_result() , "");
+            else if(current->get_op() == "<") emit("JL" , current->get_result() , "");
+            else if(current->get_op() == "<=") emit("JLE" , current->get_result() , "");
+            else if(current->get_op() == ">") emit("JG" , current->get_result() , "");
+            else if(current->get_op() == ">=") emit("JGE" , current->get_result() , "");
+        } else{
+            if(current->get_op() == "==") emit("JNE" , current->get_result() , "");
+            else if(current->get_op() == "!=") emit("JE" , current->get_result() , "");
+            else if(current->get_op() == "<") emit("JGE" , current->get_result() , "");
+            else if(current->get_op() == "<=") emit("JG" , current->get_result() , "");
+            else if(current->get_op() == ">") emit("JLE" , current->get_result() , "");
+            else if(current->get_op() == ">=") emit("JL" , current->get_result() , "");
+        }
+        
+        
+    }    
 
     return;
 }
@@ -223,6 +251,18 @@ unsigned short TacTo2acConverter::handleParam(vector<Instruction> list , int ind
 
     unsigned short paramCount = 0; 
 
+    int helperIndex = index;
+    unsigned int totalParamCount = 0;
+    
+    while(list[helperIndex].get_type() == InstructionType::Parameter){
+        totalParamCount++;
+        helperIndex++;
+    }
+
+    if(totalParamCount > 6){
+        totalParamCount -= 6;
+    }
+
     evaluateParam:
     
     if(list[index].get_type() == InstructionType::Parameter){
@@ -232,7 +272,8 @@ unsigned short TacTo2acConverter::handleParam(vector<Instruction> list , int ind
             paramCount++;
             index++;
         } else{
-            emit("PUSH" , list[index].get_arg1() , "");
+            emit("PUSH" , list[index+totalParamCount-1].get_arg1() , "");
+            totalParamCount -= 2;
             paramCount++;
             index++;
         }
@@ -251,6 +292,15 @@ void TacTo2acConverter::handleCall(Instruction* current){
     } else{
         emit("CALL" , current->get_arg1() , current->get_arg2());
         emit("MOV" , current->get_result() , "rax");
+    }
+
+    // now, we need to cleanup the stack if the number of params were more than 6
+    unsigned short helper = stoi(current->get_arg2());
+    
+    if(helper > 6){
+        helper = (helper-6);
+        helper *= 8;
+        emit("ADD" , "rsp" , to_string(helper));
     }
 
     return;
