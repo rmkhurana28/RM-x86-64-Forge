@@ -7,10 +7,10 @@
 namespace rm_forge {
 
 enum class InstructionType {
-    BinaryOperation,
+    BinaryOperation, // done
     // e.g., a = b + c, a = b - c, *, /, %, ==, !=, <, <=, >, >=, &&, ||, &, |, ^, <<, >>
 
-    UnaryOperation,
+    UnaryOperation, // done
     // e.g., a = -b, a = !b, a = ~b
 
     Assignment, // done
@@ -25,31 +25,31 @@ enum class InstructionType {
     ConditionalGoto,
     // e.g., if a goto L1, ifFalse a goto L1
 
-    Parameter,
+    Parameter, // done
     // e.g., param x (Pushing arguments before a call)
 
-    FunctionCall,
+    FunctionCall, // done
     // e.g., call foo, 2 (Call a function without capturing a return value)
 
-    FunctionCallWithReturn,
+    FunctionCallWithReturn, // done
     // e.g., a = call foo, 2 (Call a function and save the return value)
 
     Return, // done
     // e.g., return a, return
 
-    ArrayLoad,
+    ArrayLoad, // done
     // e.g., a = b[i]
 
-    ArrayStore,
+    ArrayStore, // done
     // e.g., a[i] = b
 
-    AddressOf,
+    AddressOf, // done
     // e.g., a = &b
 
-    PointerLoad,
+    PointerLoad, // done
     // e.g., a = *b (Dereference right side)
 
-    PointerStore,
+    PointerStore, // done
     // e.g., *a = b (Dereference left side)
 
     Unknown

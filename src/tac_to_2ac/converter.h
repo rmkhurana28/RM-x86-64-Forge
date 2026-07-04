@@ -25,12 +25,18 @@ public:
     void emit(const std::string& opcode, const std::string& operand1, const std::string& operand2 = "");
     
     
+    void handleBinary(Instruction* current);
+    void handleUnary(Instruction* current);
     void handleAssignment(Instruction* current);
     void handleReturn(Instruction* current);
-    void handleBinary(Instruction* current);
     void handleLabel(Instruction* current);
     void handleUnconditionalGoto(Instruction* current);
+    void handleConditionalGoto(Instruction* current);
     unsigned short handleParam(vector<Instruction> current , int index);
+    void handleCall(Instruction* current);
+    void handleArray(Instruction* current);
+    void handlePointor(Instruction* current);
+    void handleAddressOf(Instruction* current);
 
 private:
     long long tempRegisterCount = 0; // Moved from global scope to fix linker error

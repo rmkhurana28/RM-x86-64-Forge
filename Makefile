@@ -9,7 +9,7 @@ build:
 	@cd build && cmake .. > /dev/null && $(MAKE) --no-print-directory
 
 # Target to run the compiled executable
-run:
+run: build
 	@echo "========================================="
 	@./build/rm_x86_64_forge
 

@@ -1,4 +1,5 @@
 // Sample 3-address optimized code testing all types
+a = b + c
 L1:
 param x
 param y
@@ -7,7 +8,8 @@ param b
 param c 
 param d
 param e
-call foo, 2
+param f
+call foo, 8
 t1 = call bar, 0
 t2 = a + b
 t3 = -t2
@@ -19,5 +21,5 @@ t5 = arr[i]
 arr[j] = t5
 p = &t5
 t6 = *p
-*p = t6
+*prt = t68
 return t6
