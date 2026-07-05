@@ -11,7 +11,7 @@ build:
 # Target to run the compiled executable
 run: build
 	@echo "========================================="
-	@./build/rm_x86_64_forge
+	@./build/rm_x86_64_forge | tee output.txt
 
 # Target to clean up the build directory
 clean:

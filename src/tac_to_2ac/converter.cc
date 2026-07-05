@@ -165,9 +165,15 @@ void TacTo2acConverter::handleUnary(Instruction* current){
 
 void TacTo2acConverter::handleReturn(Instruction* current){
 
+     
+
+    if(current->get_arg1() != "")
+        // return void
+        emit("MOV" , "rax" , current->get_arg1());
+
     // need to reset rsp and rbp
     // bring rsp to rbp position
-    emit("MOV" , "rsp" , "rbp");
+    emit("MOV" , "rsp" , "rbp");       
 
     // using pop, since pop is equivalent to below 2 commands
     emit("POP" , "rbp" , "");
@@ -177,15 +183,9 @@ void TacTo2acConverter::handleReturn(Instruction* current){
 
     // move rsp 1 step up
     // emit("ADD" , "rsp" , "8");   
-
-    if(current->get_arg1() == ""){
-        // return void
-        emit("ret" , "" , "");
-    } else{        
-        // setting return value to rax
-        emit("MOV" , "rax" , current->get_arg1());
-        emit("ret" , "" , "");
-    }
+    
+    emit("ret" , "" , "");
+        
 
     return;
 }
@@ -258,6 +258,9 @@ unsigned short TacTo2acConverter::handleParam(vector<Instruction> list , int ind
         totalParamCount++;
         helperIndex++;
     }
+    
+    bool stackAlignmentIssue = false;
+    if(totalParamCount>6 && (totalParamCount-6) % 2 == 1) stackAlignmentIssue = true;             
 
     if(totalParamCount > 6){
         totalParamCount -= 6;
@@ -272,13 +275,17 @@ unsigned short TacTo2acConverter::handleParam(vector<Instruction> list , int ind
             paramCount++;
             index++;
         } else{
+            if(stackAlignmentIssue){
+                emit("SUB" , "rsp" , "8");
+                stackAlignmentIssue = false;
+            }
             emit("PUSH" , list[index+totalParamCount-1].get_arg1() , "");
             totalParamCount -= 2;
             paramCount++;
             index++;
         }
         
-    }else{
+    }else{        
         return paramCount;
     }
 
@@ -296,11 +303,19 @@ void TacTo2acConverter::handleCall(Instruction* current){
 
     // now, we need to cleanup the stack if the number of params were more than 6
     unsigned short helper = stoi(current->get_arg2());
+
+    bool stackAlignmentCleanup = false;
+    if(helper>6 && (helper-6)%2 == 1) stackAlignmentCleanup = true;
     
     if(helper > 6){
         helper = (helper-6);
         helper *= 8;
         emit("ADD" , "rsp" , to_string(helper));
+
+        // 16-bit stack alignment reset
+        if(stackAlignmentCleanup){
+            emit("ADD" , "rsp" , "8");
+        }
     }
 
     return;

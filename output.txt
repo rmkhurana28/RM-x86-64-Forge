@@ -1,0 +1,142 @@
+--- Compiler Backend: Code Generation Process ---
+Loading 3-Address Code from: src/test/test.txt
+
+Successfully parsed 3-Address Code:
+[001] (P) param a1
+[002] (P) param a2
+[003] (P) param a3
+[004] (P) param a4
+[005] (P) param a5
+[006] (P) param a6
+[007] (C) call func6, 6
+[008] (P) param b1
+[009] (P) param b2
+[010] (P) param b3
+[011] (P) param b4
+[012] (P) param b5
+[013] (P) param b6
+[014] (P) param b7
+[015] (C) call func7, 7
+[016] (P) param c1
+[017] (P) param c2
+[018] (P) param c3
+[019] (P) param c4
+[020] (P) param c5
+[021] (P) param c6
+[022] (P) param c7
+[023] (P) param c8
+[024] (C) call func8, 8
+[025] (P) param d1
+[026] (P) param d2
+[027] (P) param d3
+[028] (P) param d4
+[029] (P) param d5
+[030] (P) param d6
+[031] (P) param d7
+[032] (P) param d8
+[033] (P) param d9
+[034] (C) call func9, 9
+
+--- Phase 1: Instruction Selection (TAC to 2AC) ---
+Successfully converted to 2-Address Code. (Generated 41 instructions)
+
+--- 2-Address Code Output ---
+[001] MOV rdi, a1
+[002] MOV rsi, a2
+[003] MOV rdx, a3
+[004] MOV rcx, a4
+[005] MOV r8, a5
+[006] MOV r9, a6
+[007] CALL func6, 6
+[008] MOV rdi, b1
+[009] MOV rsi, b2
+[010] MOV rdx, b3
+[011] MOV rcx, b4
+[012] MOV r8, b5
+[013] MOV r9, b6
+[014] SUB rsp, 8
+[015] PUSH b7
+[016] CALL func7, 7
+[017] ADD rsp, 8
+[018] ADD rsp, 8
+[019] MOV rdi, c1
+[020] MOV rsi, c2
+[021] MOV rdx, c3
+[022] MOV rcx, c4
+[023] MOV r8, c5
+[024] MOV r9, c6
+[025] PUSH c8
+[026] PUSH c7
+[027] CALL func8, 8
+[028] ADD rsp, 16
+[029] MOV rdi, d1
+[030] MOV rsi, d2
+[031] MOV rdx, d3
+[032] MOV rcx, d4
+[033] MOV r8, d5
+[034] MOV r9, d6
+[035] SUB rsp, 8
+[036] PUSH d9
+[037] PUSH d8
+[038] PUSH d7
+[039] CALL func9, 9
+[040] ADD rsp, 24
+[041] ADD rsp, 8
+normal
+
+--- Phase 2: Control Flow Graph (CFG) ---
+==========================================
+Block ID: 0
+------------------------------------------
+Instructions:
+[001] MOV rdi, a1
+[002] MOV rsi, a2
+[003] MOV rdx, a3
+[004] MOV rcx, a4
+[005] MOV r8, a5
+[006] MOV r9, a6
+[007] CALL func6, 6
+[008] MOV rdi, b1
+[009] MOV rsi, b2
+[010] MOV rdx, b3
+[011] MOV rcx, b4
+[012] MOV r8, b5
+[013] MOV r9, b6
+[014] SUB rsp, 8
+[015] PUSH b7
+[016] CALL func7, 7
+[017] ADD rsp, 8
+[018] ADD rsp, 8
+[019] MOV rdi, c1
+[020] MOV rsi, c2
+[021] MOV rdx, c3
+[022] MOV rcx, c4
+[023] MOV r8, c5
+[024] MOV r9, c6
+[025] PUSH c8
+[026] PUSH c7
+[027] CALL func8, 8
+[028] ADD rsp, 16
+[029] MOV rdi, d1
+[030] MOV rsi, d2
+[031] MOV rdx, d3
+[032] MOV rcx, d4
+[033] MOV r8, d5
+[034] MOV r9, d6
+[035] SUB rsp, 8
+[036] PUSH d9
+[037] PUSH d8
+[038] PUSH d7
+[039] CALL func9, 9
+[040] ADD rsp, 24
+[041] ADD rsp, 8
+------------------------------------------
+CFG IN:   { Φ }
+CFG OUT:  { Φ }
+------------------------------------------
+DEF:      { Φ }
+USE:      { Φ }
+LIVE IN:  { Φ }
+LIVE OUT: { Φ }
+==========================================
+

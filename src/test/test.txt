@@ -1,73 +1,37 @@
-a = 5
-b = 10
-c = 15
-d = 20
+param a1
+param a2
+param a3
+param a4
+param a5
+param a6
+call func6, 6
 
-t1 = a + b
-t2 = t1 * c
-t3 = t2 / d
-t4 = t3 % b
-t5 = t4 & a
-t6 = t5 | c
-t7 = t6 ^ d
-t8 = t7 << 3
-t9 = t8 >> 1
+param b1
+param b2
+param b3
+param b4
+param b5
+param b6
+param b7
+call func7, 7
 
-t10 = -t9
-t11 = ~t10
-t12 = !t11
+param c1
+param c2
+param c3
+param c4
+param c5
+param c6
+param c7
+param c8
+call func8, 8
 
-cmp1 = t12 == a
-cmp2 = t12 != b
-cmp3 = t12 < c
-cmp4 = t12 <= d
-cmp5 = t12 > a
-cmp6 = t12 >= b
-
-ptr = &t12
-*ptr = cmp1
-x = *ptr
-
-arr[0] = x
-arr[1] = cmp2
-arr[2] = cmp3
-arr[3] = cmp4
-arr[4] = cmp5
-arr[5] = cmp6
-
-y = arr[5]
-
-param a
-param b
-param c
-param d
-param t1
-param t2
-param t3
-param t4
-ret1 = call foo, 8
-
-if cmp1 goto L1
-ifFalse cmp2 goto L2
-if t1 < t2 goto L3
-ifFalse t3 >= t4 goto L4
-
-goto L5
-
-L1:
-return
-
-L2:
-return ret1
-
-L3:
-param x
-call print, 1
-goto L5
-
-L4:
-t13 = arr[3]
-t14 = *ptr
-
-L5:
-return y
+param d1
+param d2
+param d3
+param d4
+param d5
+param d6
+param d7
+param d8
+param d9
+call func9, 9

@@ -13,4 +13,6 @@ add_executable(rm_x86_64_forge
     src/tac_parser/instruction.cc
     src/tac_to_2ac/converter.cc
     src/tac_to_2ac/two_address_instruction.cc
+    src/liveness_analysis/cfg.cc
+    src/liveness_analysis/basic_block.cc
 )

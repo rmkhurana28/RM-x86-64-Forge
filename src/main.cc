@@ -1,5 +1,6 @@
 #include "tac_parser/three_address_code_parser.h"
 #include "tac_to_2ac/converter.h" // Added converter header
+#include "liveness_analysis/cfg.h"
 #include <iostream>
 #include <string>
 
@@ -36,6 +37,15 @@ int main() {
         for (const auto& instr : two_addr_instructions) {
             instr.print();
         }
+        
+        // ---------------------------------------------------------
+        // Phase 2: Liveness Analysis (CFG Construction)
+        // ---------------------------------------------------------
+        rm_forge::ControlFlowGraph cfg;
+        cfg.buildCFG(two_addr_instructions);
+        
+        // Print the newly constructed CFG and blocks
+        cfg.print();
         
     } else {
         std::cerr << "Failed to parse input file.\n";
