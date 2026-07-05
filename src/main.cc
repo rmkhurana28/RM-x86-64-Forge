@@ -44,6 +44,9 @@ int main() {
         rm_forge::ControlFlowGraph cfg;
         cfg.buildCFG(two_addr_instructions);
         
+        // Run Liveness Equations
+        cfg.computeLiveness();
+        
         // Print the newly constructed CFG and blocks
         cfg.print();
         

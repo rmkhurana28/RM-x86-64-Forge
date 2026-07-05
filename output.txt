@@ -2,141 +2,435 @@
 Loading 3-Address Code from: src/test/test.txt
 
 Successfully parsed 3-Address Code:
-[001] (P) param a1
-[002] (P) param a2
-[003] (P) param a3
-[004] (P) param a4
-[005] (P) param a5
-[006] (P) param a6
-[007] (C) call func6, 6
-[008] (P) param b1
-[009] (P) param b2
-[010] (P) param b3
-[011] (P) param b4
-[012] (P) param b5
-[013] (P) param b6
-[014] (P) param b7
-[015] (C) call func7, 7
-[016] (P) param c1
-[017] (P) param c2
-[018] (P) param c3
-[019] (P) param c4
-[020] (P) param c5
-[021] (P) param c6
-[022] (P) param c7
-[023] (P) param c8
-[024] (C) call func8, 8
-[025] (P) param d1
-[026] (P) param d2
-[027] (P) param d3
-[028] (P) param d4
-[029] (P) param d5
-[030] (P) param d6
-[031] (P) param d7
-[032] (P) param d8
-[033] (P) param d9
-[034] (C) call func9, 9
+[001] (=) a = 5
+[002] (=) b = 10
+[003] (=) c = 15
+[004] (=) d = 20
+[005] (B) t1 = a + b
+[006] (B) t2 = t1 * c
+[007] (B) t3 = t2 / d
+[008] (B) t4 = t3 % b
+[009] (B) t5 = t4 & a
+[010] (B) t6 = t5 | c
+[011] (B) t7 = t6 ^ d
+[012] (B) t8 = t7 << 3
+[013] (B) t9 = t8 >> 1
+[014] (U) t10 = - t9
+[015] (U) t11 = ~ t10
+[016] (U) t12 = ! t11
+[017] (B) cmp1 = t12 == a
+[018] (B) cmp2 = t12 != b
+[019] (B) cmp3 = t12 < c
+[020] (B) cmp4 = t12 <= d
+[021] (B) cmp5 = t12 > a
+[022] (B) cmp6 = t12 >= b
+[023] (&) ptr = &t12
+[024] (#) *ptr = cmp1
+[025] (*) x = *ptr
+[026] (]) arr[0] = x
+[027] (]) arr[1] = cmp2
+[028] (]) arr[2] = cmp3
+[029] (]) arr[3] = cmp4
+[030] (]) arr[4] = cmp5
+[031] (]) arr[5] = cmp6
+[032] ([) y = arr[5]
+[033] (P) param a
+[034] (P) param b
+[035] (P) param c
+[036] (P) param d
+[037] (P) param t1
+[038] (P) param t2
+[039] (P) param t3
+[040] (P) param t4
+[041] (K) ret1 = call foo, 8
+[042] (?) if cmp1 goto L1
+[043] (?F) ifFalse cmp2 goto L2
+[044] (?) if t1 < t2 goto L3
+[045] (?F) ifFalse t3 >= t4 goto L4
+[046] (G) goto L5
+[047] (L) L1:
+[048] (R) return 
+[049] (L) L2:
+[050] (R) return ret1
+[051] (L) L3:
+[052] (P) param x
+[053] (C) call print, 1
+[054] (G) goto L5
+[055] (L) L4:
+[056] ([) t13 = arr[3]
+[057] (*) t14 = *ptr
+[058] (L) L5:
+[059] (R) return y
 
 --- Phase 1: Instruction Selection (TAC to 2AC) ---
-Successfully converted to 2-Address Code. (Generated 41 instructions)
+Successfully converted to 2-Address Code. (Generated 104 instructions)
 
 --- 2-Address Code Output ---
-[001] MOV rdi, a1
-[002] MOV rsi, a2
-[003] MOV rdx, a3
-[004] MOV rcx, a4
-[005] MOV r8, a5
-[006] MOV r9, a6
-[007] CALL func6, 6
-[008] MOV rdi, b1
-[009] MOV rsi, b2
-[010] MOV rdx, b3
-[011] MOV rcx, b4
-[012] MOV r8, b5
-[013] MOV r9, b6
-[014] SUB rsp, 8
-[015] PUSH b7
-[016] CALL func7, 7
-[017] ADD rsp, 8
-[018] ADD rsp, 8
-[019] MOV rdi, c1
-[020] MOV rsi, c2
-[021] MOV rdx, c3
-[022] MOV rcx, c4
-[023] MOV r8, c5
-[024] MOV r9, c6
-[025] PUSH c8
-[026] PUSH c7
-[027] CALL func8, 8
-[028] ADD rsp, 16
-[029] MOV rdi, d1
-[030] MOV rsi, d2
-[031] MOV rdx, d3
-[032] MOV rcx, d4
-[033] MOV r8, d5
-[034] MOV r9, d6
-[035] SUB rsp, 8
-[036] PUSH d9
-[037] PUSH d8
-[038] PUSH d7
-[039] CALL func9, 9
-[040] ADD rsp, 24
-[041] ADD rsp, 8
+[001] MOV a, 5
+[002] MOV b, 10
+[003] MOV c, 15
+[004] MOV d, 20
+[005] MOV t1, a
+[006] ADD t1, b
+[007] MOV t2, t1
+[008] IMUL t2, c
+[009] MOV rax, t2
+[010] CQO 
+[011] IDIV d
+[012] MOV t3, rax
+[013] MOV rax, t3
+[014] CQO 
+[015] IDIV b
+[016] MOV t4, rdx
+[017] MOV t5, t4
+[018] AND t5, a
+[019] MOV t6, t5
+[020] OR t6, c
+[021] MOV t7, t6
+[022] XOR t7, d
+[023] MOV t8, t7
+[024] MOV rcx, 3
+[025] SHL t8, cl
+[026] MOV t9, t8
+[027] MOV rcx, 1
+[028] SAR t9, cl
+[029] MOV t10, t9
+[030] NEG t10
+[031] MOV t11, t10
+[032] NOT t11
+[033] CMP t11, 0
+[034] SETE al
+[035] MOVZX t12, al
+[036] CMP t12, a
+[037] SETE al
+[038] MOVZX cmp1, al
+[039] CMP t12, b
+[040] SETNE al
+[041] MOVZX cmp2, al
+[042] CMP t12, c
+[043] SETL al
+[044] MOVZX cmp3, al
+[045] CMP t12, d
+[046] SETLE al
+[047] MOVZX cmp4, al
+[048] CMP t12, a
+[049] SETG al
+[050] MOVZX cmp5, al
+[051] CMP t12, b
+[052] SETGE al
+[053] MOVZX cmp6, al
+[054] LEA ptr, [t12]
+[055] MOV [ptr], cmp1
+[056] MOV x, [ptr]
+[057] MOV [arr + 0*8], x
+[058] MOV [arr + 1*8], cmp2
+[059] MOV [arr + 2*8], cmp3
+[060] MOV [arr + 3*8], cmp4
+[061] MOV [arr + 4*8], cmp5
+[062] MOV [arr + 5*8], cmp6
+[063] MOV y, [arr + 5*8]
+[064] MOV rdi, a
+[065] MOV rsi, b
+[066] MOV rdx, c
+[067] MOV rcx, d
+[068] MOV r8, t1
+[069] MOV r9, t2
+[070] PUSH t4
+[071] PUSH t3
+[072] CALL foo, 8
+[073] MOV ret1, rax
+[074] ADD rsp, 16
+[075] CMP cmp1, 0
+[076] JNE L1
+[077] CMP cmp2, 0
+[078] JE L2
+[079] CMP t1, t2
+[080] JL L3
+[081] CMP t3, t4
+[082] JL L4
+[083] JMP L5
+[084] L1 
+[085] MOV rsp, rbp
+[086] POP rbp
+[087] ret 
+[088] L2 
+[089] MOV rax, ret1
+[090] MOV rsp, rbp
+[091] POP rbp
+[092] ret 
+[093] L3 
+[094] MOV rdi, x
+[095] CALL print, 1
+[096] JMP L5
+[097] L4 
+[098] MOV t13, [arr + 3*8]
+[099] MOV t14, [ptr]
+[100] L5 
+[101] MOV rax, y
+[102] MOV rsp, rbp
+[103] POP rbp
+[104] ret 
+conditional | L1
+conditional | L2
+conditional | L3
+conditional | L4
+unconditional | L5
+Return
+Return
+unconditional | L5
 normal
+Return
+here
+here
+here
+here
+here
+here
+here
+here
 
 --- Phase 2: Control Flow Graph (CFG) ---
 ==========================================
 Block ID: 0
 ------------------------------------------
 Instructions:
-[001] MOV rdi, a1
-[002] MOV rsi, a2
-[003] MOV rdx, a3
-[004] MOV rcx, a4
-[005] MOV r8, a5
-[006] MOV r9, a6
-[007] CALL func6, 6
-[008] MOV rdi, b1
-[009] MOV rsi, b2
-[010] MOV rdx, b3
-[011] MOV rcx, b4
-[012] MOV r8, b5
-[013] MOV r9, b6
-[014] SUB rsp, 8
-[015] PUSH b7
-[016] CALL func7, 7
-[017] ADD rsp, 8
-[018] ADD rsp, 8
-[019] MOV rdi, c1
-[020] MOV rsi, c2
-[021] MOV rdx, c3
-[022] MOV rcx, c4
-[023] MOV r8, c5
-[024] MOV r9, c6
-[025] PUSH c8
-[026] PUSH c7
-[027] CALL func8, 8
-[028] ADD rsp, 16
-[029] MOV rdi, d1
-[030] MOV rsi, d2
-[031] MOV rdx, d3
-[032] MOV rcx, d4
-[033] MOV r8, d5
-[034] MOV r9, d6
-[035] SUB rsp, 8
-[036] PUSH d9
-[037] PUSH d8
-[038] PUSH d7
-[039] CALL func9, 9
-[040] ADD rsp, 24
-[041] ADD rsp, 8
+[001] MOV a, 5
+[002] MOV b, 10
+[003] MOV c, 15
+[004] MOV d, 20
+[005] MOV t1, a
+[006] ADD t1, b
+[007] MOV t2, t1
+[008] IMUL t2, c
+[009] MOV rax, t2
+[010] CQO 
+[011] IDIV d
+[012] MOV t3, rax
+[013] MOV rax, t3
+[014] CQO 
+[015] IDIV b
+[016] MOV t4, rdx
+[017] MOV t5, t4
+[018] AND t5, a
+[019] MOV t6, t5
+[020] OR t6, c
+[021] MOV t7, t6
+[022] XOR t7, d
+[023] MOV t8, t7
+[024] MOV rcx, 3
+[025] SHL t8, cl
+[026] MOV t9, t8
+[027] MOV rcx, 1
+[028] SAR t9, cl
+[029] MOV t10, t9
+[030] NEG t10
+[031] MOV t11, t10
+[032] NOT t11
+[033] CMP t11, 0
+[034] SETE al
+[035] MOVZX t12, al
+[036] CMP t12, a
+[037] SETE al
+[038] MOVZX cmp1, al
+[039] CMP t12, b
+[040] SETNE al
+[041] MOVZX cmp2, al
+[042] CMP t12, c
+[043] SETL al
+[044] MOVZX cmp3, al
+[045] CMP t12, d
+[046] SETLE al
+[047] MOVZX cmp4, al
+[048] CMP t12, a
+[049] SETG al
+[050] MOVZX cmp5, al
+[051] CMP t12, b
+[052] SETGE al
+[053] MOVZX cmp6, al
+[054] LEA ptr, [t12]
+[055] MOV [ptr], cmp1
+[056] MOV x, [ptr]
+[057] MOV [arr + 0*8], x
+[058] MOV [arr + 1*8], cmp2
+[059] MOV [arr + 2*8], cmp3
+[060] MOV [arr + 3*8], cmp4
+[061] MOV [arr + 4*8], cmp5
+[062] MOV [arr + 5*8], cmp6
+[063] MOV y, [arr + 5*8]
+[064] MOV rdi, a
+[065] MOV rsi, b
+[066] MOV rdx, c
+[067] MOV rcx, d
+[068] MOV r8, t1
+[069] MOV r9, t2
+[070] PUSH t4
+[071] PUSH t3
+[072] CALL foo, 8
+[073] MOV ret1, rax
+[074] ADD rsp, 16
+[075] CMP cmp1, 0
+[076] JNE L1
 ------------------------------------------
 CFG IN:   { Φ }
-CFG OUT:  { Φ }
+CFG OUT:  { 1 5 }
+------------------------------------------
+DEF:      { r8 rsi t5 t4 cmp5 y t6 b t9 x t2 ret1 d c rdx t7 t10 a t1 rdi t8 t11 rcx t12 r9 t3 rax cmp1 cmp2 cmp3 cmp4 cmp6 ptr }
+USE:      { arr }
+LIVE IN:  { arr }
+LIVE OUT: { y x t3 ptr t4 ret1 t1 t2 rax arr cmp2 }
+==========================================
+
+==========================================
+Block ID: 1
+------------------------------------------
+Instructions:
+[077] CMP cmp2, 0
+[078] JE L2
+------------------------------------------
+CFG IN:   { 0 }
+CFG OUT:  { 2 6 }
+------------------------------------------
+DEF:      { Φ }
+USE:      { cmp2 }
+LIVE IN:  { y t3 x t2 t1 ptr t4 ret1 arr cmp2 }
+LIVE OUT: { y arr x t3 ptr t4 ret1 t1 t2 }
+==========================================
+
+==========================================
+Block ID: 2
+------------------------------------------
+Instructions:
+[079] CMP t1, t2
+[080] JL L3
+------------------------------------------
+CFG IN:   { 1 }
+CFG OUT:  { 3 7 }
+------------------------------------------
+DEF:      { Φ }
+USE:      { t2 t1 }
+LIVE IN:  { arr y ptr t4 t3 x t2 t1 }
+LIVE OUT: { y arr x t3 ptr t4 }
+==========================================
+
+==========================================
+Block ID: 3
+------------------------------------------
+Instructions:
+[081] CMP t3, t4
+[082] JL L4
+------------------------------------------
+CFG IN:   { 2 }
+CFG OUT:  { 4 8 }
+------------------------------------------
+DEF:      { Φ }
+USE:      { t4 t3 }
+LIVE IN:  { y arr ptr t4 t3 }
+LIVE OUT: { y arr ptr }
+==========================================
+
+==========================================
+Block ID: 4
+------------------------------------------
+Instructions:
+[083] JMP L5
+------------------------------------------
+CFG IN:   { 3 }
+CFG OUT:  { 9 }
 ------------------------------------------
 DEF:      { Φ }
 USE:      { Φ }
-LIVE IN:  { Φ }
+LIVE IN:  { y }
+LIVE OUT: { y }
+==========================================
+
+==========================================
+Block ID: 5
+------------------------------------------
+Instructions:
+[084] L1 
+[085] MOV rsp, rbp
+[086] POP rbp
+[087] ret 
+------------------------------------------
+CFG IN:   { 0 }
+CFG OUT:  { Φ }
+------------------------------------------
+DEF:      { Φ }
+USE:      { rax }
+LIVE IN:  { rax }
+LIVE OUT: { Φ }
+==========================================
+
+==========================================
+Block ID: 6
+------------------------------------------
+Instructions:
+[088] L2 
+[089] MOV rax, ret1
+[090] MOV rsp, rbp
+[091] POP rbp
+[092] ret 
+------------------------------------------
+CFG IN:   { 1 }
+CFG OUT:  { Φ }
+------------------------------------------
+DEF:      { rax }
+USE:      { ret1 }
+LIVE IN:  { ret1 }
+LIVE OUT: { Φ }
+==========================================
+
+==========================================
+Block ID: 7
+------------------------------------------
+Instructions:
+[093] L3 
+[094] MOV rdi, x
+[095] CALL print, 1
+[096] JMP L5
+------------------------------------------
+CFG IN:   { 2 }
+CFG OUT:  { 9 }
+------------------------------------------
+DEF:      { rax rdi }
+USE:      { x }
+LIVE IN:  { y x }
+LIVE OUT: { y }
+==========================================
+
+==========================================
+Block ID: 8
+------------------------------------------
+Instructions:
+[097] L4 
+[098] MOV t13, [arr + 3*8]
+[099] MOV t14, [ptr]
+------------------------------------------
+CFG IN:   { 3 }
+CFG OUT:  { 9 }
+------------------------------------------
+DEF:      { t14 t13 }
+USE:      { ptr arr }
+LIVE IN:  { y ptr arr }
+LIVE OUT: { y }
+==========================================
+
+==========================================
+Block ID: 9
+------------------------------------------
+Instructions:
+[100] L5 
+[101] MOV rax, y
+[102] MOV rsp, rbp
+[103] POP rbp
+[104] ret 
+------------------------------------------
+CFG IN:   { 4 7 8 }
+CFG OUT:  { Φ }
+------------------------------------------
+DEF:      { rax }
+USE:      { y }
+LIVE IN:  { y }
 LIVE OUT: { Φ }
 ==========================================
 

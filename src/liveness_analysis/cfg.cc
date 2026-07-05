@@ -150,6 +150,256 @@ void ControlFlowGraph::buildCFG(const std::vector<TwoAddressInstruction>& instru
 
 void ControlFlowGraph::computeLiveness() {
     // Logic to calculate USE/DEF per block, and iterate LIVE IN/OUT equations
+
+    // calculating def/use
+    for(size_t i=0 ; i<basic_blocks.size() ; i++){
+        auto currBlock = basic_blocks[i];
+        
+        // calculating def/use
+        for(size_t j=0 ; j<currBlock->getInstructions().size() ; j++){
+            string op = currBlock->getInstructions()[j].getOpcode();
+            if(op == "ADD" || op == "SUB" || op == "IMUL" || op == "AND" || op == "OR" || op == "XOR"){                                              
+                // 1,2 going to USE
+                // 1 going to def
+                
+                // checking if it alr exists in def
+                if(currBlock->def_set.count(currBlock->getInstructions()[j].getOperand1()) == 0)
+                    currBlock->use_set.insert(currBlock->getInstructions()[j].getOperand1()); // add if doesnt exists
+
+                // checking if it is a constant                    
+                if(!isConstant(currBlock->getInstructions()[j].getOperand2()))
+                    // checking if it alr exist in def
+                    if(currBlock->def_set.count(currBlock->getInstructions()[j].getOperand2()) == 0)
+                        currBlock->use_set.insert(currBlock->getInstructions()[j].getOperand2()); // add if doesnt exists
+
+                currBlock->def_set.insert(currBlock->getInstructions()[j].getOperand1());
+            } else if(op == "SHL" || op == "SAR"){
+                // 1 goes to use
+                // rcx (cl) goes to use
+                // 1 going to def
+
+                // checking if it alr exists in def
+                if(currBlock->def_set.count(currBlock->getInstructions()[j].getOperand1()) == 0)
+                    currBlock->use_set.insert(currBlock->getInstructions()[j].getOperand1()); // add if doesnt exists
+
+                // checking if it alr exists in def
+                if(currBlock->def_set.count("rcx") == 0)
+                    currBlock->use_set.insert("rcx"); // add if doesnt exists
+
+                currBlock->def_set.insert(currBlock->getInstructions()[j].getOperand1());
+            } 
+            else if(op == "NEG" || op == "NOT"){
+
+                // 1 going to USE
+                // 1 going to def
+
+                // checking if it alr exists in def
+                if(currBlock->def_set.count(currBlock->getInstructions()[j].getOperand1()) == 0)
+                    currBlock->use_set.insert(currBlock->getInstructions()[j].getOperand1()); // add if doesnt exists
+
+                currBlock->def_set.insert(currBlock->getInstructions()[j].getOperand1());
+            } else if(op == "IDIV"){
+                // 1, rax, rdx going to USE
+                // rax, rdx going to def
+                
+                // checking if it is a constant                    
+                if(!isConstant(currBlock->getInstructions()[j].getOperand1()))
+                    // checking if it alr exist in def
+                    if(currBlock->def_set.count(currBlock->getInstructions()[j].getOperand1()) == 0)
+                        currBlock->use_set.insert(currBlock->getInstructions()[j].getOperand1()); // add if doesnt exists
+
+                // add rax to use if not in def
+                if(currBlock->def_set.count("rax") == 0)
+                    currBlock->use_set.insert("rax");
+
+                // add rdx to use if not in def                    
+                if(currBlock->def_set.count("rdx") == 0)
+                    currBlock->use_set.insert("rdx");
+                    
+                currBlock->def_set.insert("rax");
+                currBlock->def_set.insert("rdx");
+            } else if(op == "CQO"){
+                // rax going to use
+                // rdx going to def
+
+                // add rax to use if not in def
+                if(currBlock->def_set.count("rax") == 0)
+                    currBlock->use_set.insert("rax");
+
+                currBlock->def_set.insert("rdx");                    
+            } else if(op == "CMP"){
+                // 1,2 going to use
+                
+                // checking if it is a constant                    
+                if(!isConstant(currBlock->getInstructions()[j].getOperand1()))
+                    // checking if it alr exist in def
+                    if(currBlock->def_set.count(currBlock->getInstructions()[j].getOperand1()) == 0)
+                        currBlock->use_set.insert(currBlock->getInstructions()[j].getOperand1()); // add if doesnt exists
+
+                // checking if it is a constant                    
+                if(!isConstant(currBlock->getInstructions()[j].getOperand2()))
+                    // checking if it alr exist in def
+                    if(currBlock->def_set.count(currBlock->getInstructions()[j].getOperand2()) == 0)
+                        currBlock->use_set.insert(currBlock->getInstructions()[j].getOperand2()); // add if doesnt exists
+            } else if(op == "PUSH"){
+                // 1 goes to use
+
+                // checking if it is a constant                    
+                if(!isConstant(currBlock->getInstructions()[j].getOperand1()))
+                    // checking if it alr exist in def
+                    if(currBlock->def_set.count(currBlock->getInstructions()[j].getOperand1()) == 0)
+                        currBlock->use_set.insert(currBlock->getInstructions()[j].getOperand1()); // add if doesnt exists
+            } else if(op == "POP"){
+                // 1 goes to def
+
+                currBlock->def_set.insert(currBlock->getInstructions()[j].getOperand1());
+            } else if(op == "MOV" || op == "LEA"){
+                // 2 goes to use
+                // 1 goes to def
+
+                if(is_memory_operand(currBlock->getInstructions()[j].getOperand2())){
+                    std::unordered_set<string> listOp2 = extract_memory_vars(currBlock->getInstructions()[j].getOperand2());
+
+                    for(const string& currVar : listOp2){
+                        // check if it is const
+                        if(!isConstant(currVar))
+                            // checking if it alr exist in def
+                            if(currBlock->def_set.count(currVar) == 0)
+                                currBlock->use_set.insert(currVar); // add if doesnt exists   
+                    }
+
+                    if(is_memory_operand(currBlock->getInstructions()[j].getOperand1())){
+                        std::unordered_set<string> listOp1 = extract_memory_vars(currBlock->getInstructions()[j].getOperand1());
+
+                        for(const string& currVar : listOp1){
+                             if(!isConstant(currVar))
+                                // checking if it alr exist in def
+                                if(currBlock->def_set.count(currVar) == 0)
+                                    currBlock->use_set.insert(currVar); // add if doesnt exists   
+                        }
+                    } else{
+                        currBlock->def_set.insert(currBlock->getInstructions()[j].getOperand1());
+                    }
+                } else if (is_memory_operand(currBlock->getInstructions()[j].getOperand1())){
+                    
+                    std::unordered_set<string> listOp1 = extract_memory_vars(currBlock->getInstructions()[j].getOperand1());
+                    for(const string& currVar : listOp1){
+                         if(!isConstant(currVar))
+                            // checking if it alr exist in def
+                            if(currBlock->def_set.count(currVar) == 0)
+                                currBlock->use_set.insert(currVar); // add if doesnt exists   
+                    }
+
+                    
+                    if(!isConstant(currBlock->getInstructions()[j].getOperand2()))
+                        // checking if it alr exist in def
+                        if(currBlock->def_set.count(currBlock->getInstructions()[j].getOperand2()) == 0)
+                            currBlock->use_set.insert(currBlock->getInstructions()[j].getOperand2()); // add if doesnt exists
+                }
+                else{
+                    // checking if it is a constant                    
+                    if(!isConstant(currBlock->getInstructions()[j].getOperand2()))
+                        // checking if it alr exist in def
+                        if(currBlock->def_set.count(currBlock->getInstructions()[j].getOperand2()) == 0)
+                            currBlock->use_set.insert(currBlock->getInstructions()[j].getOperand2()); // add if doesnt exists                
+                    
+                    currBlock->def_set.insert(currBlock->getInstructions()[j].getOperand1());
+                }
+
+
+                
+            } else if(op == "MOVZX"){
+                // rax (al) goes to use
+                // 1 goes to def
+
+                if(currBlock->def_set.count("rax") == 0)
+                    currBlock->use_set.insert("rax");
+
+                currBlock->def_set.insert(currBlock->getInstructions()[j].getOperand1());
+            }
+            else if(op == "CALL"){
+                // param registers goes to use, depending on value of arg2
+                // rax goes to def
+
+                vector<string> helperString;
+                helperString.push_back("rdi");
+                helperString.push_back("rsi");
+                helperString.push_back("rdx");
+                helperString.push_back("rcx");
+                helperString.push_back("r8");
+                helperString.push_back("r9");
+
+                for(unsigned short k=0 ; k<stoi(currBlock->getInstructions()[j].getOperand2()) && k<6; k++){
+                    if(currBlock->def_set.count(helperString[k]) == 0)
+                        currBlock->use_set.insert(helperString[k]);
+                }
+
+                currBlock->def_set.insert("rax");
+            } else if(op == "ret"){
+                // rax goes to use
+
+                if(currBlock->def_set.count("rax") == 0)
+                    currBlock->use_set.insert("rax");
+            } else if(op == "SETE" || op == "SETNE" || op == "SETL" || op == "SETLE" || op == "SETG" || op == "SETGE"){
+                // rax (al) goes to def
+
+                currBlock->def_set.insert("rax");
+            } else if(op == "JMP" || op == "JE" || op == "JNE" || op == "JL" || op == "JLE" || op == "JG" || op == "JGE" || isLabel(op)) continue;
+            else{
+                continue;
+            }
+                        
+        }
+
+        currBlock->use_set.erase("rsp");
+        currBlock->use_set.erase("rbp");
+        currBlock->def_set.erase("rsp");
+        currBlock->def_set.erase("rbp");
+
+    }
+
+    // now, we have def/use
+
+    
+
+    // calculating liveIn/liveOut
+
+    // initalizing liveIn to use
+    for(size_t i=0 ; i<basic_blocks.size() ; i++){
+        basic_blocks[i]->live_in = basic_blocks[i]->use_set;    
+    }
+    
+    bool modified = false;
+
+    again:
+    cout << "here\n";
+
+    modified = false;
+
+    // iteratively calculating liveIn/liveOut
+    for(size_t i=0 ; i<basic_blocks.size() ; i++){
+        auto currBlock = basic_blocks[i];
+
+        // adding elements to liveIn
+        for(const string& element : currBlock->live_out){
+            if(currBlock->def_set.count(element) == 0){
+                size_t old_size = currBlock->live_in.size();
+                currBlock->live_in.insert(element);
+                if(!modified && currBlock->live_in.size() > old_size) modified = true;
+            }
+        }
+
+        for(size_t j=0 ; j<currBlock->cfg_out.size() ; j++){
+            for(const string& element : currBlock->cfg_out[j]->live_in){   
+                size_t old_size = currBlock->live_out.size();             
+                currBlock->live_out.insert(element);
+                
+                if(!modified && currBlock->live_out.size() > old_size) modified = true;
+            }
+        }
+    }
+
+    if(modified) goto again;
 }
 
 void ControlFlowGraph::print() const {

@@ -2,10 +2,59 @@
 #define RM_FORGE_TWO_ADDRESS_INSTRUCTION_H
 
 #include <string>
+#include <unordered_set>
 
 using namespace std;
 
 namespace rm_forge {
+
+inline bool isConstant(const string& operand) {
+    if (operand.empty()) return false;
+    size_t start = 0;
+    if (operand[0] == '-') {
+        if (operand.length() == 1) return false;
+        start = 1;
+    }
+    for (size_t i = start; i < operand.length(); ++i) {
+        if (operand[i] < '0' || operand[i] > '9') return false;
+    }
+    return true;
+}
+
+inline bool is_memory_operand(const string& operand) {
+    if (operand.length() < 2) return false;
+    return operand.front() == '[' && operand.back() == ']';
+}
+
+inline std::unordered_set<string> extract_memory_vars(const string& operand) {
+    std::unordered_set<string> vars;
+    
+    if (!is_memory_operand(operand)) {
+        return vars;
+    }
+
+    string inner = operand.substr(1, operand.length() - 2);
+    size_t plus_pos = inner.find(" + ");
+    
+    if (plus_pos != string::npos) {
+        string v1 = inner.substr(0, plus_pos);
+        vars.insert(v1);
+        
+        string right_side = inner.substr(plus_pos + 3); 
+        size_t star_pos = right_side.find("*8");
+        
+        if (star_pos != string::npos) {
+            string v2 = right_side.substr(0, star_pos);
+            vars.insert(v2);
+        } else {
+            vars.insert(right_side); 
+        }
+    } else {
+        vars.insert(inner);
+    }
+    
+    return vars;
+}
 
 class TwoAddressInstruction {
 public:
