@@ -8,6 +8,14 @@
 
 namespace rm_forge {
 
+inline bool is_stack_pointer(const std::string& op) {
+    return op == "rsp" || op == "rbp";
+}
+
+inline bool involves_stack_pointer(const std::string& op1, const std::string& op2) {
+    return op1 == "rsp" || op1 == "rbp" || op2 == "rsp" || op2 == "rbp";
+}
+
 class ControlFlowGraph {
 public:
     ControlFlowGraph();
