@@ -76,6 +76,7 @@ public:
     }
 
     int getId() const { return id; }
+    void setId(int new_id) { id = new_id; }
     const string& getOpcode() const { return opcode; }
     const string& getOperand1() const { return operand1; }
     const string& getOperand2() const { return operand2; }

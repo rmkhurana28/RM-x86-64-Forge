@@ -1,5 +1,7 @@
 #include "cfg.h"
 #include <iostream>
+#include <algorithm>
+
 
 namespace rm_forge {
 
@@ -152,6 +154,9 @@ void ControlFlowGraph::computeLiveness() {
     // Logic to calculate USE/DEF per block, and iterate LIVE IN/OUT equations
 
     vector<int> deleteVector;
+    vector<TwoAddressInstruction> optInstructions;
+
+    evaluateAgain:
 
     // calculating def/use
     for(size_t i=0 ; i<basic_blocks.size() ; i++){
@@ -692,6 +697,36 @@ void ControlFlowGraph::computeLiveness() {
             }
         }
     }
+
+    if(deleteVector.empty()) return;
+
+    for(size_t i=0 ; i<basic_blocks.size() ; i++){
+        auto currBlock = basic_blocks[i];
+
+        optInstructions.clear();
+
+        for(size_t j=0 ; j<currBlock->getInstructionsMutable().size() ; j++){
+            if(find(deleteVector.begin() , deleteVector.end() , currBlock->getInstructionsMutable()[j].getId()) != deleteVector.end())
+                continue;
+
+            optInstructions.push_back(currBlock->getInstructionsMutable()[j]);
+        }
+        
+        currBlock->getInstructionsMutable() = optInstructions;
+                
+    }
+
+    deleteVector.clear();
+    for(size_t i=0 ; i<basic_blocks.size() ; i++){
+        basic_blocks[i]->use_set.clear();
+        basic_blocks[i]->def_set.clear();
+        basic_blocks[i]->live_in.clear();
+        basic_blocks[i]->live_out.clear();
+    }
+
+    goto evaluateAgain;
+
+    
 }
 
 void ControlFlowGraph::print() const {

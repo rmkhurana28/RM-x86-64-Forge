@@ -24,6 +24,7 @@ public:
 
     int getId() const { return block_id; }
     const std::vector<TwoAddressInstruction>& getInstructions() const { return instructions; }
+    std::vector<TwoAddressInstruction>& getInstructionsMutable() { return instructions; }
 
     // ---------------------------------------------------------
     // Liveness Analysis Sets (Using string for virtual registers)

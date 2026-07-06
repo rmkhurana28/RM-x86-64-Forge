@@ -266,10 +266,10 @@ Instructions:
 CFG IN:   { Φ }
 CFG OUT:  { 1 5 }
 ------------------------------------------
-DEF:      { r8 rsi t5 t4 cmp5 y t6 b t9 x t2 ret1 d c rdx t7 t10 a t1 rdi t8 t11 rcx t12 r9 t3 rax cmp1 cmp2 cmp3 cmp4 cmp6 ptr }
+DEF:      { r8 rsi y x ptr cmp6 cmp5 cmp4 cmp3 cmp2 t12 t11 t10 t9 rcx t8 t5 t4 t7 rdx r9 cmp1 t3 rax t2 rdi t1 ret1 d c t6 b a }
 USE:      { arr }
 LIVE IN:  { arr }
-LIVE OUT: { y x t3 ptr t4 ret1 t1 t2 rax arr cmp2 }
+LIVE OUT: { y x t3 t4 ret1 t1 t2 rax cmp2 }
 ==========================================
 
 ==========================================
@@ -284,8 +284,8 @@ CFG OUT:  { 2 6 }
 ------------------------------------------
 DEF:      { Φ }
 USE:      { cmp2 }
-LIVE IN:  { y t3 x t2 t1 ptr t4 ret1 arr cmp2 }
-LIVE OUT: { y arr x t3 ptr t4 ret1 t1 t2 }
+LIVE IN:  { y t3 x t2 t1 t4 ret1 cmp2 }
+LIVE OUT: { y x t3 t4 ret1 t1 t2 }
 ==========================================
 
 ==========================================
@@ -300,8 +300,8 @@ CFG OUT:  { 3 7 }
 ------------------------------------------
 DEF:      { Φ }
 USE:      { t2 t1 }
-LIVE IN:  { arr y ptr t4 t3 x t2 t1 }
-LIVE OUT: { y arr x t3 ptr t4 }
+LIVE IN:  { y t4 t3 x t2 t1 }
+LIVE OUT: { y x t3 t4 }
 ==========================================
 
 ==========================================
@@ -316,8 +316,8 @@ CFG OUT:  { 4 8 }
 ------------------------------------------
 DEF:      { Φ }
 USE:      { t4 t3 }
-LIVE IN:  { y arr ptr t4 t3 }
-LIVE OUT: { y arr ptr }
+LIVE IN:  { y t4 t3 }
+LIVE OUT: { y }
 ==========================================
 
 ==========================================
@@ -395,15 +395,13 @@ Block ID: 8
 ------------------------------------------
 Instructions:
 [097] L4 
-[098] MOV t13, [arr + 3*8]
-[099] MOV t14, [ptr]
 ------------------------------------------
 CFG IN:   { 3 }
 CFG OUT:  { 9 }
 ------------------------------------------
-DEF:      { t14 t13 }
-USE:      { ptr arr }
-LIVE IN:  { y ptr arr }
+DEF:      { Φ }
+USE:      { Φ }
+LIVE IN:  { y }
 LIVE OUT: { y }
 ==========================================
 
