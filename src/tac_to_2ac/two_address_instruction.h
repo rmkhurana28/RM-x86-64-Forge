@@ -75,6 +75,14 @@ public:
         }
     }
 
+    void printWithSeq(int seq) const {
+        if (operand2.empty()) {
+            printf("[%03d] <- [%03d] %s %s\n", seq, id, opcode.c_str(), operand1.c_str());
+        } else {
+            printf("[%03d] <- [%03d] %s %s, %s\n", seq, id, opcode.c_str(), operand1.c_str(), operand2.c_str());
+        }
+    }
+
     int getId() const { return id; }
     void setId(int new_id) { id = new_id; }
     const string& getOpcode() const { return opcode; }

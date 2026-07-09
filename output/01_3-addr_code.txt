@@ -1,0 +1,60 @@
+Successfully parsed 3-Address Code:
+[001] (=) a = 5
+[002] (=) b = 10
+[003] (=) c = 15
+[004] (=) d = 20
+[005] (B) t1 = a + b
+[006] (B) t2 = t1 * c
+[007] (B) t3 = t2 / d
+[008] (B) t4 = t3 % b
+[009] (B) t5 = t4 & a
+[010] (B) t6 = t5 | c
+[011] (B) t7 = t6 ^ d
+[012] (B) t8 = t7 << 3
+[013] (B) t9 = t8 >> 1
+[014] (U) t10 = - t9
+[015] (U) t11 = ~ t10
+[016] (U) t12 = ! t11
+[017] (B) cmp1 = t12 == a
+[018] (B) cmp2 = t12 != b
+[019] (B) cmp3 = t12 < c
+[020] (B) cmp4 = t12 <= d
+[021] (B) cmp5 = t12 > a
+[022] (B) cmp6 = t12 >= b
+[023] (&) ptr = &t12
+[024] (#) *ptr = cmp1
+[025] (*) x = *ptr
+[026] (]) arr[0] = x
+[027] (]) arr[1] = cmp2
+[028] (]) arr[2] = cmp3
+[029] (]) arr[3] = cmp4
+[030] (]) arr[4] = cmp5
+[031] (]) arr[5] = cmp6
+[032] ([) y = arr[5]
+[033] (P) param a
+[034] (P) param b
+[035] (P) param c
+[036] (P) param d
+[037] (P) param t1
+[038] (P) param t2
+[039] (P) param t3
+[040] (P) param t4
+[041] (K) ret1 = call foo, 8
+[042] (?) if cmp1 goto L1
+[043] (?F) ifFalse cmp2 goto L2
+[044] (?) if t1 < t2 goto L3
+[045] (?F) ifFalse t3 >= t4 goto L4
+[046] (G) goto L5
+[047] (L) L1:
+[048] (R) return 
+[049] (L) L2:
+[050] (R) return ret1
+[051] (L) L3:
+[052] (P) param x
+[053] (C) call print, 1
+[054] (G) goto L5
+[055] (L) L4:
+[056] ([) t13 = arr[3]
+[057] (*) t14 = *ptr
+[058] (L) L5:
+[059] (R) return y

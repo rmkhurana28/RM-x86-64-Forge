@@ -3,8 +3,12 @@
 #include "liveness_analysis/cfg.h"
 #include <iostream>
 #include <string>
+#include <cstdio>
 
 int main() {
+    // Ensure output directory exists before generating files
+    system("mkdir -p output");
+
     std::string input_filepath = "src/test/test.txt";
     
     std::cout << "--- Compiler Backend: Code Generation Process ---\n";
@@ -13,12 +17,14 @@ int main() {
     rm_forge::ThreeAddressCodeParser parser(input_filepath);
     
     if (parser.parse()) {
+        freopen("output/01_3-addr_code.txt", "w", stdout);
         std::cout << "Successfully parsed 3-Address Code:\n";
         const auto& instructions = parser.get_instructions();
         for (const auto& instr : instructions) {
             instr.print();
         }
         
+        freopen("output/02_2-addr_code.txt", "w", stdout);
         std::cout << "\n--- Phase 1: Instruction Selection (TAC to 2AC) ---\n";
         
         // 1. Instantiate the converter with the parsed TAC instructions
@@ -41,6 +47,7 @@ int main() {
         // ---------------------------------------------------------
         // Phase 2: Liveness Analysis (CFG Construction)
         // ---------------------------------------------------------
+        freopen("output/03_cfg.txt", "w", stdout);
         rm_forge::ControlFlowGraph cfg;
         cfg.buildCFG(two_addr_instructions);
         
@@ -49,6 +56,22 @@ int main() {
         
         // Print the newly constructed CFG and blocks
         cfg.print();
+        
+        // Flatten and print optimized 2AC Code for comparison
+        std::vector<rm_forge::TwoAddressInstruction> final_code = cfg.getOptimizedInstructions();
+        freopen("output/04_optimized_2-addr_code.txt", "w", stdout);
+        std::cout << "\n--- Optimized 2-Address Code Output ---\n";
+        int seq_counter = 1;
+        for (const auto& instr : final_code) {
+            instr.printWithSeq(seq_counter++);
+        }
+        
+        // Ensure all output is fully written to the disk before combining
+        std::cout.flush();
+        std::fflush(stdout);
+
+        // Concatenate all 4 files into a master 00 file
+        system("cat output/01_3-addr_code.txt output/02_2-addr_code.txt output/03_cfg.txt output/04_optimized_2-addr_code.txt > output/00_all_in_one.txt");
         
     } else {
         std::cerr << "Failed to parse input file.\n";

@@ -33,6 +33,9 @@ public:
     // Helper: Creates a new block, adds it to the graph, and returns it
     std::shared_ptr<BasicBlock> createNewBlock();
 
+    // Returns flattened optimized instructions
+    std::vector<TwoAddressInstruction> getOptimizedInstructions() const;
+
     // Prints the CFG structure
     void print() const;
 

@@ -1,9 +1,90 @@
 #include "cfg.h"
 #include <iostream>
 #include <algorithm>
+#include <unordered_map>
+
+typedef struct{
+    int nodeId; // unique nodeId for each node
+    string name; // name containing real register or var name
+    short color; // -1 for uncolor, 0-13 for physical registers
+    int degree; // number of edges
+    int spillCost; // cost to spill this node
+    bool isPhysical; // is this node a physical register node
+    bool inGraph; // is it in the graph or in the stack
+
+    unordered_set<int> neigh; // set of id(s) of neighboring nodes
+} Node;
+
 
 
 namespace rm_forge {
+
+void drawInterferenceEdges(const string& defVar, 
+                           const unordered_set<string>& currentLive, 
+                           vector<Node>& myGraph, 
+                           unordered_map<string, int>& stringToIdMap) {
+                               
+    // 1. Safety Check: Skip if the defined variable is a constant or a stack pointer
+    if (isConstant(defVar) || is_stack_pointer(defVar)) return;
+
+    // 2. Find or create the Node for the DEFINED variable
+    int defId = -1;
+    if (stringToIdMap.count(defVar) != 0) {
+        defId = stringToIdMap[defVar];
+    } else {
+        Node temp;
+        temp.color = -1;
+        temp.degree = 0;
+        temp.inGraph = true;
+        temp.isPhysical = false;
+        temp.name = defVar;
+        temp.nodeId = myGraph.size();
+        temp.spillCost = -1;
+        
+        defId = temp.nodeId;
+        stringToIdMap[defVar] = defId;
+        myGraph.push_back(temp);
+    }
+
+    // 3. Draw edges against the CURRENT LIVE set
+    for (const string& currLiveString : currentLive) {
+        
+        // Safety Check: Skip constants and stack pointers in the live set
+        if (isConstant(currLiveString) || is_stack_pointer(currLiveString)) continue;
+
+        // Find or create the Node for the LIVE variable
+        int useId = -1;
+        if (stringToIdMap.count(currLiveString) == 0) {
+            Node temp;
+            temp.color = -1;
+            temp.degree = 0;
+            temp.inGraph = true;
+            temp.isPhysical = false;
+            temp.name = currLiveString;
+            temp.nodeId = myGraph.size();
+            temp.spillCost = -1;
+            
+            useId = temp.nodeId;
+            stringToIdMap[currLiveString] = useId;
+            myGraph.push_back(temp);
+        } else {
+            useId = stringToIdMap[currLiveString];
+        }
+        
+        // Safety Check: Do NOT draw an edge to itself
+        if (defId == useId) continue;
+        
+        // Safety Check: If the edge already exists, skip it
+        if (myGraph[defId].neigh.count(useId) != 0) continue;
+        
+        // Draw the undirected edge and increment degrees
+        myGraph[defId].neigh.insert(useId);
+        myGraph[defId].degree++;
+        
+        myGraph[useId].neigh.insert(defId);
+        myGraph[useId].degree++;
+    }
+}
 
 ControlFlowGraph::ControlFlowGraph() {
 }
@@ -88,17 +169,14 @@ void ControlFlowGraph::buildCFG(const std::vector<TwoAddressInstruction>& instru
         auto currBlockHelper = basic_blocks[j];
 
         // if it is return statement, do NOT add anything in cfgOUT
-        if(isReturn(currBlockHelper->getInstructions()[currBlockHelper->getInstructions().size()-1].getOpcode())){
-            cout << "Return\n";
+        if(isReturn(currBlockHelper->getInstructions()[currBlockHelper->getInstructions().size()-1].getOpcode())){            
             continue;
         } 
 
         // if it is unconditonal statement, add the block whose 1st insturction is this label
         if(isUnconditionalJump(currBlockHelper->getInstructions()[currBlockHelper->getInstructions().size()-1].getOpcode())){
-            cout << "unconditional";
             // get label name
             string label = currBlockHelper->getInstructions()[currBlockHelper->getInstructions().size()-1].getOperand1();
-            cout << " | " << label << endl;
             
             // search through all the blocks
             for(size_t k=0 ; k<basic_blocks.size() ; k++){
@@ -111,12 +189,10 @@ void ControlFlowGraph::buildCFG(const std::vector<TwoAddressInstruction>& instru
         }
 
         if(isConditionalJump(currBlockHelper->getInstructions()[currBlockHelper->getInstructions().size()-1].getOpcode())){
-            cout << "conditional";
             if(j != basic_blocks.size()-1)
                 currBlockHelper->addSuccessor(basic_blocks[j+1]);
             
             string label = currBlockHelper->getInstructions()[currBlockHelper->getInstructions().size()-1].getOperand1();
-            cout << " | " << label << endl;
             
             for(size_t k=0 ; k<basic_blocks.size() ; k++){
                 if(basic_blocks[k]->getInstructions()[0].getOpcode() == label){
@@ -127,7 +203,6 @@ void ControlFlowGraph::buildCFG(const std::vector<TwoAddressInstruction>& instru
             continue;
         }
 
-        cout << "normal\n";
 
         if(j != basic_blocks.size()-1)
             currBlockHelper->addSuccessor(basic_blocks[j+1]);
@@ -409,6 +484,7 @@ void ControlFlowGraph::computeLiveness() {
 
     // proceeding to dce now
     
+    // performing dce now
     for(size_t i=0 ; i<basic_blocks.size(); i++){
         auto currBlock = basic_blocks[i];
 
@@ -698,8 +774,10 @@ void ControlFlowGraph::computeLiveness() {
         }
     }
 
-    if(deleteVector.empty()) return;
+    // if(deleteVector.empty()) return;
+    if(deleteVector.empty()) goto proceedToGraphColor; // using goto to skip under instrucitons and moving straight to graph color algo
 
+    // removing the dead instructions and only keeping alive ones
     for(size_t i=0 ; i<basic_blocks.size() ; i++){
         auto currBlock = basic_blocks[i];
 
@@ -716,6 +794,7 @@ void ControlFlowGraph::computeLiveness() {
                 
     }
 
+    // reseting vectors for the iterative approach
     deleteVector.clear();
     for(size_t i=0 ; i<basic_blocks.size() ; i++){
         basic_blocks[i]->use_set.clear();
@@ -726,7 +805,107 @@ void ControlFlowGraph::computeLiveness() {
 
     goto evaluateAgain;
 
+    proceedToGraphColor:
+
+    // now, we have the optimized 2-addr code instructions, we can start wiht out graph-color algo
+
+    // interference graph        
+    vector<Node> myGraph;
+
+    // acting as helper to map string to id
+    unordered_map<string , int> stringToIdMap;
+
+    vector<string> physicalRegisterVector = { "rax", "rbx" , "rcx", "rdx","rsi","rdi","r8","r9","r10","r11","r12","r13","r14","r15"};
     
+    // initializing pre-colored nodes
+    for(int i=0 ; i<14 ; i++){
+        Node temp;
+        
+        temp.isPhysical = true;
+        temp.color = i;
+        temp.degree = INTMAX_MAX;
+        temp.inGraph = true;
+        temp.nodeId = i;
+        temp.name = physicalRegisterVector[i];
+        temp.spillCost = INTMAX_MAX;
+
+        stringToIdMap[temp.name] = temp.nodeId; 
+
+        myGraph.push_back(temp);
+        
+    }
+
+    // now the precolored nodes are place perfectly, we can proceed with making the edges of the graph
+
+    // go through all the blocks
+    for(size_t i=0 ; i<basic_blocks.size(); i++){
+        auto currBlock = basic_blocks[i];
+
+        // copy liveOut of currBlock to currentLive
+        unordered_set<string> currentLive = currBlock->live_out;
+
+        // make nodes for every string in currentLive
+        for(const string& initString : currentLive){
+            if(!isConstant(initString))
+                if(!is_stack_pointer(initString)){
+                    // if node of this string alr exist, continue
+                    if(stringToIdMap.count(initString) != 0) continue;
+                    // make new node and puhs to myGraph
+                    Node temp;
+                    temp.color = -1;
+                    temp.degree = 0;
+                    temp.inGraph = true;
+                    temp.isPhysical = false;
+                    temp.name = initString;
+                    temp.nodeId = myGraph.size();
+                    temp.spillCost = -1;
+                    
+                    stringToIdMap[initString] = myGraph.size();
+                    myGraph.push_back(temp);
+                }
+        }
+
+        // go through all instruction of currBlock in reverse order
+        for(int j=currBlock->getInstructions().size()-1 ; j>=0 ; j--){
+            string op = currBlock->getInstructions()[j].getOpcode();
+
+            if(op == "ADD"){
+                // op1, op2 is read
+                // op1 is overwritten                
+
+                // here, op1 will make an edge with everything(except itself ofc) present in currentLive
+
+                drawInterferenceEdges(currBlock->getInstructions()[j].getOperand1(), currentLive, myGraph, stringToIdMap);
+                
+                
+                // remove write from currentLive
+                currentLive.erase(currBlock->getInstructions()[j].getOperand1());
+
+                // add op1, op2 back in the currentLive
+                if(!isConstant(currBlock->getInstructions()[j].getOperand2()))
+                    if(!is_stack_pointer(currBlock->getInstructions()[j].getOperand2()))
+                        currentLive.insert(currBlock->getInstructions()[j].getOperand2());
+                        
+                if(!isConstant(currBlock->getInstructions()[j].getOperand1()))
+                    if(!is_stack_pointer(currBlock->getInstructions()[j].getOperand1()))
+                        currentLive.insert(currBlock->getInstructions()[j].getOperand1());
+            }
+            
+        }
+    }
+    
+
+    
+}
+
+std::vector<TwoAddressInstruction> ControlFlowGraph::getOptimizedInstructions() const {
+    std::vector<TwoAddressInstruction> flat_list;
+    for (const auto& block : basic_blocks) {
+        for (const auto& instr : block->getInstructions()) {
+            flat_list.push_back(instr);
+        }
+    }
+    return flat_list;
 }
 
 void ControlFlowGraph::print() const {
