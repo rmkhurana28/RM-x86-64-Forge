@@ -84,7 +84,7 @@ Instructions:
 CFG IN:   { Φ }
 CFG OUT:  { 1 5 }
 ------------------------------------------
-DEF:      { r8 rsi y x ptr cmp6 cmp5 cmp4 cmp3 cmp2 t12 t11 t10 t9 rcx t8 t5 t4 t7 rdx r9 cmp1 t3 rax t2 rdi t1 ret1 d c t6 b a }
+DEF:      { r8 rsi y x ptr cmp6 cmp5 cmp4 cmp3 cmp2 t12 t11 t10 r11 t9 r10 rcx t8 t5 t4 t7 rdx r9 cmp1 t3 rax t2 rdi t1 ret1 d c t6 b a }
 USE:      { arr }
 LIVE IN:  { arr }
 LIVE OUT: { y x t3 t4 ret1 t1 t2 rax cmp2 }
@@ -202,7 +202,7 @@ Instructions:
 CFG IN:   { 2 }
 CFG OUT:  { 9 }
 ------------------------------------------
-DEF:      { rax rdi }
+DEF:      { r11 r8 rsi rdx r10 rcx rax r9 rdi }
 USE:      { x }
 LIVE IN:  { y x }
 LIVE OUT: { y }

@@ -425,6 +425,19 @@ void ControlFlowGraph::computeLiveness() {
             else if(op == "CALL"){
                 // param registers goes to use, depending on value of arg2
                 // rax goes to def
+                // rax, rcx, rdx, rsi, rdi, r8, r9, r10, r11 goes to def (caller-saved)
+
+                // caller saved registered
+                currBlock->def_set.insert("rax");
+                currBlock->def_set.insert("rcx");
+                currBlock->def_set.insert("rdx");
+                currBlock->def_set.insert("rsi");
+                currBlock->def_set.insert("rdi");
+                currBlock->def_set.insert("r8");
+                currBlock->def_set.insert("r9");
+                currBlock->def_set.insert("r10");
+                currBlock->def_set.insert("r11");
+                
 
                 vector<string> helperString;
                 helperString.push_back("rdi");
@@ -552,6 +565,17 @@ void ControlFlowGraph::computeLiveness() {
                 
                 // write to rax, and reads from registers containing the param values
                 else if(op == "CALL"){
+
+                    // remove caller-saved registers from currentLive
+                    currentLive.erase("rax");
+                    currentLive.erase("rcx");
+                    currentLive.erase("rdx");
+                    currentLive.erase("rsi");
+                    currentLive.erase("rdi");
+                    currentLive.erase("r8");
+                    currentLive.erase("r9");
+                    currentLive.erase("r10");
+                    currentLive.erase("r11");                    
 
                     // remove rax from currentLive 
                     currentLive.erase("rax");
@@ -931,7 +955,28 @@ void ControlFlowGraph::computeLiveness() {
                 // write to rax, and reads from registers containing the param values
                 else if(op == "CALL"){
 
-                    drawInterferenceEdges("rax" , currentLive , myGraph , stringToIdMap);
+                    // caller-saved register edges
+                    drawInterferenceEdges("rax" , currentLive , myGraph , stringToIdMap); // ret-value && caller saved both
+                    drawInterferenceEdges("rcx" , currentLive , myGraph , stringToIdMap);
+                    drawInterferenceEdges("rdx" , currentLive , myGraph , stringToIdMap);
+                    drawInterferenceEdges("rsi" , currentLive , myGraph , stringToIdMap);
+                    drawInterferenceEdges("rdi" , currentLive , myGraph , stringToIdMap);
+                    drawInterferenceEdges("r8" , currentLive , myGraph , stringToIdMap);
+                    drawInterferenceEdges("r9" , currentLive , myGraph , stringToIdMap);
+                    drawInterferenceEdges("r10" , currentLive , myGraph , stringToIdMap);
+                    drawInterferenceEdges("r11" , currentLive , myGraph , stringToIdMap);
+
+
+                    // remove caller-saved registers from currentLive
+                    currentLive.erase("rax");
+                    currentLive.erase("rcx");
+                    currentLive.erase("rdx");
+                    currentLive.erase("rsi");
+                    currentLive.erase("rdi");
+                    currentLive.erase("r8");
+                    currentLive.erase("r9");
+                    currentLive.erase("r10");
+                    currentLive.erase("r11");      
 
                     // remove rax from currentLive 
                     currentLive.erase("rax");
@@ -1135,10 +1180,15 @@ void ControlFlowGraph::computeLiveness() {
                 
             }
         }
-    }
-    
+    }    
 
+    // interference graph is ready now
+
+    // printing graph
     printInterferenceGraph(myGraph);
+
+    // now, we can proceed further
+
 }
 
 std::vector<TwoAddressInstruction> ControlFlowGraph::getOptimizedInstructions() const {
