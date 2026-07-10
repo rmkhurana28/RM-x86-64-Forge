@@ -1189,6 +1189,113 @@ void ControlFlowGraph::computeLiveness() {
 
     // now, we can proceed further
 
+    vector<int> helperStack;
+    bool sentLess14;
+
+    sendLess14Label:
+
+    sentLess14 = false;
+    for(size_t i=0 ; i<myGraph.size() ; i++){
+
+        // do NOT evaluate physical registers
+        if(myGraph[i].isPhysical == true) continue;
+
+        // evaluate only those which are currently in graph
+        if(myGraph[i].inGraph == false) continue;
+
+        // if degree is less than 14, push to helperStack and decr degree of all it's neighbours
+        if(myGraph[i].degree < 14){
+            
+            // decr degree of all the neighbours
+            for(const int& nId : myGraph[i].neigh){
+                myGraph[nId].degree--;
+            }
+
+            // mark this node as NOT in graph
+            myGraph[i].inGraph = false;
+            
+            // push nodeId to the stack
+            helperStack.push_back(i);
+
+            // mark that node wiht less than 14 edges is found
+            sentLess14 = true;
+        }
+    }
+
+    // if any node less than 14 degree was found, go through the loop again
+    if(sentLess14) goto sendLess14Label;
+
+    // now all the other var have degree more than 14, now, we need to decide which var to push to stack first,
+    // in this project, we will push the highest-degree var to stack first to keep it simple
+
+    long long highestDegreeIndex = -1;
+
+    for(size_t i=0 ; i<myGraph.size() ; i++){
+
+        // do NOT evaluate physical registers
+        if(myGraph[i].isPhysical == true) continue;
+
+        // evaluate only those which are currently in graph
+        if(myGraph[i].inGraph == false) continue;
+
+        // degree is 14 or more
+        if(myGraph[i].degree >= 14){
+            if(highestDegreeIndex == -1){
+                highestDegreeIndex = i;
+            } else{
+                if(myGraph[i].degree > myGraph[highestDegreeIndex].degree){
+                    highestDegreeIndex = i;
+                }
+            }
+        }
+        
+    }
+
+    if(highestDegreeIndex != -1) {
+
+        // decr degree of all the neighbours
+        for(const int& nId : myGraph[highestDegreeIndex].neigh){
+            myGraph[nId].degree--;
+        }
+
+        // set the node that is pushed to be NOT in graph anymore
+        myGraph[highestDegreeIndex].inGraph = false;
+        
+        // push the nodeId to the graph
+        helperStack.push_back(highestDegreeIndex);
+
+        // reset the helperIndex
+        highestDegreeIndex = -1;
+
+        // check again
+        goto sendLess14Label;
+    }
+
+    // here, all nodes have been succesfully pushed to the stack
+
+    // 1. Append remaining graph to 05_interference_graph.txt
+    std::ofstream out5("output/05_interference_graph.txt", std::ios::app);
+    out5 << "\n--- Graph After Simplify (Should only be Physical Registers) ---\n";
+    for(size_t i=0 ; i<myGraph.size() ; i++){
+        if(myGraph[i].inGraph){
+            out5 << "Node: " << myGraph[i].name 
+                 << " (ID: " << myGraph[i].nodeId 
+                 << ", Physical: " << (myGraph[i].isPhysical ? "Yes" : "No")
+                 << ", Degree: " << (myGraph[i].degree == (int) INTMAX_MAX ? "INF" : std::to_string(myGraph[i].degree)) 
+                 << ")\n";
+        }
+    }
+    out5.close();
+
+    // 2. Print the stack to 06_stack.txt
+    std::ofstream out6("output/06_stack.txt");
+    out6 << "\n--- Phase 4: Stack (Pop Order / Top to Bottom) ---\n";
+    for(int i = helperStack.size() - 1; i >= 0; i--){
+        int nId = helperStack[i];
+        out6 << "Stack Level [" << i << "]: Node " << myGraph[nId].name << " (ID: " << nId << ")\n";
+    }
+    out6.close();
+
 }
 
 std::vector<TwoAddressInstruction> ControlFlowGraph::getOptimizedInstructions() const {

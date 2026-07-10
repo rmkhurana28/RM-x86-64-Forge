@@ -123,3 +123,19 @@ Node: t6 (ID: 39, Physical: No, Degree: 16)
 Node: t5 (ID: 40, Physical: No, Degree: 16)
   Interferes With: t1 t4 cmp5 t12 t2 cmp1 cmp2 cmp3 cmp4 cmp6 t3 arr a c d b 
 
+
+--- Graph After Simplify (Should only be Physical Registers) ---
+Node: rax (ID: 0, Physical: Yes, Degree: 7)
+Node: rbx (ID: 1, Physical: Yes, Degree: INF)
+Node: rcx (ID: 2, Physical: Yes, Degree: 5)
+Node: rdx (ID: 3, Physical: Yes, Degree: 5)
+Node: rsi (ID: 4, Physical: Yes, Degree: 5)
+Node: rdi (ID: 5, Physical: Yes, Degree: 5)
+Node: r8 (ID: 6, Physical: Yes, Degree: 5)
+Node: r9 (ID: 7, Physical: Yes, Degree: 5)
+Node: r10 (ID: 8, Physical: Yes, Degree: 0)
+Node: r11 (ID: 9, Physical: Yes, Degree: 0)
+Node: r12 (ID: 10, Physical: Yes, Degree: INF)
+Node: r13 (ID: 11, Physical: Yes, Degree: INF)
+Node: r14 (ID: 12, Physical: Yes, Degree: INF)
+Node: r15 (ID: 13, Physical: Yes, Degree: INF)
