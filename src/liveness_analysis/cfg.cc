@@ -1,5 +1,6 @@
 #include "cfg.h"
 #include <iostream>
+#include <fstream>
 #include <algorithm>
 #include <unordered_map>
 
@@ -84,6 +85,28 @@ void drawInterferenceEdges(const string& defVar,
         myGraph[useId].neigh.insert(defId);
         myGraph[useId].degree++;
     }
+}
+
+void printInterferenceGraph(const vector<Node>& myGraph) {
+    std::ofstream out("output/05_interference_graph.txt");
+    out << "\n--- Phase 3: Interference Graph ---\n";
+    for (const auto& node : myGraph) {
+        if (!node.inGraph) continue;
+        out << "Node: " << node.name 
+            << " (ID: " << node.nodeId 
+            << ", Physical: " << (node.isPhysical ? "Yes" : "No")
+            << ", Degree: " << (node.degree == (int) INTMAX_MAX ? "INF" : std::to_string(node.degree)) 
+            << ")\n  Interferes With: ";
+        if (node.neigh.empty()) {
+            out << "None";
+        } else {
+            for (int adjId : node.neigh) {
+                out << myGraph[adjId].name << " ";
+            }
+        }
+        out << "\n\n";
+    }
+    out.close();
 }
 
 ControlFlowGraph::ControlFlowGraph() {
@@ -823,11 +846,11 @@ void ControlFlowGraph::computeLiveness() {
         
         temp.isPhysical = true;
         temp.color = i;
-        temp.degree = INTMAX_MAX;
+        temp.degree = (int) INTMAX_MAX;
         temp.inGraph = true;
         temp.nodeId = i;
         temp.name = physicalRegisterVector[i];
-        temp.spillCost = INTMAX_MAX;
+        temp.spillCost = (int) INTMAX_MAX;
 
         stringToIdMap[temp.name] = temp.nodeId; 
 
@@ -869,33 +892,253 @@ void ControlFlowGraph::computeLiveness() {
         for(int j=currBlock->getInstructions().size()-1 ; j>=0 ; j--){
             string op = currBlock->getInstructions()[j].getOpcode();
 
-            if(op == "ADD"){
-                // op1, op2 is read
-                // op1 is overwritten                
+            if(op == "MOV" || op == "LEA" || op == "PUSH" || op == "POP" || op == "CMP" || op == "CALL" || op == "ret"){
+                // never delete instructions
+                // MOV is never delete if dest is memory operand
 
-                // here, op1 will make an edge with everything(except itself ofc) present in currentLive
-
-                drawInterferenceEdges(currBlock->getInstructions()[j].getOperand1(), currentLive, myGraph, stringToIdMap);
+                // ading lea here coz forgot to implement lea, since it has same logic as mov, i added it here with mov
                 
-                
-                // remove write from currentLive
-                currentLive.erase(currBlock->getInstructions()[j].getOperand1());
 
-                // add op1, op2 back in the currentLive
-                if(!isConstant(currBlock->getInstructions()[j].getOperand2()))
-                    if(!is_stack_pointer(currBlock->getInstructions()[j].getOperand2()))
-                        currentLive.insert(currBlock->getInstructions()[j].getOperand2());
+                // it reads rax
+                if(op == "ret") {                    
+                    currentLive.insert("rax");
+                } 
+                // it reads op1 and op2 and updates RFLAGS(not counted as write btw)
+                else if(op == "CMP"){
+                    if(!isConstant(currBlock->getInstructions()[j].getOperand1()))
+                        if(!is_stack_pointer(currBlock->getInstructions()[j].getOperand1()))
+                            currentLive.insert(currBlock->getInstructions()[j].getOperand1());
+
+                    if(!isConstant(currBlock->getInstructions()[j].getOperand2()))
+                        if(!is_stack_pointer(currBlock->getInstructions()[j].getOperand2()))
+                                currentLive.insert(currBlock->getInstructions()[j].getOperand2());
+                } 
+
+                // it reads op1 and pushes it's value to stack (rsp/rbp are NOT coutned as write in this phase)
+                else if(op == "PUSH") {
+                    if(!isConstant(currBlock->getInstructions()[j].getOperand1()))
+                        if(!is_stack_pointer(currBlock->getInstructions()[j].getOperand1()))
+                            currentLive.insert(currBlock->getInstructions()[j].getOperand1());
+
+                // it writes to op1 and updates the rsp/rbp
+                } else if(op == "POP") {
+
+                    drawInterferenceEdges(currBlock->getInstructions()[j].getOperand1() , currentLive , myGraph , stringToIdMap);
+
+                    // if op1 is present in currentLive, remove it
+                    currentLive.erase(currBlock->getInstructions()[j].getOperand1());
+                }
+                // write to rax, and reads from registers containing the param values
+                else if(op == "CALL"){
+
+                    drawInterferenceEdges("rax" , currentLive , myGraph , stringToIdMap);
+
+                    // remove rax from currentLive 
+                    currentLive.erase("rax");
+                    
+                    vector<string> paramReg;
+                    paramReg.push_back("rdi");
+                    paramReg.push_back("rsi");
+                    paramReg.push_back("rdx");
+                    paramReg.push_back("rcx");
+                    paramReg.push_back("r8");
+                    paramReg.push_back("r9");
+
+                    // insert param registers to currentLive depending on the number of params
+                    for(unsigned short k=0 ; k<stoi(currBlock->getInstructions()[j].getOperand2()) && k<6 ; k++){
+                        currentLive.insert(paramReg[k]);
+                    }
+
+                    
+                } else if(op == "MOV" || op == "LEA"){
+                    if(is_memory_operand(currBlock->getInstructions()[j].getOperand1())){
+                        // write part is memory operand, hence this instruction can never be deleted
+
+                        if(is_memory_operand(currBlock->getInstructions()[j].getOperand2())){
+                            // write and read, both are memory operand
+
+                            // extract vars from write memory part and insert in currentLive
+                            unordered_set<string> holder = extract_memory_vars(currBlock->getInstructions()[j].getOperand1());
+                            for(const string& tempStr : holder){
+                                if(!isConstant(tempStr))
+                                    if(!is_stack_pointer(tempStr))
+                                        currentLive.insert(tempStr);
+                            }
+
+                            // extract vars from read memory part and insert in currentLive
+                            holder = extract_memory_vars(currBlock->getInstructions()[j].getOperand2());
+                            for(const string& tempStr : holder){
+                                if(!isConstant(tempStr))
+                                    if(!is_stack_pointer(tempStr))
+                                        currentLive.insert(tempStr);
+                            }
+                            
+                        } else{
+                            // only write is memory operand, read is register or var or const
+
+                            // extract vars from write memory part and insert in currentLive
+                            unordered_set<string> holder = extract_memory_vars(currBlock->getInstructions()[j].getOperand1());
+                            for(const string& tempStr : holder){
+                                if(!isConstant(tempStr))
+                                    if(!is_stack_pointer(tempStr))
+                                        currentLive.insert(tempStr);
+                            }
+
+                            // insert read part to currentLive
+                            if(!isConstant(currBlock->getInstructions()[j].getOperand2()))
+                                if(!is_stack_pointer(currBlock->getInstructions()[j].getOperand2()))                                
+                                    currentLive.insert(currBlock->getInstructions()[j].getOperand2());
+                        }
+                    } else{
+                        // wrtie part is NOT memory operand, hence it can be deleted if possible
+
+                        drawInterferenceEdges(currBlock->getInstructions()[j].getOperand1() , currentLive , myGraph , stringToIdMap);
                         
-                if(!isConstant(currBlock->getInstructions()[j].getOperand1()))
-                    if(!is_stack_pointer(currBlock->getInstructions()[j].getOperand1()))
-                        currentLive.insert(currBlock->getInstructions()[j].getOperand1());
+                        // now the write(op1) is in the currentLive
+
+                        // remove op1 from currentLive
+                        currentLive.erase(currBlock->getInstructions()[j].getOperand1());
+
+                        if(is_memory_operand(currBlock->getInstructions()[j].getOperand2())){
+                            // write is NOT memory operand
+                            // read is memory operand
+
+                            // extract vars from read memory part and insert in currentLive
+                            unordered_set<string> holder = extract_memory_vars(currBlock->getInstructions()[j].getOperand2());
+                            for(const string& tempStr : holder){
+                                if(!isConstant(tempStr))
+                                    if(!is_stack_pointer(tempStr))
+                                        currentLive.insert(tempStr);
+                            }
+                        } else{
+                            // neither of write or read is memory operand
+
+                            if(!isConstant(currBlock->getInstructions()[j].getOperand2()))
+                                if(!is_stack_pointer(currBlock->getInstructions()[j].getOperand2()))
+                                    currentLive.insert(currBlock->getInstructions()[j].getOperand2());
+                        }
+                    }
+                }
+            } else{
+                // other instructions can be deleted if possible
+                
+                if(op == "ADD" || op == "SUB" || op == "IMUL" || op == "AND" || op == "OR" || op == "XOR"){
+                    // op1, op2 is read
+                    // op1 is write
+
+                    drawInterferenceEdges(currBlock->getInstructions()[j].getOperand1() , currentLive , myGraph , stringToIdMap);
+
+                    // remove write from currentLive
+                    currentLive.erase(currBlock->getInstructions()[j].getOperand1());
+
+                    if(!isConstant(currBlock->getInstructions()[j].getOperand2()))
+                        if(!is_stack_pointer(currBlock->getInstructions()[j].getOperand2()))
+                            currentLive.insert(currBlock->getInstructions()[j].getOperand2());
+
+                    if(!isConstant(currBlock->getInstructions()[j].getOperand1()))
+                        if(!is_stack_pointer(currBlock->getInstructions()[j].getOperand1()))
+                            currentLive.insert(currBlock->getInstructions()[j].getOperand1());
+                }
+
+                else if(op == "SHL" || op == "SAR"){
+                    // op1, op2(either rcx(cl) or constant) is getting read
+                    // op1 is getting written
+                    
+                    drawInterferenceEdges(currBlock->getInstructions()[j].getOperand1() , currentLive , myGraph , stringToIdMap);
+
+                    // remove write from currentLive
+                    currentLive.erase(currBlock->getInstructions()[j].getOperand1());
+
+                    if(!isConstant(currBlock->getInstructions()[j].getOperand2()))                        
+                            currentLive.insert("rcx");
+
+                    if(!isConstant(currBlock->getInstructions()[j].getOperand1()))
+                        if(!is_stack_pointer(currBlock->getInstructions()[j].getOperand1()))
+                            currentLive.insert(currBlock->getInstructions()[j].getOperand1());
+                } 
+
+                else if(op == "MOVZX"){
+                    // op1, op2(either rax(al) or constant) is getting read
+                    // op1 is getting written
+
+                    drawInterferenceEdges(currBlock->getInstructions()[j].getOperand1() , currentLive , myGraph , stringToIdMap);
+
+                    // remove write from currentLive
+                    currentLive.erase(currBlock->getInstructions()[j].getOperand1());
+
+                    if(!isConstant(currBlock->getInstructions()[j].getOperand2()))                        
+                            currentLive.insert("rax");
+
+                    if(!isConstant(currBlock->getInstructions()[j].getOperand1()))
+                        if(!is_stack_pointer(currBlock->getInstructions()[j].getOperand1()))
+                            currentLive.insert(currBlock->getInstructions()[j].getOperand1());
+                } 
+
+                else if(op == "NEG" || op == "NOT"){
+                    // op1 is getting read
+                    // op1 is getting overwritten
+
+                    drawInterferenceEdges(currBlock->getInstructions()[j].getOperand1() , currentLive , myGraph , stringToIdMap);
+
+                    // remove write from currentLive
+                    currentLive.erase(currBlock->getInstructions()[j].getOperand1());
+
+                    if(!isConstant(currBlock->getInstructions()[j].getOperand1()))
+                        if(!is_stack_pointer(currBlock->getInstructions()[j].getOperand1()))
+                            currentLive.insert(currBlock->getInstructions()[j].getOperand1());
+                }
+                
+                else if(op == "IDIV"){
+                    // rax,rdx are getting read
+                    // op1 is getting read
+                    // rax,rdx are getting overwritten
+
+                    drawInterferenceEdges("rax" , currentLive , myGraph , stringToIdMap);
+                    drawInterferenceEdges("rdx" , currentLive , myGraph , stringToIdMap);
+
+                    currentLive.erase("rax");
+                    currentLive.erase("rdx");
+
+                    if(!isConstant(currBlock->getInstructions()[j].getOperand1()))
+                        if(!is_stack_pointer(currBlock->getInstructions()[j].getOperand1()))
+                            currentLive.insert(currBlock->getInstructions()[j].getOperand1());
+
+                    currentLive.insert("rax");
+                    currentLive.insert("rdx");
+                
+                }
+
+                else if(op == "CQO"){
+                    // rax is getting read
+                    // rdx is getting overwritten
+
+                    drawInterferenceEdges("rdx" , currentLive , myGraph , stringToIdMap);
+
+                    currentLive.erase("rdx");
+
+                    currentLive.insert("rax");
+                } 
+
+                else if(op == "JMP" || op == "JE" || op == "JNE" || op == "JL" || op == "JLE" || op == "JG" || op == "JGE" || isLabel(op)) continue;
+
+                else if(op == "SETE" || op == "SETNE" || op == "SETL" || op == "SETLE" || op == "SETG" || op == "SETGE"){
+                    // op1 (rax(al)) is getting overwritten
+                    // RFLAGS are getting read , but we dont consider them here in this analysis
+
+                    drawInterferenceEdges("rax" , currentLive , myGraph , stringToIdMap);
+
+                    currentLive.erase("rax");
+                }
+                else{
+                    continue;
+                }
+                
             }
-            
         }
     }
     
 
-    
+    printInterferenceGraph(myGraph);
 }
 
 std::vector<TwoAddressInstruction> ControlFlowGraph::getOptimizedInstructions() const {

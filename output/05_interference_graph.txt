@@ -1,0 +1,125 @@
+
+--- Phase 3: Interference Graph ---
+Node: rax (ID: 0, Physical: Yes, Degree: 19)
+  Interferes With: rdx cmp5 b d c a arr ret1 y cmp3 x cmp4 t3 cmp6 cmp1 t4 t1 t2 t12 cmp2 
+
+Node: rbx (ID: 1, Physical: Yes, Degree: INF)
+  Interferes With: None
+
+Node: rcx (ID: 2, Physical: Yes, Degree: 24)
+  Interferes With: t8 cmp5 b d c a arr cmp6 cmp4 cmp3 t9 r9 t2 r8 t1 cmp2 t12 rsi t4 cmp1 t3 rdx rdi x y 
+
+Node: rdx (ID: 3, Physical: Yes, Degree: 23)
+  Interferes With: b c a arr cmp4 cmp3 cmp6 rax t1 r9 t2 r8 cmp5 rcx x cmp2 d t12 rsi t4 cmp1 t3 rdi y 
+
+Node: rsi (ID: 4, Physical: Yes, Degree: 14)
+  Interferes With: t1 y r9 t2 r8 rcx x rdx t3 c cmp2 d cmp1 rdi t4 
+
+Node: rdi (ID: 5, Physical: Yes, Degree: 15)
+  Interferes With: t1 y t4 r9 t2 r8 rcx x rdx t3 rsi c cmp2 d cmp1 b 
+
+Node: r8 (ID: 6, Physical: Yes, Degree: 12)
+  Interferes With: t1 y rdi rdx t3 cmp1 t4 rsi x rcx cmp2 t2 r9 
+
+Node: r9 (ID: 7, Physical: Yes, Degree: 12)
+  Interferes With: r8 t1 y rdi rdx t3 cmp1 t4 rsi x rcx t2 cmp2 
+
+Node: r10 (ID: 8, Physical: Yes, Degree: INF)
+  Interferes With: None
+
+Node: r11 (ID: 9, Physical: Yes, Degree: INF)
+  Interferes With: None
+
+Node: r12 (ID: 10, Physical: Yes, Degree: INF)
+  Interferes With: None
+
+Node: r13 (ID: 11, Physical: Yes, Degree: INF)
+  Interferes With: None
+
+Node: r14 (ID: 12, Physical: Yes, Degree: INF)
+  Interferes With: None
+
+Node: r15 (ID: 13, Physical: Yes, Degree: INF)
+  Interferes With: None
+
+Node: y (ID: 14, Physical: No, Degree: 19)
+  Interferes With: t1 t4 x t3 b cmp1 ret1 rdi rax a r9 t2 r8 rcx rdx rsi c cmp2 d 
+
+Node: x (ID: 15, Physical: No, Degree: 24)
+  Interferes With: t1 t4 t3 b cmp1 t2 d cmp2 c a ret1 rdi r9 r8 cmp5 rcx cmp4 rdx rax cmp6 rsi arr y cmp3 
+
+Node: t3 (ID: 16, Physical: No, Degree: 33)
+  Interferes With: t1 b t2 d y rsi t12 cmp6 rax rdx ptr x rcx cmp5 r8 t10 r9 t9 rdi t11 ret1 cmp4 cmp3 cmp2 cmp1 t8 t7 t6 t5 t4 arr a c 
+
+Node: t4 (ID: 17, Physical: No, Degree: 33)
+  Interferes With: t1 t3 b t2 y rsi t12 cmp6 rax rdx ptr x rcx cmp5 r8 t10 r9 t9 rdi t11 ret1 cmp4 cmp3 cmp2 cmp1 t8 t7 t6 t5 arr a c d 
+
+Node: ret1 (ID: 18, Physical: No, Degree: 9)
+  Interferes With: cmp2 rax t2 t1 t4 cmp1 t3 x y 
+
+Node: t1 (ID: 19, Physical: No, Degree: 33)
+  Interferes With: b d c a y rsi t12 cmp6 rax rdx ptr x rcx cmp5 r8 t10 r9 t9 rdi t11 ret1 cmp4 cmp3 cmp2 cmp1 t8 t7 t6 t5 t4 t3 t2 arr 
+
+Node: t2 (ID: 20, Physical: No, Degree: 33)
+  Interferes With: t1 b d c y rsi t12 cmp6 rax rdx ptr x rcx cmp5 r8 t10 r9 t9 rdi t11 ret1 cmp4 cmp3 cmp2 cmp1 t8 t7 t6 t5 t4 t3 arr a 
+
+Node: cmp2 (ID: 21, Physical: No, Degree: 33)
+  Interferes With: t5 t6 t7 t8 y rsi t12 cmp6 rax rdx ptr x rcx cmp5 r8 t10 r9 t9 rdi t11 ret1 cmp4 cmp3 arr a c d t2 cmp1 b t3 t4 t1 
+
+Node: cmp1 (ID: 22, Physical: No, Degree: 33)
+  Interferes With: t5 t6 t7 t8 y rsi t12 cmp6 rax rdx ptr x rcx cmp5 r8 t10 r9 t9 rdi t11 ret1 cmp4 cmp3 cmp2 arr a c d t2 b t3 t4 t1 
+
+Node: d (ID: 23, Physical: No, Degree: 30)
+  Interferes With: b cmp1 cmp2 rax cmp6 ptr rdx cmp4 x cmp3 y cmp5 rcx rdi t11 rsi t12 t10 t9 t8 t7 t6 t5 t4 t3 t2 t1 arr a c 
+
+Node: c (ID: 24, Physical: No, Degree: 30)
+  Interferes With: b t12 rsi cmp1 cmp2 rax cmp6 ptr rdx cmp4 x cmp3 y cmp5 rcx rdi t11 t10 t9 t8 t7 t6 t5 t4 t3 t2 t1 d arr a 
+
+Node: b (ID: 25, Physical: No, Degree: 29)
+  Interferes With: a arr c d t1 t2 t3 t4 t5 t6 t7 t8 t9 t10 rcx cmp5 y cmp3 x cmp4 rdx ptr cmp6 rax cmp2 rdi t11 cmp1 t12 
+
+Node: a (ID: 26, Physical: No, Degree: 28)
+  Interferes With: arr b c d t1 t2 t3 t4 t5 t6 t7 t8 t9 y cmp3 x cmp4 rdx ptr cmp6 rax rcx cmp5 cmp2 t11 cmp1 t10 t12 
+
+Node: cmp3 (ID: 27, Physical: No, Degree: 27)
+  Interferes With: t5 t6 t7 t8 t9 t10 t11 t1 t4 t3 b cmp1 x cmp4 rdx ptr cmp6 rax a rcx cmp5 t12 t2 arr c cmp2 d 
+
+Node: cmp4 (ID: 28, Physical: No, Degree: 27)
+  Interferes With: t5 t6 t7 t8 t9 t10 t11 t1 t4 t3 b cmp1 x rdx ptr cmp6 rax a rcx cmp5 t12 t2 cmp3 arr c cmp2 d 
+
+Node: cmp6 (ID: 29, Physical: No, Degree: 27)
+  Interferes With: t5 t6 t7 t8 t9 t10 t11 rax t1 t4 rcx cmp5 t3 x cmp4 rdx ptr t12 t2 cmp3 arr a c cmp2 d cmp1 b 
+
+Node: arr (ID: 30, Physical: No, Degree: 27)
+  Interferes With: a b c d t1 t2 t3 t4 t5 t6 t7 t8 x cmp4 rdx ptr cmp6 rax rcx cmp5 cmp3 cmp2 t11 cmp1 t10 t12 t9 
+
+Node: cmp5 (ID: 31, Physical: No, Degree: 27)
+  Interferes With: t5 t6 t7 t8 rcx t9 t10 t11 t1 t4 t3 b cmp1 x cmp4 rdx ptr cmp6 rax a t12 t2 cmp3 arr c cmp2 d 
+
+Node: ptr (ID: 32, Physical: No, Degree: 15)
+  Interferes With: t1 t4 cmp3 cmp4 cmp6 t3 arr a c cmp2 d t2 cmp1 b cmp5 
+
+Node: t12 (ID: 33, Physical: No, Degree: 25)
+  Interferes With: rdx t5 t6 t7 t8 t9 t10 t11 t1 t4 t3 cmp6 rax a rcx cmp5 cmp4 cmp3 cmp2 cmp1 arr c d t2 b 
+
+Node: t11 (ID: 34, Physical: No, Degree: 16)
+  Interferes With: t1 t4 cmp5 t12 t2 cmp1 cmp2 cmp3 cmp4 cmp6 t3 arr a c d b 
+
+Node: t10 (ID: 35, Physical: No, Degree: 16)
+  Interferes With: t1 t4 cmp5 t12 t2 cmp1 cmp2 cmp3 cmp4 cmp6 t3 arr a c d b 
+
+Node: t9 (ID: 36, Physical: No, Degree: 17)
+  Interferes With: t1 t4 rcx cmp5 t12 t2 cmp1 cmp2 cmp3 cmp4 cmp6 t3 arr a c d b 
+
+Node: t8 (ID: 37, Physical: No, Degree: 17)
+  Interferes With: t1 t4 rcx cmp5 t12 t2 cmp1 cmp2 cmp3 cmp4 cmp6 t3 arr a c d b 
+
+Node: t7 (ID: 38, Physical: No, Degree: 16)
+  Interferes With: t1 t4 cmp5 t12 t2 cmp1 cmp2 cmp3 cmp4 cmp6 t3 arr a c d b 
+
+Node: t6 (ID: 39, Physical: No, Degree: 16)
+  Interferes With: t1 t4 cmp5 t12 t2 cmp1 cmp2 cmp3 cmp4 cmp6 t3 arr a c d b 
+
+Node: t5 (ID: 40, Physical: No, Degree: 16)
+  Interferes With: t1 t4 cmp5 t12 t2 cmp1 cmp2 cmp3 cmp4 cmp6 t3 arr a c d b 
+

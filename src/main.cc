@@ -71,7 +71,7 @@ int main() {
         std::fflush(stdout);
 
         // Concatenate all 4 files into a master 00 file
-        system("cat output/01_3-addr_code.txt output/02_2-addr_code.txt output/03_cfg.txt output/04_optimized_2-addr_code.txt > output/00_all_in_one.txt");
+        system("cat output/01_3-addr_code.txt output/02_2-addr_code.txt output/03_cfg.txt output/04_optimized_2-addr_code.txt output/05_interference_graph.txt > output/00_all_in_one.txt");
         
     } else {
         std::cerr << "Failed to parse input file.\n";
