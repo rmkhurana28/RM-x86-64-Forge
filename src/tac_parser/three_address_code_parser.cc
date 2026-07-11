@@ -55,6 +55,14 @@ Instruction ThreeAddressCodeParser::parse_line(const std::string& line) const {
         return instr;
     }
 
+    // 1b. Function Label: func L:
+    std::regex func_label_re(R"(^func\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*:$)");
+    if (std::regex_match(line, match, func_label_re)) {
+        instr.set_type(InstructionType::FunctionLabel);
+        instr.set_result(match[1]);
+        return instr;
+    }
+
     // 2a. Conditional Goto (Binary): if/ifFalse x relop y goto L
     std::regex cond_goto_bin_re(R"(^(if|ifFalse)\s+(.+?)\s+(==|!=|<|>|<=|>=)\s+(.+?)\s+goto\s+([a-zA-Z_][a-zA-Z0-9_]*)$)");
     if (std::regex_match(line, match, cond_goto_bin_re)) {

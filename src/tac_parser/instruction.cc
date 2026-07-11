@@ -9,6 +9,7 @@ std::string Instruction::type_to_string(InstructionType t) {
         case InstructionType::UnaryOperation: return "U";  // Unary
         case InstructionType::Assignment: return "=";      // Assignment
         case InstructionType::Label: return "L";           // Label
+        case InstructionType::FunctionLabel: return "F";   // Function Label
         case InstructionType::UnconditionalGoto: return "G"; // Goto
         case InstructionType::ConditionalGoto: return "?";   // Conditional Goto Binary
         case InstructionType::ConditionalGotoIfFalse: return "?F"; // Conditional Goto Binary False
@@ -42,6 +43,9 @@ void Instruction::print() const {
             break;
         case InstructionType::Label:
             std::cout << result_ << ":\n";
+            break;
+        case InstructionType::FunctionLabel:
+            std::cout << "func " << result_ << ":\n";
             break;
         case InstructionType::UnconditionalGoto:
             std::cout << "goto " << result_ << "\n";

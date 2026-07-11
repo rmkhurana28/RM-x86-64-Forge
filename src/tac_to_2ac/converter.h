@@ -30,6 +30,7 @@ public:
     void handleAssignment(Instruction* current);
     void handleReturn(Instruction* current);
     void handleLabel(Instruction* current);
+    void handleFunctionLabel(Instruction* current);
     void handleUnconditionalGoto(Instruction* current);
     void handleConditionalGoto(Instruction* current);
     unsigned short handleParam(vector<Instruction> current , int index);

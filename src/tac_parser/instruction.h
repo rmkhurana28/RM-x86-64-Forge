@@ -19,6 +19,9 @@ enum class InstructionType {
     Label, // done
     // e.g., L1:
 
+    FunctionLabel, // done
+    // e.g., func foo:
+
     UnconditionalGoto, // done
     // e.g., goto L1
 

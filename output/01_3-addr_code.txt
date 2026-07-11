@@ -1,60 +1,78 @@
 Successfully parsed 3-Address Code:
-[001] (=) a = 5
-[002] (=) b = 10
-[003] (=) c = 15
-[004] (=) d = 20
-[005] (B) t1 = a + b
-[006] (B) t2 = t1 * c
-[007] (B) t3 = t2 / d
-[008] (B) t4 = t3 % b
-[009] (B) t5 = t4 & a
-[010] (B) t6 = t5 | c
-[011] (B) t7 = t6 ^ d
-[012] (B) t8 = t7 << 3
-[013] (B) t9 = t8 >> 1
-[014] (U) t10 = - t9
-[015] (U) t11 = ~ t10
-[016] (U) t12 = ! t11
-[017] (B) cmp1 = t12 == a
-[018] (B) cmp2 = t12 != b
-[019] (B) cmp3 = t12 < c
-[020] (B) cmp4 = t12 <= d
-[021] (B) cmp5 = t12 > a
-[022] (B) cmp6 = t12 >= b
-[023] (&) ptr = &t12
-[024] (#) *ptr = cmp1
-[025] (*) x = *ptr
-[026] (]) arr[0] = x
-[027] (]) arr[1] = cmp2
-[028] (]) arr[2] = cmp3
-[029] (]) arr[3] = cmp4
-[030] (]) arr[4] = cmp5
-[031] (]) arr[5] = cmp6
-[032] ([) y = arr[5]
-[033] (P) param a
-[034] (P) param b
-[035] (P) param c
-[036] (P) param d
-[037] (P) param t1
-[038] (P) param t2
-[039] (P) param t3
-[040] (P) param t4
-[041] (K) ret1 = call foo, 8
-[042] (?) if cmp1 goto L1
-[043] (?F) ifFalse cmp2 goto L2
-[044] (?) if t1 < t2 goto L3
-[045] (?F) ifFalse t3 >= t4 goto L4
-[046] (G) goto L5
-[047] (L) L1:
-[048] (R) return 
-[049] (L) L2:
-[050] (R) return ret1
-[051] (L) L3:
-[052] (P) param x
-[053] (C) call print, 1
-[054] (G) goto L5
-[055] (L) L4:
-[056] ([) t13 = arr[3]
-[057] (*) t14 = *ptr
-[058] (L) L5:
-[059] (R) return y
+[001] (F) func math_ops:
+[002] (=) m1 = 10
+[003] (=) m2 = 20
+[004] (B) m3 = m1 + m2
+[005] (B) m4 = m3 * 2
+[006] (R) return m4
+[007] (F) func foo:
+[008] (P) param m1
+[009] (P) param m2
+[010] (K) res = call math_ops, 2
+[011] (?) if res > 50 goto L1
+[012] (B) res = res + 10
+[013] (G) goto L2
+[014] (L) L1:
+[015] (B) res = res - 10
+[016] (L) L2:
+[017] (R) return res
+[018] (F) func main:
+[019] (=) a = 5
+[020] (=) b = 10
+[021] (=) c = 15
+[022] (=) d = 20
+[023] (B) t1 = a + b
+[024] (B) t2 = t1 * c
+[025] (B) t3 = t2 / d
+[026] (B) t4 = t3 % b
+[027] (B) t5 = t4 & a
+[028] (B) t6 = t5 | c
+[029] (B) t7 = t6 ^ d
+[030] (B) t8 = t7 << 3
+[031] (B) t9 = t8 >> 1
+[032] (U) t10 = - t9
+[033] (U) t11 = ~ t10
+[034] (U) t12 = ! t11
+[035] (B) cmp1 = t12 == a
+[036] (B) cmp2 = t12 != b
+[037] (B) cmp3 = t12 < c
+[038] (B) cmp4 = t12 <= d
+[039] (B) cmp5 = t12 > a
+[040] (B) cmp6 = t12 >= b
+[041] (&) ptr = &t12
+[042] (#) *ptr = cmp1
+[043] (*) x = *ptr
+[044] (]) arr[0] = x
+[045] (]) arr[1] = cmp2
+[046] (]) arr[2] = cmp3
+[047] (]) arr[3] = cmp4
+[048] (]) arr[4] = cmp5
+[049] (]) arr[5] = cmp6
+[050] ([) y = arr[5]
+[051] (P) param a
+[052] (P) param b
+[053] (P) param c
+[054] (P) param d
+[055] (P) param t1
+[056] (P) param t2
+[057] (P) param t3
+[058] (P) param t4
+[059] (K) ret1 = call foo, 8
+[060] (?) if cmp1 goto L3
+[061] (?F) ifFalse cmp2 goto L4
+[062] (?) if t1 < t2 goto L5
+[063] (?F) ifFalse t3 >= t4 goto L6
+[064] (G) goto L7
+[065] (L) L3:
+[066] (R) return ret1
+[067] (L) L4:
+[068] (R) return 
+[069] (L) L5:
+[070] (P) param x
+[071] (C) call foo, 1
+[072] (G) goto L7
+[073] (L) L6:
+[074] ([) t13 = arr[3]
+[075] (*) t14 = *ptr
+[076] (L) L7:
+[077] (R) return y

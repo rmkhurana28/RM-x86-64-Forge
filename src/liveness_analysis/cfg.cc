@@ -16,8 +16,6 @@ typedef struct{
     unordered_set<int> neigh; // set of id(s) of neighboring nodes
 } Node;
 
-
-
 namespace rm_forge {
 
 void drawInterferenceEdges(const string& defVar, 
@@ -134,6 +132,60 @@ void printPhase4Stack(const vector<Node>& myGraph, const vector<int>& helperStac
     out6.close();
 }
 
+void printPhase4MappingAndSpills(const unordered_map<string, int>& varRegMap, const vector<int>& spillNeeded, const vector<Node>& myGraph, const unordered_map<string, string>& varFuncMap) {
+    const char* regNames[14] = {
+        "rax", "rbx", "rcx", "rdx", "rsi", "rdi", 
+        "r8", "r9", "r10", "r11", "r12", "r13", "r14", "r15"
+    };
+
+    std::string outputContent = "\n--- Phase 4: Register Mapping and Spills ---\n";
+    outputContent += "Mapping (Var -> Physical Color ID):\n";
+    if (varRegMap.empty()) {
+        outputContent += "  None\n";
+    } else {
+        int mapCount = 1;
+        for (const auto& pair : varRegMap) {
+            std::string regName = (pair.second >= 0 && pair.second < 14) ? regNames[pair.second] : "UNKNOWN";
+            char buf[256];
+            snprintf(buf, sizeof(buf), "  [%03d] %s -> %d (%s)\n", mapCount++, pair.first.c_str(), pair.second, regName.c_str());
+            outputContent += buf;
+        }
+    }
+    
+    outputContent += "\nSpill Needed Stack (Node IDs):\n";
+    if (spillNeeded.empty()) {
+        outputContent += "  None\n";
+    } else {
+        int spillCount = 1;
+        for (size_t i = 0; i < spillNeeded.size(); ++i) {
+            int nId = spillNeeded[i];
+            char buf[256];
+            snprintf(buf, sizeof(buf), "  [%03d] %s (ID: %d)\n", spillCount++, myGraph[nId].name.c_str(), nId);
+            outputContent += buf;
+        }
+    }
+    
+    outputContent += "\nVariable to Function Context Map:\n";
+    if (varFuncMap.empty()) {
+        outputContent += "  None\n";
+    } else {
+        int vCount = 1;
+        for (const auto& pair : varFuncMap) {
+            char buf[256];
+            snprintf(buf, sizeof(buf), "  [%03d] %s -> %s\n", vCount++, pair.first.c_str(), pair.second.c_str());
+            outputContent += buf;
+        }
+    }
+    
+    std::ofstream out7("output/07_mapping_and_spills.txt");
+    out7 << outputContent;
+    out7.close();
+    
+    std::ofstream out0("output/00_all_in_one.txt", std::ios::app);
+    out0 << outputContent;
+    out0.close();
+}
+
 ControlFlowGraph::ControlFlowGraph() {
 }
 
@@ -193,7 +245,7 @@ void ControlFlowGraph::buildCFG(const std::vector<TwoAddressInstruction>& instru
                 i++;
                 goto newBlock;
             }    
-        } else if(isLabel(decider)){
+        } else if(isLabel(decider) || decider == "FUNC"){
             // cout << "Case-2\n";
             // basic_blocks.push_back(currBlock);
             if(currBlock->getInstructions().size() != 0){
@@ -278,6 +330,10 @@ void ControlFlowGraph::computeLiveness() {
 
     vector<int> deleteVector;
     vector<TwoAddressInstruction> optInstructions;
+    vector<TwoAddressInstruction> modifiedInstructions;
+
+    unordered_map<string , string> varFuncMap;
+    unordered_map<string , int> funcOffsetMap;
 
     evaluateAgain:
 
@@ -1350,9 +1406,120 @@ void ControlFlowGraph::computeLiveness() {
 
         // pop the element from the stack
         helperStack.pop_back();
-
+        
     }
 
+    
+
+    /*
+        we are gonna now make a hashmap of which var belong to which func
+        this will be used for determinig what offset to se for each spileld var
+        this will be used in determining and solving the problem of callee saved registers
+    */
+
+    string currFunc = "";
+
+    // go throguh all the blocks linearly
+    for(size_t i=0 ; i<basic_blocks.size() ; i++){
+        // go throguh all instructions linearly frm starting of each block
+        auto currBlock = basic_blocks[i];
+        for(size_t j=0 ; j<currBlock->getInstructions().size() ; j++){
+
+            // this is new func starting label
+            if(currBlock->getInstructions()[j].getOpcode() == "FUNC"){
+                // update currFunc 
+                currFunc = currBlock->getInstructions()[j].getOperand1();
+
+                // if mapping of this func to it's offset isnt alr present, initialize it
+                if(funcOffsetMap.count(currFunc) == 0) funcOffsetMap[currFunc] = 0;
+            }
+
+            unordered_set<string> helperOpStorage;
+            if(!isConstant(currBlock->getInstructions()[j].getOperand1()) && 
+                currBlock->getInstructions()[j].getOperand1() != "" &&
+                !isPhysicalRegister(currBlock->getInstructions()[j].getOperand1()) &&
+                !is_memory_operand(currBlock->getInstructions()[j].getOperand1())){                
+                    
+                    // add if not constant && not memory operand && snot physical register 
+                    helperOpStorage.insert(currBlock->getInstructions()[j].getOperand1());
+            }
+            if(!isConstant(currBlock->getInstructions()[j].getOperand2()) && 
+                currBlock->getInstructions()[j].getOperand2() != "" &&
+                !isPhysicalRegister(currBlock->getInstructions()[j].getOperand2()) &&
+                !is_memory_operand(currBlock->getInstructions()[j].getOperand2())){                
+                    
+                    // add if not constant && not memory operand && snot physical register
+                    helperOpStorage.insert(currBlock->getInstructions()[j].getOperand2());
+            }
+
+            // case for op1 being memory operand
+            if(is_memory_operand(currBlock->getInstructions()[j].getOperand1())){
+
+                // extracting vars
+                unordered_set<string> tempStorage = extract_memory_vars(currBlock->getInstructions()[j].getOperand1());
+                for(const string& each : tempStorage){
+
+                    // add if not constant && not physical register
+                    if(!isConstant(each) && !isPhysicalRegister(each))   
+                        helperOpStorage.insert(each);
+                }
+            }
+            if(is_memory_operand(currBlock->getInstructions()[j].getOperand2())){
+
+                // extracting vars
+                unordered_set<string> tempStorage = extract_memory_vars(currBlock->getInstructions()[j].getOperand2());
+                for(const string& each : tempStorage){
+
+                    // add if not constant && not physical register
+                    if(!isConstant(each) && !isPhysicalRegister(each))                                        
+                        helperOpStorage.insert(each);
+                }
+            }
+
+            // check if list is empty
+            if(!helperOpStorage.empty()){
+                for(const string& eachInHelper : helperOpStorage){
+
+                    // insert the mapping if not present
+                    if(varFuncMap.count(eachInHelper) == 0){ 
+                        // create the mapping
+                        varFuncMap[eachInHelper] = currFunc;
+                    }
+                }
+            }
+
+            
+        }
+    }
+
+    printPhase4MappingAndSpills(varRegMap, spillNeeded, myGraph, varFuncMap);
+
+
+    // now, we need to deal with the variables in the spillNeeded vector
+
+    // unordered_map<string , string> replacerMap;
+
+    // for(size_t i=0 ; i<spillNeeded.size() ; i++){
+
+    //     // store the index of the current node that is being dealt with
+    //     int currNode = spillNeeded[i];
+    //     string spillName = myGraph[currNode].name;
+
+    //     // replacerMap.[spillName , "[" + ]
+
+    //     // clearing the vector for a fresh start
+    //     modifiedInstructions.clear();
+
+    //     // go through all blocks
+    //     for(size_t j=0 ; j<basic_blocks.size() ; j++){
+
+    //         // go through all insturctions of this block
+    //         for(size_t k=0 ; k<basic_blocks[i]->getInstructions().size() ; k++){
+    //             //
+    //         }
+    //     }
+    // }
+    
 }
 
 std::vector<TwoAddressInstruction> ControlFlowGraph::getOptimizedInstructions() const {

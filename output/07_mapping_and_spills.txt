@@ -1,0 +1,81 @@
+
+--- Phase 4: Register Mapping and Spills ---
+Mapping (Var -> Physical Color ID):
+  [001] ret1 -> 2 (rcx)
+  [002] m2 -> 2 (rcx)
+  [003] t10 -> 0 (rax)
+  [004] t7 -> 0 (rax)
+  [005] t6 -> 0 (rax)
+  [006] t5 -> 0 (rax)
+  [007] cmp1 -> 1 (rbx)
+  [008] x -> 10 (r12)
+  [009] a -> 4 (rsi)
+  [010] m1 -> 0 (rax)
+  [011] d -> 8 (r10)
+  [012] t11 -> 0 (rax)
+  [013] t8 -> 0 (rax)
+  [014] arr -> 9 (r11)
+  [015] res -> 0 (rax)
+  [016] t9 -> 0 (rax)
+  [017] b -> 6 (r8)
+  [018] c -> 7 (r9)
+  [019] m4 -> 0 (rax)
+  [020] m3 -> 0 (rax)
+  [021] y -> 11 (r13)
+  [022] cmp5 -> 5 (rdi)
+  [023] ptr -> 0 (rax)
+  [024] cmp6 -> 11 (r13)
+  [025] cmp4 -> 12 (r14)
+  [026] cmp3 -> 13 (r15)
+  [027] t12 -> 10 (r12)
+
+Spill Needed Stack (Node IDs):
+  [001] cmp2 (ID: 26)
+  [002] t4 (ID: 24)
+  [003] t2 (ID: 23)
+  [004] t1 (ID: 22)
+  [005] t3 (ID: 21)
+
+Variable to Function Context Map:
+  [001] L5 -> main
+  [002] L4 -> main
+  [003] y -> main
+  [004] x -> main
+  [005] L6 -> main
+  [006] ptr -> main
+  [007] cmp6 -> main
+  [008] cmp5 -> main
+  [009] cmp4 -> main
+  [010] cmp3 -> main
+  [011] arr -> main
+  [012] L1 -> foo
+  [013] m4 -> math_ops
+  [014] m3 -> math_ops
+  [015] t4 -> main
+  [016] res -> foo
+  [017] L7 -> main
+  [018] t9 -> main
+  [019] a -> main
+  [020] foo -> foo
+  [021] b -> main
+  [022] t6 -> main
+  [023] t5 -> main
+  [024] main -> main
+  [025] c -> main
+  [026] L2 -> foo
+  [027] m2 -> math_ops
+  [028] L3 -> main
+  [029] t10 -> main
+  [030] t7 -> main
+  [031] m1 -> math_ops
+  [032] ret1 -> main
+  [033] d -> main
+  [034] t2 -> main
+  [035] math_ops -> math_ops
+  [036] t1 -> main
+  [037] t8 -> main
+  [038] t11 -> main
+  [039] t12 -> main
+  [040] t3 -> main
+  [041] cmp1 -> main
+  [042] cmp2 -> main

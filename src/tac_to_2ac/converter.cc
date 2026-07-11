@@ -33,6 +33,8 @@ void TacTo2acConverter::convert() {
             handleReturn(&current);
         } else if(current.get_type() == InstructionType::Label){
             handleLabel(&current);
+        } else if(current.get_type() == InstructionType::FunctionLabel){
+            handleFunctionLabel(&current);
         } else if(current.get_type() == InstructionType::UnconditionalGoto){
             handleUnconditionalGoto(&current);
         } else if(current.get_type() == InstructionType::ConditionalGoto ||
@@ -192,6 +194,11 @@ void TacTo2acConverter::handleReturn(Instruction* current){
 
 void TacTo2acConverter::handleLabel(Instruction* current){
     emit(current->get_result(),"","");
+    return;
+}
+
+void TacTo2acConverter::handleFunctionLabel(Instruction* current){
+    emit("FUNC", current->get_result(), "");
     return;
 }
 
