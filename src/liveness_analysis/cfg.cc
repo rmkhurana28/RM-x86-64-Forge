@@ -1497,29 +1497,112 @@ void ControlFlowGraph::computeLiveness() {
 
     // now, we need to deal with the variables in the spillNeeded vector
 
-    // unordered_map<string , string> replacerMap;
+    unordered_map<string , string> replacerMap;
 
-    // for(size_t i=0 ; i<spillNeeded.size() ; i++){
+    for(size_t i=0 ; i<spillNeeded.size() ; i++){
 
-    //     // store the index of the current node that is being dealt with
-    //     int currNode = spillNeeded[i];
-    //     string spillName = myGraph[currNode].name;
+        // store the index of the current node that is being dealt with
+        int currNode = spillNeeded[i];
 
-    //     // replacerMap.[spillName , "[" + ]
+        // name of currentPoped var
+        string spillName = myGraph[currNode].name;
 
-    //     // clearing the vector for a fresh start
-    //     modifiedInstructions.clear();
+        string stackAddr;
 
-    //     // go through all blocks
-    //     for(size_t j=0 ; j<basic_blocks.size() ; j++){
+        string funcAttachToThisVar = varFuncMap[spillName];
+        int countOfOffsetUsed = funcOffsetMap[funcAttachToThisVar] + 1;
 
-    //         // go through all insturctions of this block
-    //         for(size_t k=0 ; k<basic_blocks[i]->getInstructions().size() ; k++){
-    //             //
-    //         }
-    //     }
-    // }
+        stackAddr = "[rbp - " + to_string(8*countOfOffsetUsed) + "]"; 
+        funcOffsetMap[funcAttachToThisVar] = countOfOffsetUsed;
+
+        replacerMap[spillName] = stackAddr;
+
+        int helperCount = 1;
+
+        // clearing the vector for a fresh start
+        modifiedInstructions.clear();
+
+        // go through all blocks
+        for(size_t j=0 ; j<basic_blocks.size() ; j++){
+
+            // go through all insturctions of this block
+            for(size_t k=0 ; k<basic_blocks[j]->getInstructions().size() ; k++){
+
+                // if spillName is NOT in this instruciton, copy that to modified instructions as it is
+                if(basic_blocks[j]->getInstructions()[k].getOperand1() != spillName && basic_blocks[j]->getInstructions()[k].getOperand2() != spillName){
+                    modifiedInstructions.push_back(basic_blocks[j]->getInstructions()[k]);
+                    continue;
+                }
+
+                // copy the current instruction
+                auto currInstruction = basic_blocks[j]->getInstructions()[k];
+                string originalOp1 = currInstruction.getOperand1();
+                string originalOp2 = currInstruction.getOperand2();           
+                
+                string specialCase = "";
+
+                if(originalOp1 == spillName && isOp1Read(currInstruction.getOpcode())){
+                    // op1 is spillName and getting read
+
+                    string helperName = spillName + "_helper_" + to_string(helperCount++);
+                    specialCase = helperName;
+
+                    modifiedInstructions.push_back(makeInstruction("MOV" , helperName , stackAddr));
+                    
+                    currInstruction.setOperand1(helperName);
+                } 
+
+                if(originalOp2 == spillName && isOp2Read(currInstruction.getOpcode())){
+                    // op2 is spillName and getting read                    
+
+                    string helperName = spillName + "_helper_" + to_string(helperCount++);
+                    modifiedInstructions.push_back(makeInstruction("MOV" , helperName , stackAddr));
+                    currInstruction.setOperand2(helperName);
+                } 
+
+                
+                if(originalOp1 == spillName && isOp1Modified(currInstruction.getOpcode())){
+                    // op1 is spillName and getting modified
+                    
+                    string helperName = spillName + "_helper_" + to_string(helperCount++);
+                    
+                    if(specialCase == "")
+                        currInstruction.setOperand1(helperName);                    
+                    else
+                        currInstruction.setOperand1(specialCase);                    
+                    
+                    modifiedInstructions.push_back(currInstruction);
+                    
+                    if(specialCase == "")
+                        modifiedInstructions.push_back(makeInstruction("MOV" , stackAddr , helperName));
+                    else
+                        modifiedInstructions.push_back(makeInstruction("MOV" , stackAddr , specialCase));
+                } else{
+                    modifiedInstructions.push_back(currInstruction);
+                }
+            }
+
+            basic_blocks[j]->getInstructionsMutable() = modifiedInstructions;
+            
+            modifiedInstructions.clear();
+        }
+    }
     
+    std::cerr << "\n\n=== POST-REWRITE SPILLED INSTRUCTIONS ===\n";
+    for(size_t b=0; b<basic_blocks.size(); b++){
+        for(size_t i=0; i<basic_blocks[b]->getInstructions().size(); i++){
+            // Temporarily use fprintf to stderr to ensure it bypasses stdout redirection
+            fprintf(stderr, "[%03d] %s %s", 
+                basic_blocks[b]->getInstructions()[i].getId(), 
+                basic_blocks[b]->getInstructions()[i].getOpcode().c_str(), 
+                basic_blocks[b]->getInstructions()[i].getOperand1().c_str());
+            if (!basic_blocks[b]->getInstructions()[i].getOperand2().empty()) {
+                fprintf(stderr, ", %s", basic_blocks[b]->getInstructions()[i].getOperand2().c_str());
+            }
+            fprintf(stderr, "\n");
+        }
+    }
+    std::cerr << "=========================================\n\n";
 }
 
 std::vector<TwoAddressInstruction> ControlFlowGraph::getOptimizedInstructions() const {

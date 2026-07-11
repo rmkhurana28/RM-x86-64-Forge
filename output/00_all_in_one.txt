@@ -321,19 +321,31 @@ Instructions:
 [030] MOV b, 10
 [031] MOV c, 15
 [032] MOV d, 20
-[033] MOV t1, a
-[034] ADD t1, b
-[035] MOV t2, t1
-[036] IMUL t2, c
-[037] MOV rax, t2
+[033] MOV t1_helper_1, a
+[146] MOV [rbp - 32], t1_helper_1
+[147] MOV t1_helper_2, [rbp - 32]
+[034] ADD t1_helper_2, b
+[148] MOV [rbp - 32], t1_helper_2
+[149] MOV t1_helper_4, [rbp - 32]
+[035] MOV t2_helper_1, t1_helper_4
+[140] MOV [rbp - 24], t2_helper_1
+[141] MOV t2_helper_2, [rbp - 24]
+[036] IMUL t2_helper_2, c
+[142] MOV [rbp - 24], t2_helper_2
+[143] MOV t2_helper_4, [rbp - 24]
+[037] MOV rax, t2_helper_4
 [038] CQO 
 [039] IDIV d
-[040] MOV t3, rax
-[041] MOV rax, t3
+[040] MOV t3_helper_1, rax
+[152] MOV [rbp - 40], t3_helper_1
+[153] MOV t3_helper_2, [rbp - 40]
+[041] MOV rax, t3_helper_2
 [042] CQO 
 [043] IDIV b
-[044] MOV t4, rdx
-[045] MOV t5, t4
+[044] MOV t4_helper_1, rdx
+[136] MOV [rbp - 16], t4_helper_1
+[137] MOV t4_helper_2, [rbp - 16]
+[045] MOV t5, t4_helper_2
 [046] AND t5, a
 [047] MOV t6, t5
 [048] OR t6, c
@@ -357,7 +369,8 @@ Instructions:
 [066] MOVZX cmp1, al
 [067] CMP t12, b
 [068] SETNE al
-[069] MOVZX cmp2, al
+[069] MOVZX cmp2_helper_1, al
+[133] MOV [rbp - 8], cmp2_helper_1
 [070] CMP t12, c
 [071] SETL al
 [072] MOVZX cmp3, al
@@ -374,7 +387,8 @@ Instructions:
 [083] MOV [ptr], cmp1
 [084] MOV x, [ptr]
 [085] MOV [arr + 0*8], x
-[086] MOV [arr + 1*8], cmp2
+[134] MOV cmp2_helper_2, [rbp - 8]
+[086] MOV [arr + 1*8], cmp2_helper_2
 [087] MOV [arr + 2*8], cmp3
 [088] MOV [arr + 3*8], cmp4
 [089] MOV [arr + 4*8], cmp5
@@ -384,10 +398,14 @@ Instructions:
 [093] MOV rsi, b
 [094] MOV rdx, c
 [095] MOV rcx, d
-[096] MOV r8, t1
-[097] MOV r9, t2
-[098] PUSH t4
-[099] PUSH t3
+[150] MOV t1_helper_5, [rbp - 32]
+[096] MOV r8, t1_helper_5
+[144] MOV t2_helper_5, [rbp - 24]
+[097] MOV r9, t2_helper_5
+[138] MOV t4_helper_3, [rbp - 16]
+[098] PUSH t4_helper_3
+[154] MOV t3_helper_3, [rbp - 40]
+[099] PUSH t3_helper_3
 [100] CALL foo, 8
 [101] MOV ret1, rax
 [102] ADD rsp, 16
@@ -407,7 +425,8 @@ LIVE OUT: { y x t3 rax t1 t2 t4 ret1 cmp2 }
 Block ID: 6
 ------------------------------------------
 Instructions:
-[105] CMP cmp2, 0
+[135] MOV cmp2_helper_3, [rbp - 8]
+[105] CMP cmp2_helper_3, 0
 [106] JE L4
 ------------------------------------------
 CFG IN:   { 5 }
@@ -423,7 +442,9 @@ LIVE OUT: { y x t3 t4 rax t1 t2 }
 Block ID: 7
 ------------------------------------------
 Instructions:
-[107] CMP t1, t2
+[145] MOV t2_helper_6, [rbp - 24]
+[151] MOV t1_helper_6, [rbp - 32]
+[107] CMP t1_helper_6, t2_helper_6
 [108] JL L5
 ------------------------------------------
 CFG IN:   { 6 }
@@ -439,7 +460,9 @@ LIVE OUT: { y x t3 t4 }
 Block ID: 8
 ------------------------------------------
 Instructions:
-[109] CMP t3, t4
+[139] MOV t4_helper_4, [rbp - 16]
+[155] MOV t3_helper_4, [rbp - 40]
+[109] CMP t3_helper_4, t4_helper_4
 [110] JL L6
 ------------------------------------------
 CFG IN:   { 7 }
@@ -589,104 +612,127 @@ LIVE OUT: { Φ }
 [030] <- [030] MOV b, 10
 [031] <- [031] MOV c, 15
 [032] <- [032] MOV d, 20
-[033] <- [033] MOV t1, a
-[034] <- [034] ADD t1, b
-[035] <- [035] MOV t2, t1
-[036] <- [036] IMUL t2, c
-[037] <- [037] MOV rax, t2
-[038] <- [038] CQO 
-[039] <- [039] IDIV d
-[040] <- [040] MOV t3, rax
-[041] <- [041] MOV rax, t3
-[042] <- [042] CQO 
-[043] <- [043] IDIV b
-[044] <- [044] MOV t4, rdx
-[045] <- [045] MOV t5, t4
-[046] <- [046] AND t5, a
-[047] <- [047] MOV t6, t5
-[048] <- [048] OR t6, c
-[049] <- [049] MOV t7, t6
-[050] <- [050] XOR t7, d
-[051] <- [051] MOV t8, t7
-[052] <- [052] MOV rcx, 3
-[053] <- [053] SHL t8, cl
-[054] <- [054] MOV t9, t8
-[055] <- [055] MOV rcx, 1
-[056] <- [056] SAR t9, cl
-[057] <- [057] MOV t10, t9
-[058] <- [058] NEG t10
-[059] <- [059] MOV t11, t10
-[060] <- [060] NOT t11
-[061] <- [061] CMP t11, 0
-[062] <- [062] SETE al
-[063] <- [063] MOVZX t12, al
-[064] <- [064] CMP t12, a
-[065] <- [065] SETE al
-[066] <- [066] MOVZX cmp1, al
-[067] <- [067] CMP t12, b
-[068] <- [068] SETNE al
-[069] <- [069] MOVZX cmp2, al
-[070] <- [070] CMP t12, c
-[071] <- [071] SETL al
-[072] <- [072] MOVZX cmp3, al
-[073] <- [073] CMP t12, d
-[074] <- [074] SETLE al
-[075] <- [075] MOVZX cmp4, al
-[076] <- [076] CMP t12, a
-[077] <- [077] SETG al
-[078] <- [078] MOVZX cmp5, al
-[079] <- [079] CMP t12, b
-[080] <- [080] SETGE al
-[081] <- [081] MOVZX cmp6, al
-[082] <- [082] LEA ptr, [t12]
-[083] <- [083] MOV [ptr], cmp1
-[084] <- [084] MOV x, [ptr]
-[085] <- [085] MOV [arr + 0*8], x
-[086] <- [086] MOV [arr + 1*8], cmp2
-[087] <- [087] MOV [arr + 2*8], cmp3
-[088] <- [088] MOV [arr + 3*8], cmp4
-[089] <- [089] MOV [arr + 4*8], cmp5
-[090] <- [090] MOV [arr + 5*8], cmp6
-[091] <- [091] MOV y, [arr + 5*8]
-[092] <- [092] MOV rdi, a
-[093] <- [093] MOV rsi, b
-[094] <- [094] MOV rdx, c
-[095] <- [095] MOV rcx, d
-[096] <- [096] MOV r8, t1
-[097] <- [097] MOV r9, t2
-[098] <- [098] PUSH t4
-[099] <- [099] PUSH t3
-[100] <- [100] CALL foo, 8
-[101] <- [101] MOV ret1, rax
-[102] <- [102] ADD rsp, 16
-[103] <- [103] CMP cmp1, 0
-[104] <- [104] JNE L3
-[105] <- [105] CMP cmp2, 0
-[106] <- [106] JE L4
-[107] <- [107] CMP t1, t2
-[108] <- [108] JL L5
-[109] <- [109] CMP t3, t4
-[110] <- [110] JL L6
-[111] <- [111] JMP L7
-[112] <- [112] L3 
-[113] <- [113] MOV rax, ret1
-[114] <- [114] MOV rsp, rbp
-[115] <- [115] POP rbp
-[116] <- [116] ret 
-[117] <- [117] L4 
-[118] <- [118] MOV rsp, rbp
-[119] <- [119] POP rbp
-[120] <- [120] ret 
-[121] <- [121] L5 
-[122] <- [122] MOV rdi, x
-[123] <- [123] CALL foo, 1
-[124] <- [124] JMP L7
-[125] <- [125] L6 
-[126] <- [128] L7 
-[127] <- [129] MOV rax, y
-[128] <- [130] MOV rsp, rbp
-[129] <- [131] POP rbp
-[130] <- [132] ret 
+[033] <- [033] MOV t1_helper_1, a
+[034] <- [146] MOV [rbp - 32], t1_helper_1
+[035] <- [147] MOV t1_helper_2, [rbp - 32]
+[036] <- [034] ADD t1_helper_2, b
+[037] <- [148] MOV [rbp - 32], t1_helper_2
+[038] <- [149] MOV t1_helper_4, [rbp - 32]
+[039] <- [035] MOV t2_helper_1, t1_helper_4
+[040] <- [140] MOV [rbp - 24], t2_helper_1
+[041] <- [141] MOV t2_helper_2, [rbp - 24]
+[042] <- [036] IMUL t2_helper_2, c
+[043] <- [142] MOV [rbp - 24], t2_helper_2
+[044] <- [143] MOV t2_helper_4, [rbp - 24]
+[045] <- [037] MOV rax, t2_helper_4
+[046] <- [038] CQO 
+[047] <- [039] IDIV d
+[048] <- [040] MOV t3_helper_1, rax
+[049] <- [152] MOV [rbp - 40], t3_helper_1
+[050] <- [153] MOV t3_helper_2, [rbp - 40]
+[051] <- [041] MOV rax, t3_helper_2
+[052] <- [042] CQO 
+[053] <- [043] IDIV b
+[054] <- [044] MOV t4_helper_1, rdx
+[055] <- [136] MOV [rbp - 16], t4_helper_1
+[056] <- [137] MOV t4_helper_2, [rbp - 16]
+[057] <- [045] MOV t5, t4_helper_2
+[058] <- [046] AND t5, a
+[059] <- [047] MOV t6, t5
+[060] <- [048] OR t6, c
+[061] <- [049] MOV t7, t6
+[062] <- [050] XOR t7, d
+[063] <- [051] MOV t8, t7
+[064] <- [052] MOV rcx, 3
+[065] <- [053] SHL t8, cl
+[066] <- [054] MOV t9, t8
+[067] <- [055] MOV rcx, 1
+[068] <- [056] SAR t9, cl
+[069] <- [057] MOV t10, t9
+[070] <- [058] NEG t10
+[071] <- [059] MOV t11, t10
+[072] <- [060] NOT t11
+[073] <- [061] CMP t11, 0
+[074] <- [062] SETE al
+[075] <- [063] MOVZX t12, al
+[076] <- [064] CMP t12, a
+[077] <- [065] SETE al
+[078] <- [066] MOVZX cmp1, al
+[079] <- [067] CMP t12, b
+[080] <- [068] SETNE al
+[081] <- [069] MOVZX cmp2_helper_1, al
+[082] <- [133] MOV [rbp - 8], cmp2_helper_1
+[083] <- [070] CMP t12, c
+[084] <- [071] SETL al
+[085] <- [072] MOVZX cmp3, al
+[086] <- [073] CMP t12, d
+[087] <- [074] SETLE al
+[088] <- [075] MOVZX cmp4, al
+[089] <- [076] CMP t12, a
+[090] <- [077] SETG al
+[091] <- [078] MOVZX cmp5, al
+[092] <- [079] CMP t12, b
+[093] <- [080] SETGE al
+[094] <- [081] MOVZX cmp6, al
+[095] <- [082] LEA ptr, [t12]
+[096] <- [083] MOV [ptr], cmp1
+[097] <- [084] MOV x, [ptr]
+[098] <- [085] MOV [arr + 0*8], x
+[099] <- [134] MOV cmp2_helper_2, [rbp - 8]
+[100] <- [086] MOV [arr + 1*8], cmp2_helper_2
+[101] <- [087] MOV [arr + 2*8], cmp3
+[102] <- [088] MOV [arr + 3*8], cmp4
+[103] <- [089] MOV [arr + 4*8], cmp5
+[104] <- [090] MOV [arr + 5*8], cmp6
+[105] <- [091] MOV y, [arr + 5*8]
+[106] <- [092] MOV rdi, a
+[107] <- [093] MOV rsi, b
+[108] <- [094] MOV rdx, c
+[109] <- [095] MOV rcx, d
+[110] <- [150] MOV t1_helper_5, [rbp - 32]
+[111] <- [096] MOV r8, t1_helper_5
+[112] <- [144] MOV t2_helper_5, [rbp - 24]
+[113] <- [097] MOV r9, t2_helper_5
+[114] <- [138] MOV t4_helper_3, [rbp - 16]
+[115] <- [098] PUSH t4_helper_3
+[116] <- [154] MOV t3_helper_3, [rbp - 40]
+[117] <- [099] PUSH t3_helper_3
+[118] <- [100] CALL foo, 8
+[119] <- [101] MOV ret1, rax
+[120] <- [102] ADD rsp, 16
+[121] <- [103] CMP cmp1, 0
+[122] <- [104] JNE L3
+[123] <- [135] MOV cmp2_helper_3, [rbp - 8]
+[124] <- [105] CMP cmp2_helper_3, 0
+[125] <- [106] JE L4
+[126] <- [145] MOV t2_helper_6, [rbp - 24]
+[127] <- [151] MOV t1_helper_6, [rbp - 32]
+[128] <- [107] CMP t1_helper_6, t2_helper_6
+[129] <- [108] JL L5
+[130] <- [139] MOV t4_helper_4, [rbp - 16]
+[131] <- [155] MOV t3_helper_4, [rbp - 40]
+[132] <- [109] CMP t3_helper_4, t4_helper_4
+[133] <- [110] JL L6
+[134] <- [111] JMP L7
+[135] <- [112] L3 
+[136] <- [113] MOV rax, ret1
+[137] <- [114] MOV rsp, rbp
+[138] <- [115] POP rbp
+[139] <- [116] ret 
+[140] <- [117] L4 
+[141] <- [118] MOV rsp, rbp
+[142] <- [119] POP rbp
+[143] <- [120] ret 
+[144] <- [121] L5 
+[145] <- [122] MOV rdi, x
+[146] <- [123] CALL foo, 1
+[147] <- [124] JMP L7
+[148] <- [125] L6 
+[149] <- [128] L7 
+[150] <- [129] MOV rax, y
+[151] <- [130] MOV rsp, rbp
+[152] <- [131] POP rbp
+[153] <- [132] ret 
 
 --- Phase 3: Interference Graph ---
 Node: rax (ID: 0, Physical: Yes, Degree: 26)

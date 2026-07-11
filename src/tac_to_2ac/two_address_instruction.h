@@ -36,6 +36,40 @@ inline bool isPhysicalRegister(const string& operand) {
     return physical_registers.count(operand) > 0;
 }
 
+// Helper 1: Returns true if Operand 1 is modified (DEF)
+inline bool isOp1Modified(const string& opcode) {
+    return (opcode == "ADD" || opcode == "SUB" || opcode == "IMUL" || 
+            opcode == "AND" || opcode == "OR" || opcode == "XOR" ||
+            opcode == "SHL" || opcode == "SAR" || opcode == "NEG" || 
+            opcode == "NOT" || opcode == "POP" || opcode == "MOV" || 
+            opcode == "LEA" || opcode == "MOVZX" || 
+            opcode == "SETE" || opcode == "SETNE" || opcode == "SETL" || 
+            opcode == "SETLE" || opcode == "SETG" || opcode == "SETGE");
+}
+
+// Helper 2: Returns true if Operand 1 is read (USE)
+inline bool isOp1Read(const string& opcode) {
+    return (opcode == "ADD" || opcode == "SUB" || opcode == "IMUL" || 
+            opcode == "AND" || opcode == "OR" || opcode == "XOR" ||
+            opcode == "SHL" || opcode == "SAR" || opcode == "NEG" || 
+            opcode == "NOT" || opcode == "IDIV" || opcode == "CMP" || 
+            opcode == "PUSH");
+}
+
+// Helper 3: Returns true if Operand 2 is modified (DEF)
+inline bool isOp2Modified(const string& opcode) {
+    // In x86-64 Intel syntax, operand 2 is never the destination for these standard instructions.
+    return false;
+}
+
+// Helper 4: Returns true if Operand 2 is read (USE)
+inline bool isOp2Read(const string& opcode) {
+    return (opcode == "ADD" || opcode == "SUB" || opcode == "IMUL" || 
+            opcode == "AND" || opcode == "OR" || opcode == "XOR" ||
+            opcode == "CMP" || opcode == "MOV" || opcode == "LEA" || 
+            opcode == "MOVZX" || opcode == "SHL" || opcode == "SAR");
+}
+
 inline bool is_memory_operand(const string& operand) {
     if (operand.length() < 2) return false;
     return operand.front() == '[' && operand.back() == ']';
@@ -103,6 +137,9 @@ public:
     const string& getOpcode() const { return opcode; }
     const string& getOperand1() const { return operand1; }
     const string& getOperand2() const { return operand2; }
+    
+    void setOperand1(const string& op1) { operand1 = op1; }
+    void setOperand2(const string& op2) { operand2 = op2; }
 
 private:
     string opcode;
@@ -110,6 +147,11 @@ private:
     string operand2;
     int id;
 };
+
+// Global helper to easily create a new instruction on the fly
+inline TwoAddressInstruction makeInstruction(const string& op, const string& op1, const string& op2 = "") {
+    return TwoAddressInstruction(op, op1, op2);
+}
 
 } // namespace rm_forge
 

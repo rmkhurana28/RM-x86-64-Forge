@@ -106,19 +106,31 @@ Instructions:
 [030] MOV b, 10
 [031] MOV c, 15
 [032] MOV d, 20
-[033] MOV t1, a
-[034] ADD t1, b
-[035] MOV t2, t1
-[036] IMUL t2, c
-[037] MOV rax, t2
+[033] MOV t1_helper_1, a
+[146] MOV [rbp - 32], t1_helper_1
+[147] MOV t1_helper_2, [rbp - 32]
+[034] ADD t1_helper_2, b
+[148] MOV [rbp - 32], t1_helper_2
+[149] MOV t1_helper_4, [rbp - 32]
+[035] MOV t2_helper_1, t1_helper_4
+[140] MOV [rbp - 24], t2_helper_1
+[141] MOV t2_helper_2, [rbp - 24]
+[036] IMUL t2_helper_2, c
+[142] MOV [rbp - 24], t2_helper_2
+[143] MOV t2_helper_4, [rbp - 24]
+[037] MOV rax, t2_helper_4
 [038] CQO 
 [039] IDIV d
-[040] MOV t3, rax
-[041] MOV rax, t3
+[040] MOV t3_helper_1, rax
+[152] MOV [rbp - 40], t3_helper_1
+[153] MOV t3_helper_2, [rbp - 40]
+[041] MOV rax, t3_helper_2
 [042] CQO 
 [043] IDIV b
-[044] MOV t4, rdx
-[045] MOV t5, t4
+[044] MOV t4_helper_1, rdx
+[136] MOV [rbp - 16], t4_helper_1
+[137] MOV t4_helper_2, [rbp - 16]
+[045] MOV t5, t4_helper_2
 [046] AND t5, a
 [047] MOV t6, t5
 [048] OR t6, c
@@ -142,7 +154,8 @@ Instructions:
 [066] MOVZX cmp1, al
 [067] CMP t12, b
 [068] SETNE al
-[069] MOVZX cmp2, al
+[069] MOVZX cmp2_helper_1, al
+[133] MOV [rbp - 8], cmp2_helper_1
 [070] CMP t12, c
 [071] SETL al
 [072] MOVZX cmp3, al
@@ -159,7 +172,8 @@ Instructions:
 [083] MOV [ptr], cmp1
 [084] MOV x, [ptr]
 [085] MOV [arr + 0*8], x
-[086] MOV [arr + 1*8], cmp2
+[134] MOV cmp2_helper_2, [rbp - 8]
+[086] MOV [arr + 1*8], cmp2_helper_2
 [087] MOV [arr + 2*8], cmp3
 [088] MOV [arr + 3*8], cmp4
 [089] MOV [arr + 4*8], cmp5
@@ -169,10 +183,14 @@ Instructions:
 [093] MOV rsi, b
 [094] MOV rdx, c
 [095] MOV rcx, d
-[096] MOV r8, t1
-[097] MOV r9, t2
-[098] PUSH t4
-[099] PUSH t3
+[150] MOV t1_helper_5, [rbp - 32]
+[096] MOV r8, t1_helper_5
+[144] MOV t2_helper_5, [rbp - 24]
+[097] MOV r9, t2_helper_5
+[138] MOV t4_helper_3, [rbp - 16]
+[098] PUSH t4_helper_3
+[154] MOV t3_helper_3, [rbp - 40]
+[099] PUSH t3_helper_3
 [100] CALL foo, 8
 [101] MOV ret1, rax
 [102] ADD rsp, 16
@@ -192,7 +210,8 @@ LIVE OUT: { y x t3 rax t1 t2 t4 ret1 cmp2 }
 Block ID: 6
 ------------------------------------------
 Instructions:
-[105] CMP cmp2, 0
+[135] MOV cmp2_helper_3, [rbp - 8]
+[105] CMP cmp2_helper_3, 0
 [106] JE L4
 ------------------------------------------
 CFG IN:   { 5 }
@@ -208,7 +227,9 @@ LIVE OUT: { y x t3 t4 rax t1 t2 }
 Block ID: 7
 ------------------------------------------
 Instructions:
-[107] CMP t1, t2
+[145] MOV t2_helper_6, [rbp - 24]
+[151] MOV t1_helper_6, [rbp - 32]
+[107] CMP t1_helper_6, t2_helper_6
 [108] JL L5
 ------------------------------------------
 CFG IN:   { 6 }
@@ -224,7 +245,9 @@ LIVE OUT: { y x t3 t4 }
 Block ID: 8
 ------------------------------------------
 Instructions:
-[109] CMP t3, t4
+[139] MOV t4_helper_4, [rbp - 16]
+[155] MOV t3_helper_4, [rbp - 40]
+[109] CMP t3_helper_4, t4_helper_4
 [110] JL L6
 ------------------------------------------
 CFG IN:   { 7 }
