@@ -109,6 +109,31 @@ void printInterferenceGraph(const vector<Node>& myGraph) {
     out.close();
 }
 
+void printPhase4Stack(const vector<Node>& myGraph, const vector<int>& helperStack) {
+    // 1. Append remaining graph to 05_interference_graph.txt
+    std::ofstream out5("output/05_interference_graph.txt", std::ios::app);
+    out5 << "\n--- Graph After Simplify (Should only be Physical Registers) ---\n";
+    for(size_t i=0 ; i<myGraph.size() ; i++){
+        if(myGraph[i].inGraph){
+            out5 << "Node: " << myGraph[i].name 
+                 << " (ID: " << myGraph[i].nodeId 
+                 << ", Physical: " << (myGraph[i].isPhysical ? "Yes" : "No")
+                 << ", Degree: " << (myGraph[i].degree == (int) INTMAX_MAX ? "INF" : std::to_string(myGraph[i].degree)) 
+                 << ")\n";
+        }
+    }
+    out5.close();
+
+    // 2. Print the stack to 06_stack.txt
+    std::ofstream out6("output/06_stack.txt");
+    out6 << "\n--- Phase 4: Stack (Pop Order / Top to Bottom) ---\n";
+    for(int i = helperStack.size() - 1; i >= 0; i--){
+        int nId = helperStack[i];
+        out6 << "Stack Level [" << i << "]: Node " << myGraph[nId].name << " (ID: " << nId << ")\n";
+    }
+    out6.close();
+}
+
 ControlFlowGraph::ControlFlowGraph() {
 }
 
@@ -1273,28 +1298,60 @@ void ControlFlowGraph::computeLiveness() {
 
     // here, all nodes have been succesfully pushed to the stack
 
-    // 1. Append remaining graph to 05_interference_graph.txt
-    std::ofstream out5("output/05_interference_graph.txt", std::ios::app);
-    out5 << "\n--- Graph After Simplify (Should only be Physical Registers) ---\n";
-    for(size_t i=0 ; i<myGraph.size() ; i++){
-        if(myGraph[i].inGraph){
-            out5 << "Node: " << myGraph[i].name 
-                 << " (ID: " << myGraph[i].nodeId 
-                 << ", Physical: " << (myGraph[i].isPhysical ? "Yes" : "No")
-                 << ", Degree: " << (myGraph[i].degree == (int) INTMAX_MAX ? "INF" : std::to_string(myGraph[i].degree)) 
-                 << ")\n";
-        }
-    }
-    out5.close();
+    printPhase4Stack(myGraph, helperStack);
 
-    // 2. Print the stack to 06_stack.txt
-    std::ofstream out6("output/06_stack.txt");
-    out6 << "\n--- Phase 4: Stack (Pop Order / Top to Bottom) ---\n";
-    for(int i = helperStack.size() - 1; i >= 0; i--){
-        int nId = helperStack[i];
-        out6 << "Stack Level [" << i << "]: Node " << myGraph[nId].name << " (ID: " << nId << ")\n";
+    // we can now start popping nodes from the stack and proceed accordingly
+
+    // sequence of assinging registers (calleer-saved , then calle saved)
+    // rax, rcx, rdx, rsi, rdi, r8, r9, r10, r11, rbx, r12, r13, r14, r15
+    vector<int> priorityRegAllocationSequence = {0 , 2 , 3 , 4, 5, 6, 7, 8, 9 , 1 , 10, 11, 12, 13};
+    
+    unordered_map<string , int> varRegMap;
+    vector<int> spillNeeded;
+
+    // keep popping till the stack is empty
+    while(helperStack.size() != 0){
+        
+        // store teh last value in the stack
+        int popedVar = helperStack[helperStack.size()-1];
+
+        // mark the reg as NA for now
+        int regAvail = -1;
+
+        // copy the possible registers 
+        vector<int> checkRegAvail = priorityRegAllocationSequence;
+
+        // go through all neigh of the popedNode
+        for(const int& currNeigh : myGraph[popedVar].neigh){
+
+            // if node not in graph currently, continue
+            if(!myGraph[currNeigh].inGraph) continue;
+
+            // if neigh is physical register, continue
+            // if(myGraph[currNeigh].isPhysical) continue;
+
+            // remove the possibilities of assinging the neigh color to our poped node
+            checkRegAvail.erase(remove(checkRegAvail.begin(), checkRegAvail.end(), myGraph[currNeigh].color),checkRegAvail.end());          
+        }
+
+        // if any color index remians in the set, assign the first color index
+        if(!checkRegAvail.empty()) regAvail = *checkRegAvail.begin();
+
+        if(regAvail != -1){
+            // reg is found, add in the mapping
+            varRegMap[myGraph[popedVar].name] = regAvail;
+            myGraph[popedVar].inGraph = true;
+            myGraph[popedVar].color = regAvail;
+
+        } else{
+            // reg not found, mark to be spilled
+            spillNeeded.push_back(popedVar);
+        }
+
+        // pop the element from the stack
+        helperStack.pop_back();
+
     }
-    out6.close();
 
 }
 
