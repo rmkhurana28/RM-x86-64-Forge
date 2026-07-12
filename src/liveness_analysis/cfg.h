@@ -3,10 +3,13 @@
 
 #include <vector>
 #include <memory>
+#include <unordered_set>
 #include "basic_block.h"
 #include "../tac_to_2ac/two_address_instruction.h"
 
 namespace rm_forge {
+
+extern std::unordered_set<std::string> addressTakenVars;
 
 inline bool is_stack_pointer(const std::string& op) {
     return op == "rsp" || op == "rbp";

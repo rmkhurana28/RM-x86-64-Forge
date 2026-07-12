@@ -1,143 +1,213 @@
 
 --- Phase 1: Instruction Selection (TAC to 2AC) ---
-Successfully converted to 2-Address Code. (Generated 138 instructions)
+Successfully converted to 2-Address Code. (Generated 208 instructions)
 
 --- 2-Address Code Output ---
-[001] FUNC foo
+[001] FUNC helper1
 [002] MOV rdi, a
 [003] MOV rsi, b
 [004] MOV t1, a
 [005] ADD t1, b
 [006] MOV t2, t1
 [007] IMUL t2, a
-[008] MOV t3, t2
-[009] SUB t3, b
-[010] CMP t3, t1
-[011] SETG al
-[012] MOVZX cmp, al
-[013] CMP cmp, 0
-[014] JNE L1
-[015] MOV t4, t3
-[016] ADD t4, a
-[017] JMP L2
-[018] L1 
-[019] MOV t4, t3
-[020] SUB t4, b
-[021] L2 
-[022] MOV rax, t4
-[023] MOV rsp, rbp
-[024] POP rbp
-[025] ret 
-[026] FUNC main
-[027] MOV a, 5
-[028] MOV b, 10
-[029] MOV c, 15
-[030] MOV d, 20
-[031] MOV e, 25
-[032] MOV f, 30
-[033] MOV g, 35
-[034] MOV h, 40
-[035] MOV t1, a
-[036] ADD t1, b
-[037] MOV t2, t1
-[038] IMUL t2, c
-[039] MOV rax, t2
-[040] CQO 
-[041] IDIV d
-[042] MOV t3, rax
-[043] MOV rax, t3
-[044] CQO 
-[045] IDIV b
-[046] MOV t4, rdx
-[047] MOV t5, t4
-[048] AND t5, a
-[049] MOV t6, t5
-[050] OR t6, c
-[051] MOV t7, t6
-[052] XOR t7, d
-[053] MOV t8, t7
-[054] MOV rcx, 3
-[055] SHL t8, cl
-[056] MOV t9, t8
-[057] MOV rcx, 1
-[058] SAR t9, cl
-[059] MOV t10, t9
-[060] NEG t10
-[061] MOV t11, t10
-[062] NOT t11
-[063] CMP t11, 0
-[064] SETE al
-[065] MOVZX t12, al
-[066] CMP t12, a
-[067] SETE al
-[068] MOVZX cmp1, al
-[069] CMP t12, b
-[070] SETNE al
-[071] MOVZX cmp2, al
-[072] CMP t12, c
-[073] SETL al
-[074] MOVZX cmp3, al
-[075] CMP t12, d
-[076] SETLE al
-[077] MOVZX cmp4, al
-[078] CMP t12, a
-[079] SETG al
-[080] MOVZX cmp5, al
-[081] CMP t12, b
-[082] SETGE al
-[083] MOVZX cmp6, al
-[084] LEA ptr, [t12]
-[085] MOV [ptr], cmp1
-[086] MOV x, [ptr]
-[087] MOV [arr + 0*8], x
-[088] MOV [arr + 1*8], cmp2
-[089] MOV [arr + 2*8], cmp3
-[090] MOV [arr + 3*8], cmp4
-[091] MOV [arr + 4*8], cmp5
-[092] MOV [arr + 5*8], cmp6
-[093] MOV y, [arr + 5*8]
-[094] MOV z, [arr + 0*8]
-[095] MOV rdi, a
-[096] MOV rsi, b
-[097] MOV rdx, c
-[098] MOV rcx, d
-[099] MOV r8, e
-[100] MOV r9, f
-[101] PUSH h
-[102] PUSH g
-[103] CALL foo, 8
-[104] MOV ret1, rax
-[105] ADD rsp, 16
-[106] MOV u1, ret1
-[107] ADD u1, y
-[108] MOV u2, u1
-[109] IMUL u2, z
-[110] CMP u2, t4
-[111] SETG al
-[112] MOVZX cmp7, al
-[113] CMP cmp7, 0
-[114] JNE L3
-[115] CMP cmp2, 0
-[116] JE L4
-[117] JMP L5
-[118] L3 
-[119] MOV t13, u2
-[120] ADD t13, ret1
-[121] MOV rax, t13
-[122] MOV rsp, rbp
-[123] POP rbp
-[124] ret 
-[125] L4 
-[126] MOV t14, [arr + 3*8]
-[127] MOV t15, [ptr]
-[128] MOV t16, t14
-[129] ADD t16, t15
-[130] MOV rax, t16
-[131] MOV rsp, rbp
-[132] POP rbp
-[133] ret 
-[134] L5 
-[135] MOV rax, y
-[136] MOV rsp, rbp
-[137] POP rbp
-[138] ret 
+[008] MOV rax, t2
+[009] CQO 
+[010] IDIV b
+[011] MOV t3, rax
+[012] MOV rax, t3
+[013] CQO 
+[014] IDIV a
+[015] MOV t4, rdx
+[016] CMP t4, t1
+[017] SETG al
+[018] MOVZX cmp1, al
+[019] CMP cmp1, 0
+[020] JNE L1
+[021] MOV t5, t4
+[022] ADD t5, b
+[023] JMP L2
+[024] L1 
+[025] MOV t5, t4
+[026] SUB t5, a
+[027] L2 
+[028] MOV rax, t5
+[029] MOV rsp, rbp
+[030] POP rbp
+[031] ret 
+[032] FUNC helper2
+[033] MOV rdi, x
+[034] MOV t1, x
+[035] ADD t1, x
+[036] MOV t2, t1
+[037] MOV rcx, 2
+[038] SHL t2, cl
+[039] MOV t3, t2
+[040] MOV rcx, 1
+[041] SAR t3, cl
+[042] MOV t4, t3
+[043] NEG t4
+[044] MOV t5, t4
+[045] NOT t5
+[046] CMP t5, 0
+[047] SETE al
+[048] MOVZX t6, al
+[049] MOV rax, t6
+[050] MOV rsp, rbp
+[051] POP rbp
+[052] ret 
+[053] FUNC main
+[054] MOV a, 5
+[055] MOV b, 10
+[056] MOV c, 15
+[057] MOV d, 20
+[058] MOV e, 25
+[059] MOV f, 30
+[060] MOV g, 35
+[061] MOV h, 40
+[062] MOV i, 2
+[063] MOV j, 3
+[064] MOV k, i
+[065] ADD k, j
+[066] MOV t1, a
+[067] ADD t1, b
+[068] MOV t2, c
+[069] ADD t2, d
+[070] MOV t3, e
+[071] ADD t3, f
+[072] MOV t4, g
+[073] ADD t4, h
+[074] MOV t5, t1
+[075] IMUL t5, t2
+[076] MOV t6, t3
+[077] IMUL t6, t4
+[078] MOV t7, t5
+[079] ADD t7, t6
+[080] MOV rax, t7
+[081] CQO 
+[082] IDIV d
+[083] MOV t8, rax
+[084] MOV rax, t8
+[085] CQO 
+[086] IDIV b
+[087] MOV t9, rdx
+[088] MOV t10, t9
+[089] AND t10, a
+[090] MOV t11, t10
+[091] OR t11, c
+[092] MOV t12, t11
+[093] XOR t12, d
+[094] MOV t13, t12
+[095] MOV rcx, 3
+[096] SHL t13, cl
+[097] MOV t14, t13
+[098] MOV rcx, 2
+[099] SAR t14, cl
+[100] MOV t15, t14
+[101] NEG t15
+[102] MOV t16, t15
+[103] NOT t16
+[104] CMP t16, 0
+[105] SETE al
+[106] MOVZX t17, al
+[107] CMP t17, a
+[108] SETE al
+[109] MOVZX cmp1, al
+[110] CMP t17, b
+[111] SETNE al
+[112] MOVZX cmp2, al
+[113] CMP t17, c
+[114] SETL al
+[115] MOVZX cmp3, al
+[116] CMP t17, d
+[117] SETLE al
+[118] MOVZX cmp4, al
+[119] CMP t17, e
+[120] SETG al
+[121] MOVZX cmp5, al
+[122] CMP t17, f
+[123] SETGE al
+[124] MOVZX cmp6, al
+[125] LEA ptr1, [t17]
+[126] MOV [ptr1], cmp1
+[127] MOV x1, [ptr1]
+[128] MOV [arr + 0*8], x1
+[129] MOV [arr + 1*8], cmp2
+[130] MOV [arr + 2*8], cmp3
+[131] MOV [arr + 3*8], cmp4
+[132] MOV [arr + 4*8], cmp5
+[133] MOV [arr + 5*8], cmp6
+[134] MOV [arr + i*8], t7
+[135] MOV [arr + k*8], t8
+[136] MOV y1, [arr + 0*8]
+[137] MOV y2, [arr + 1*8]
+[138] MOV y3, [arr + i*8]
+[139] MOV y4, [arr + k*8]
+[140] MOV rdi, a
+[141] MOV rsi, b
+[142] MOV rdx, c
+[143] MOV rcx, d
+[144] MOV r8, e
+[145] MOV r9, f
+[146] PUSH h
+[147] PUSH g
+[148] CALL helper1, 8
+[149] MOV ret1, rax
+[150] ADD rsp, 16
+[151] MOV rdi, ret1
+[152] CALL helper2, 1
+[153] MOV ret2, rax
+[154] MOV u1, ret1
+[155] ADD u1, ret2
+[156] MOV u2, u1
+[157] ADD u2, y1
+[158] MOV u3, u2
+[159] ADD u3, y2
+[160] MOV u4, u3
+[161] ADD u4, y3
+[162] MOV u5, u4
+[163] ADD u5, y4
+[164] CMP u5, t9
+[165] SETG al
+[166] MOVZX cmp7, al
+[167] CMP cmp7, 0
+[168] JNE L3
+[169] CMP cmp2, 0
+[170] JE L4
+[171] CMP u1, u2
+[172] JL L5
+[173] CMP u3, u4
+[174] JL L6
+[175] JMP L7
+[176] L3 
+[177] LEA ptr2, [u5]
+[178] MOV [ptr2], ret2
+[179] MOV v1, [ptr2]
+[180] MOV rax, v1
+[181] MOV rsp, rbp
+[182] POP rbp
+[183] ret 
+[184] L4 
+[185] MOV v2, [arr + 3*8]
+[186] MOV v3, [arr + 4*8]
+[187] MOV v4, v2
+[188] ADD v4, v3
+[189] MOV rax, v4
+[190] MOV rsp, rbp
+[191] POP rbp
+[192] ret 
+[193] L5 
+[194] MOV rdi, u5
+[195] CALL helper2, 1
+[196] JMP L7
+[197] L6 
+[198] MOV [arr + 6*8], ret2
+[199] MOV v5, [arr + 6*8]
+[200] MOV rax, v5
+[201] MOV rsp, rbp
+[202] POP rbp
+[203] ret 
+[204] L7 
+[205] MOV rax, u5
+[206] MOV rsp, rbp
+[207] POP rbp
+[208] ret 

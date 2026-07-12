@@ -1,272 +1,333 @@
 
 --- Optimized 2-Address Code Output ---
-[001] <- [001] FUNC foo
-[002] <- [251] PUSH rbp
-[003] <- [252] MOV rbp, rsp
-[004] <- [253] SUB rsp, 32
-[005] <- [240] MOV rax, [r10]
-[006] <- [004] MOV rcx, rax
-[007] <- [175] MOV rax, [r8]
-[008] <- [005] ADD rcx, rax
-[009] <- [006] MOV rax, rcx
-[010] <- [241] MOV rdx, [r10]
-[011] <- [007] IMUL rax, rdx
-[012] <- [008] MOV rdx, rax
-[013] <- [176] MOV rax, [r8]
-[014] <- [009] SUB rdx, rax
-[015] <- [010] CMP rdx, rcx
-[016] <- [011] SETG al
-[017] <- [012] MOVZX rsi, al
-[018] <- [013] CMP rsi, 0
-[019] <- [014] JNE L1
-[020] <- [015] MOV rax, rdx
-[021] <- [142] MOV [r13], rax
-[022] <- [143] MOV rcx, [r13]
-[023] <- [242] MOV rax, [r10]
-[024] <- [016] ADD rcx, rax
-[025] <- [144] MOV [r13], rcx
-[026] <- [017] JMP L2
-[027] <- [018] L1 
-[028] <- [019] MOV rax, rdx
-[029] <- [145] MOV [r13], rax
-[030] <- [146] MOV rcx, [r13]
-[031] <- [177] MOV rax, [r8]
-[032] <- [020] SUB rcx, rax
-[033] <- [147] MOV [r13], rcx
-[034] <- [021] L2 
-[035] <- [148] MOV rax, [r13]
-[036] <- [022] MOV rax, rax
-[037] <- [023] MOV rsp, rbp
-[038] <- [024] POP rbp
-[039] <- [025] ret 
-[040] <- [026] FUNC main
-[041] <- [254] PUSH rbp
-[042] <- [255] MOV rbp, rsp
-[043] <- [256] SUB rsp, 352
-[044] <- [257] MOV [rbp - 344], rbx
-[045] <- [258] MOV [rbp - 352], r15
-[046] <- [259] MOV [rbp - 336], r12
-[047] <- [260] MOV [rbp - 328], r14
-[048] <- [027] MOV rax, 5
-[049] <- [243] MOV [r10], rax
-[050] <- [028] MOV rax, 10
-[051] <- [178] MOV [r8], rax
-[052] <- [029] MOV rax, 15
-[053] <- [161] MOV [r8], rax
-[054] <- [030] MOV rax, 20
-[055] <- [166] MOV [r8], rax
-[056] <- [031] MOV rax, 25
-[057] <- [171] MOV [r8], rax
-[058] <- [032] MOV rax, 30
-[059] <- [139] MOV [r13], rax
-[060] <- [033] MOV rax, 35
-[061] <- [154] MOV [r10], rax
-[062] <- [034] MOV rax, 40
-[063] <- [152] MOV [r10], rax
-[064] <- [244] MOV rax, [r10]
-[065] <- [035] MOV rcx, rax
-[066] <- [179] MOV rax, [r8]
-[067] <- [036] ADD rcx, rax
-[068] <- [037] MOV rax, rcx
-[069] <- [162] MOV rcx, [r8]
-[070] <- [038] IMUL rax, rcx
-[071] <- [039] MOV rax, rax
-[072] <- [040] CQO 
-[073] <- [167] MOV rcx, [r8]
-[074] <- [041] IDIV rcx
-[075] <- [042] MOV rdx, rax
-[076] <- [043] MOV rax, rdx
-[077] <- [044] CQO 
-[078] <- [180] MOV rcx, [r8]
-[079] <- [045] IDIV rcx
-[080] <- [046] MOV rax, rdx
-[081] <- [149] MOV [r13], rax
-[082] <- [150] MOV rax, [r13]
-[083] <- [047] MOV rcx, rax
-[084] <- [245] MOV rax, [r10]
-[085] <- [048] AND rcx, rax
-[086] <- [049] MOV rcx, rcx
-[087] <- [163] MOV rax, [r8]
-[088] <- [050] OR rcx, rax
-[089] <- [051] MOV rcx, rcx
-[090] <- [168] MOV rax, [r8]
-[091] <- [052] XOR rcx, rax
-[092] <- [053] MOV rax, rcx
-[093] <- [054] MOV rcx, 3
-[094] <- [055] SHL rax, cl
-[095] <- [056] MOV rax, rax
-[096] <- [057] MOV rcx, 1
-[097] <- [058] SAR rax, cl
-[098] <- [059] MOV rax, rax
-[099] <- [060] NEG rax
-[100] <- [061] MOV rax, rax
-[101] <- [062] NOT rax
-[102] <- [063] CMP rax, 0
-[103] <- [064] SETE al
-[104] <- [065] MOVZX rdi, al
-[105] <- [246] MOV rax, [r10]
-[106] <- [066] CMP rdi, rax
-[107] <- [067] SETE al
-[108] <- [068] MOVZX r9, al
-[109] <- [181] MOV rax, [r8]
-[110] <- [069] CMP rdi, rax
-[111] <- [070] SETNE al
-[112] <- [071] MOVZX rsi, al
-[113] <- [158] MOV [r13], rsi
-[114] <- [164] MOV rax, [r8]
-[115] <- [072] CMP rdi, rax
-[116] <- [073] SETL al
-[117] <- [074] MOVZX r14, al
-[118] <- [169] MOV rax, [r8]
-[119] <- [075] CMP rdi, rax
-[120] <- [076] SETLE al
-[121] <- [077] MOVZX r11, al
-[122] <- [247] MOV rax, [r10]
-[123] <- [078] CMP rdi, rax
-[124] <- [079] SETG al
-[125] <- [080] MOVZX r12, al
-[126] <- [182] MOV rax, [r8]
-[127] <- [081] CMP rdi, rax
-[128] <- [082] SETGE al
-[129] <- [083] MOVZX rbx, al
-[130] <- [084] LEA rax, [rdi]
-[131] <- [141] MOV [r8], rax
-[132] <- [085] MOV [r13], r9
-[133] <- [086] MOV rax, [r13]
-[134] <- [087] MOV [r13 + 0*8], rax
-[135] <- [159] MOV rax, [r13]
-[136] <- [088] MOV [r13 + 1*8], rax
-[137] <- [089] MOV [r13 + 2*8], r14
-[138] <- [090] MOV [r13 + 3*8], r11
-[139] <- [091] MOV [r13 + 4*8], r12
-[140] <- [092] MOV [r13 + 5*8], rbx
-[141] <- [093] MOV rbx, [r13 + 5*8]
-[142] <- [094] MOV r12, [r13 + 0*8]
-[143] <- [248] MOV rax, [r10]
-[144] <- [095] MOV rdi, rax
-[145] <- [183] MOV rax, [r8]
-[146] <- [096] MOV rsi, rax
-[147] <- [165] MOV rax, [r8]
-[148] <- [097] MOV rdx, rax
-[149] <- [170] MOV rax, [r8]
-[150] <- [098] MOV rcx, rax
-[151] <- [172] MOV rax, [r8]
-[152] <- [099] MOV r8, rax
-[153] <- [140] MOV rax, [r13]
-[154] <- [100] MOV r9, rax
-[155] <- [153] MOV rax, [r10]
-[156] <- [101] PUSH rax
-[157] <- [155] MOV rax, [r10]
-[158] <- [102] PUSH rax
-[159] <- [103] CALL foo, 8
-[160] <- [104] MOV rcx, rax
-[161] <- [105] ADD rsp, 16
-[162] <- [106] MOV rax, rcx
-[163] <- [107] ADD rax, rbx
-[164] <- [108] MOV rdx, rax
-[165] <- [109] IMUL rdx, r12
-[166] <- [151] MOV rax, [r13]
-[167] <- [110] CMP rdx, rax
-[168] <- [111] SETG al
-[169] <- [112] MOVZX r15, al
-[170] <- [249] MOV [r13], r15
-[171] <- [250] MOV rax, [r13]
-[172] <- [238] MOV [r13], rax
-[173] <- [239] MOV rax, [r13]
-[174] <- [236] MOV [r13], rax
-[175] <- [237] MOV rax, [r13]
-[176] <- [234] MOV [r13], rax
-[177] <- [235] MOV rax, [r13]
-[178] <- [232] MOV [r13], rax
-[179] <- [233] MOV rax, [r13]
-[180] <- [230] MOV [r13], rax
-[181] <- [231] MOV rax, [r13]
-[182] <- [228] MOV [r13], rax
-[183] <- [229] MOV rax, [r13]
-[184] <- [226] MOV [r13], rax
-[185] <- [227] MOV rax, [r13]
-[186] <- [224] MOV [r13], rax
-[187] <- [225] MOV rax, [r13]
-[188] <- [222] MOV [r13], rax
-[189] <- [223] MOV rax, [r13]
-[190] <- [220] MOV [r13], rax
-[191] <- [221] MOV rax, [r13]
-[192] <- [218] MOV [r13], rax
-[193] <- [219] MOV rax, [r13]
-[194] <- [216] MOV [r13], rax
-[195] <- [217] MOV rax, [r13]
-[196] <- [214] MOV [r13], rax
-[197] <- [215] MOV rax, [r13]
-[198] <- [212] MOV [r13], rax
-[199] <- [213] MOV rax, [r13]
-[200] <- [210] MOV [r13], rax
-[201] <- [211] MOV rax, [r13]
-[202] <- [208] MOV [r13], rax
-[203] <- [209] MOV rax, [r13]
-[204] <- [206] MOV [r13], rax
-[205] <- [207] MOV rax, [r13]
-[206] <- [204] MOV [r13], rax
-[207] <- [205] MOV rax, [r13]
-[208] <- [202] MOV [r13], rax
-[209] <- [203] MOV rax, [r13]
-[210] <- [200] MOV [r13], rax
-[211] <- [201] MOV rax, [r13]
-[212] <- [198] MOV [r13], rax
-[213] <- [199] MOV rax, [r13]
-[214] <- [196] MOV [r13], rax
-[215] <- [197] MOV rax, [r13]
-[216] <- [194] MOV [r13], rax
-[217] <- [195] MOV rax, [r13]
-[218] <- [192] MOV [r13], rax
-[219] <- [193] MOV rax, [r13]
-[220] <- [190] MOV [r13], rax
-[221] <- [191] MOV rax, [r13]
-[222] <- [188] MOV [r13], rax
-[223] <- [189] MOV rax, [r13]
-[224] <- [186] MOV [r13], rax
-[225] <- [187] MOV rax, [r13]
-[226] <- [184] MOV [r13], rax
-[227] <- [185] MOV rax, [r13]
-[228] <- [173] MOV [r13], rax
-[229] <- [174] MOV rax, [r13]
-[230] <- [156] MOV [r13], rax
-[231] <- [157] MOV rax, [r13]
-[232] <- [113] CMP rax, 0
-[233] <- [114] JNE L3
-[234] <- [160] MOV rax, [r13]
-[235] <- [115] CMP rax, 0
-[236] <- [116] JE L4
-[237] <- [117] JMP L5
-[238] <- [118] L3 
-[239] <- [119] MOV rax, rdx
-[240] <- [120] ADD rax, rcx
-[241] <- [121] MOV rax, rax
-[242] <- [261] MOV rbx, [rbp - 344]
-[243] <- [262] MOV r15, [rbp - 352]
-[244] <- [263] MOV r12, [rbp - 336]
-[245] <- [264] MOV r14, [rbp - 328]
-[246] <- [122] MOV rsp, rbp
-[247] <- [123] POP rbp
-[248] <- [124] ret 
-[249] <- [125] L4 
-[250] <- [126] MOV rax, [r13 + 3*8]
-[251] <- [127] MOV rcx, [r13]
-[252] <- [128] MOV rax, rax
-[253] <- [129] ADD rax, rcx
-[254] <- [130] MOV rax, rax
-[255] <- [265] MOV rbx, [rbp - 344]
-[256] <- [266] MOV r15, [rbp - 352]
-[257] <- [267] MOV r12, [rbp - 336]
-[258] <- [268] MOV r14, [rbp - 328]
-[259] <- [131] MOV rsp, rbp
-[260] <- [132] POP rbp
-[261] <- [133] ret 
-[262] <- [134] L5 
-[263] <- [135] MOV rax, rbx
-[264] <- [269] MOV rbx, [rbp - 344]
-[265] <- [270] MOV r15, [rbp - 352]
-[266] <- [271] MOV r12, [rbp - 336]
-[267] <- [272] MOV r14, [rbp - 328]
-[268] <- [136] MOV rsp, rbp
-[269] <- [137] POP rbp
-[270] <- [138] ret 
+[001] <- [001] FUNC helper1
+[002] <- [295] PUSH rbp
+[003] <- [296] MOV rbp, rsp
+[004] <- [297] SUB rsp, 48
+[005] <- [298] MOV [rbp - 40], r15
+[006] <- [299] MOV [rbp - 32], r14
+[007] <- [300] MOV [rbp - 24], r13
+[008] <- [286] MOV rax, [rbp - 16]
+[009] <- [004] MOV rcx, rax
+[010] <- [219] MOV rax, [rbp - 8]
+[011] <- [005] ADD rcx, rax
+[012] <- [006] MOV rax, rcx
+[013] <- [287] MOV rdx, [rbp - 16]
+[014] <- [007] IMUL rax, rdx
+[015] <- [008] MOV rax, rax
+[016] <- [009] CQO 
+[017] <- [220] MOV rsi, [rbp - 8]
+[018] <- [010] IDIV rsi
+[019] <- [011] MOV r13, rax
+[020] <- [012] MOV rax, r13
+[021] <- [013] CQO 
+[022] <- [288] MOV rsi, [rbp - 16]
+[023] <- [014] IDIV rsi
+[024] <- [015] MOV r14, rdx
+[025] <- [016] CMP r14, rcx
+[026] <- [017] SETG al
+[027] <- [018] MOVZX r15, al
+[028] <- [019] CMP r15, 0
+[029] <- [020] JNE L1
+[030] <- [021] MOV rcx, r14
+[031] <- [221] MOV rax, [rbp - 8]
+[032] <- [022] ADD rcx, rax
+[033] <- [023] JMP L2
+[034] <- [024] L1 
+[035] <- [025] MOV rcx, r14
+[036] <- [289] MOV rax, [rbp - 16]
+[037] <- [026] SUB rcx, rax
+[038] <- [027] L2 
+[039] <- [028] MOV rax, rcx
+[040] <- [301] MOV r15, [rbp - 40]
+[041] <- [302] MOV r14, [rbp - 32]
+[042] <- [303] MOV r13, [rbp - 24]
+[043] <- [029] MOV rsp, rbp
+[044] <- [030] POP rbp
+[045] <- [031] ret 
+[046] <- [032] FUNC helper2
+[047] <- [304] PUSH rbp
+[048] <- [305] MOV rbp, rsp
+[049] <- [306] SUB rsp, 0
+[050] <- [034] MOV rcx, rax
+[051] <- [035] ADD rcx, rax
+[052] <- [036] MOV rax, rcx
+[053] <- [037] MOV rcx, 2
+[054] <- [038] SHL rax, cl
+[055] <- [039] MOV r13, rax
+[056] <- [040] MOV rcx, 1
+[057] <- [041] SAR r13, cl
+[058] <- [042] MOV r14, r13
+[059] <- [043] NEG r14
+[060] <- [044] MOV rcx, r14
+[061] <- [045] NOT rcx
+[062] <- [046] CMP rcx, 0
+[063] <- [047] SETE al
+[064] <- [048] MOVZX rdx, al
+[065] <- [049] MOV rax, rdx
+[066] <- [050] MOV rsp, rbp
+[067] <- [051] POP rbp
+[068] <- [052] ret 
+[069] <- [053] FUNC main
+[070] <- [307] PUSH rbp
+[071] <- [308] MOV rbp, rsp
+[072] <- [309] SUB rsp, 160
+[073] <- [310] MOV [rbp - 152], rbx
+[074] <- [311] MOV [rbp - 136], r14
+[075] <- [312] MOV [rbp - 128], r13
+[076] <- [313] MOV [rbp - 144], r15
+[077] <- [314] MOV [rbp - 120], r12
+[078] <- [054] MOV rax, 5
+[079] <- [290] MOV [rbp - 16], rax
+[080] <- [055] MOV rax, 10
+[081] <- [222] MOV [rbp - 8], rax
+[082] <- [056] MOV rax, 15
+[083] <- [227] MOV [rbp - 24], rax
+[084] <- [057] MOV rax, 20
+[085] <- [232] MOV [rbp - 32], rax
+[086] <- [058] MOV rax, 25
+[087] <- [238] MOV [rbp - 40], rax
+[088] <- [059] MOV rax, 30
+[089] <- [242] MOV [rbp - 48], rax
+[090] <- [060] MOV rax, 35
+[091] <- [249] MOV [rbp - 64], rax
+[092] <- [061] MOV rax, 40
+[093] <- [246] MOV [rbp - 56], rax
+[094] <- [062] MOV r12, 2
+[095] <- [063] MOV rcx, 3
+[096] <- [064] MOV rax, r12
+[097] <- [281] MOV [rbp - 112], rax
+[098] <- [282] MOV rax, [rbp - 112]
+[099] <- [065] ADD rax, rcx
+[100] <- [283] MOV [rbp - 112], rax
+[101] <- [291] MOV rax, [rbp - 16]
+[102] <- [066] MOV rcx, rax
+[103] <- [223] MOV rax, [rbp - 8]
+[104] <- [067] ADD rcx, rax
+[105] <- [228] MOV rax, [rbp - 24]
+[106] <- [068] MOV rax, rax
+[107] <- [233] MOV rdx, [rbp - 32]
+[108] <- [069] ADD rax, rdx
+[109] <- [239] MOV rdx, [rbp - 40]
+[110] <- [070] MOV r13, rdx
+[111] <- [243] MOV rdx, [rbp - 48]
+[112] <- [071] ADD r13, rdx
+[113] <- [250] MOV rdx, [rbp - 64]
+[114] <- [072] MOV r14, rdx
+[115] <- [247] MOV rdx, [rbp - 56]
+[116] <- [073] ADD r14, rdx
+[117] <- [074] MOV rcx, rcx
+[118] <- [075] IMUL rcx, rax
+[119] <- [076] MOV rdx, r13
+[120] <- [077] IMUL rdx, r14
+[121] <- [078] MOV r13, rcx
+[122] <- [079] ADD r13, rdx
+[123] <- [080] MOV rax, r13
+[124] <- [081] CQO 
+[125] <- [234] MOV rcx, [rbp - 32]
+[126] <- [082] IDIV rcx
+[127] <- [083] MOV r14, rax
+[128] <- [084] MOV rax, r14
+[129] <- [085] CQO 
+[130] <- [224] MOV rcx, [rbp - 8]
+[131] <- [086] IDIV rcx
+[132] <- [087] MOV rax, rdx
+[133] <- [216] MOV [rbp - 16], rax
+[134] <- [217] MOV rax, [rbp - 16]
+[135] <- [088] MOV rcx, rax
+[136] <- [292] MOV rax, [rbp - 16]
+[137] <- [089] AND rcx, rax
+[138] <- [090] MOV rcx, rcx
+[139] <- [229] MOV rax, [rbp - 24]
+[140] <- [091] OR rcx, rax
+[141] <- [092] MOV rcx, rcx
+[142] <- [235] MOV rax, [rbp - 32]
+[143] <- [093] XOR rcx, rax
+[144] <- [094] MOV rax, rcx
+[145] <- [095] MOV rcx, 3
+[146] <- [096] SHL rax, cl
+[147] <- [097] MOV rax, rax
+[148] <- [098] MOV rcx, 2
+[149] <- [099] SAR rax, cl
+[150] <- [100] MOV rax, rax
+[151] <- [101] NEG rax
+[152] <- [102] MOV rax, rax
+[153] <- [103] NOT rax
+[154] <- [104] CMP rax, 0
+[155] <- [105] SETE al
+[156] <- [106] MOVZX rsi, al
+[157] <- [209] MOV [rbp - 8], rsi
+[158] <- [210] MOV rax, [rbp - 8]
+[159] <- [293] MOV rcx, [rbp - 16]
+[160] <- [107] CMP rax, rcx
+[161] <- [108] SETE al
+[162] <- [109] MOVZX r15, al
+[163] <- [211] MOV rax, [rbp - 8]
+[164] <- [225] MOV rcx, [rbp - 8]
+[165] <- [110] CMP rax, rcx
+[166] <- [111] SETNE al
+[167] <- [112] MOVZX rdi, al
+[168] <- [254] MOV [rbp - 80], rdi
+[169] <- [212] MOV rax, [rbp - 8]
+[170] <- [230] MOV rcx, [rbp - 24]
+[171] <- [113] CMP rax, rcx
+[172] <- [114] SETL al
+[173] <- [115] MOVZX r8, al
+[174] <- [213] MOV rax, [rbp - 8]
+[175] <- [236] MOV rcx, [rbp - 32]
+[176] <- [116] CMP rax, rcx
+[177] <- [117] SETLE al
+[178] <- [118] MOVZX r9, al
+[179] <- [214] MOV rax, [rbp - 8]
+[180] <- [240] MOV rcx, [rbp - 40]
+[181] <- [119] CMP rax, rcx
+[182] <- [120] SETG al
+[183] <- [121] MOVZX r10, al
+[184] <- [215] MOV rax, [rbp - 8]
+[185] <- [244] MOV rcx, [rbp - 48]
+[186] <- [122] CMP rax, rcx
+[187] <- [123] SETGE al
+[188] <- [124] MOVZX r11, al
+[189] <- [125] LEA rax, [rbp - 8]
+[190] <- [126] MOV [rax], r15
+[191] <- [127] MOV rax, [rax]
+[192] <- [263] MOV rcx, [rbp - 96]
+[193] <- [128] MOV [rcx + 0*8], rax
+[194] <- [255] MOV rax, [rbp - 80]
+[195] <- [264] MOV rcx, [rbp - 96]
+[196] <- [129] MOV [rcx + 1*8], rax
+[197] <- [265] MOV rax, [rbp - 96]
+[198] <- [130] MOV [rax + 2*8], r8
+[199] <- [266] MOV rax, [rbp - 96]
+[200] <- [131] MOV [rax + 3*8], r9
+[201] <- [267] MOV rax, [rbp - 96]
+[202] <- [132] MOV [rax + 4*8], r10
+[203] <- [268] MOV rax, [rbp - 96]
+[204] <- [133] MOV [rax + 5*8], r11
+[205] <- [269] MOV rax, [rbp - 96]
+[206] <- [134] MOV [rax + r12*8], r13
+[207] <- [270] MOV rax, [rbp - 96]
+[208] <- [284] MOV rcx, [rbp - 112]
+[209] <- [135] MOV [rax + rcx*8], r14
+[210] <- [271] MOV rax, [rbp - 96]
+[211] <- [136] MOV r13, [rax + 0*8]
+[212] <- [272] MOV rax, [rbp - 96]
+[213] <- [137] MOV r14, [rax + 1*8]
+[214] <- [273] MOV rax, [rbp - 96]
+[215] <- [138] MOV r15, [rax + r12*8]
+[216] <- [274] MOV rax, [rbp - 96]
+[217] <- [285] MOV rcx, [rbp - 112]
+[218] <- [139] MOV rax, [rax + rcx*8]
+[219] <- [279] MOV [rbp - 104], rax
+[220] <- [294] MOV rax, [rbp - 16]
+[221] <- [140] MOV rdi, rax
+[222] <- [226] MOV rax, [rbp - 8]
+[223] <- [141] MOV rsi, rax
+[224] <- [231] MOV rax, [rbp - 24]
+[225] <- [142] MOV rdx, rax
+[226] <- [237] MOV rax, [rbp - 32]
+[227] <- [143] MOV rcx, rax
+[228] <- [241] MOV rax, [rbp - 40]
+[229] <- [144] MOV r8, rax
+[230] <- [245] MOV rax, [rbp - 48]
+[231] <- [145] MOV r9, rax
+[232] <- [248] MOV rax, [rbp - 56]
+[233] <- [146] PUSH rax
+[234] <- [251] MOV rax, [rbp - 64]
+[235] <- [147] PUSH rax
+[236] <- [148] CALL helper1, 8
+[237] <- [149] MOV r12, rax
+[238] <- [150] ADD rsp, 16
+[239] <- [151] MOV rdi, r12
+[240] <- [152] CALL helper2, 1
+[241] <- [153] MOV rcx, rax
+[242] <- [154] MOV rdi, r12
+[243] <- [155] ADD rdi, rcx
+[244] <- [156] MOV rdx, rdi
+[245] <- [157] ADD rdx, r13
+[246] <- [158] MOV r8, rdx
+[247] <- [159] ADD r8, r14
+[248] <- [160] MOV rsi, r8
+[249] <- [161] ADD rsi, r15
+[250] <- [162] MOV rax, rsi
+[251] <- [257] MOV [rbp - 88], rax
+[252] <- [258] MOV r9, [rbp - 88]
+[253] <- [280] MOV rax, [rbp - 104]
+[254] <- [163] ADD r9, rax
+[255] <- [259] MOV [rbp - 88], r9
+[256] <- [218] MOV rax, [rbp - 16]
+[257] <- [260] MOV r9, [rbp - 88]
+[258] <- [164] CMP r9, rax
+[259] <- [165] SETG al
+[260] <- [166] MOVZX rbx, al
+[261] <- [252] MOV [rbp - 72], rbx
+[262] <- [253] MOV rax, [rbp - 72]
+[263] <- [167] CMP rax, 0
+[264] <- [168] JNE L3
+[265] <- [256] MOV rax, [rbp - 80]
+[266] <- [169] CMP rax, 0
+[267] <- [170] JE L4
+[268] <- [171] CMP rdi, rdx
+[269] <- [172] JL L5
+[270] <- [173] CMP r8, rsi
+[271] <- [174] JL L6
+[272] <- [175] JMP L7
+[273] <- [176] L3 
+[274] <- [177] LEA rax, [rbp - 88]
+[275] <- [178] MOV [rax], rcx
+[276] <- [179] MOV rax, [rax]
+[277] <- [180] MOV rax, rax
+[278] <- [315] MOV rbx, [rbp - 152]
+[279] <- [316] MOV r14, [rbp - 136]
+[280] <- [317] MOV r13, [rbp - 128]
+[281] <- [318] MOV r15, [rbp - 144]
+[282] <- [319] MOV r12, [rbp - 120]
+[283] <- [181] MOV rsp, rbp
+[284] <- [182] POP rbp
+[285] <- [183] ret 
+[286] <- [184] L4 
+[287] <- [275] MOV rax, [rbp - 96]
+[288] <- [185] MOV rcx, [rax + 3*8]
+[289] <- [276] MOV rax, [rbp - 96]
+[290] <- [186] MOV rax, [rax + 4*8]
+[291] <- [187] MOV rcx, rcx
+[292] <- [188] ADD rcx, rax
+[293] <- [189] MOV rax, rcx
+[294] <- [320] MOV rbx, [rbp - 152]
+[295] <- [321] MOV r14, [rbp - 136]
+[296] <- [322] MOV r13, [rbp - 128]
+[297] <- [323] MOV r15, [rbp - 144]
+[298] <- [324] MOV r12, [rbp - 120]
+[299] <- [190] MOV rsp, rbp
+[300] <- [191] POP rbp
+[301] <- [192] ret 
+[302] <- [193] L5 
+[303] <- [261] MOV rax, [rbp - 88]
+[304] <- [194] MOV rdi, rax
+[305] <- [195] CALL helper2, 1
+[306] <- [196] JMP L7
+[307] <- [197] L6 
+[308] <- [277] MOV rax, [rbp - 96]
+[309] <- [198] MOV [rax + 6*8], rcx
+[310] <- [278] MOV rax, [rbp - 96]
+[311] <- [199] MOV rax, [rax + 6*8]
+[312] <- [200] MOV rax, rax
+[313] <- [325] MOV rbx, [rbp - 152]
+[314] <- [326] MOV r14, [rbp - 136]
+[315] <- [327] MOV r13, [rbp - 128]
+[316] <- [328] MOV r15, [rbp - 144]
+[317] <- [329] MOV r12, [rbp - 120]
+[318] <- [201] MOV rsp, rbp
+[319] <- [202] POP rbp
+[320] <- [203] ret 
+[321] <- [204] L7 
+[322] <- [262] MOV rax, [rbp - 88]
+[323] <- [205] MOV rax, rax
+[324] <- [330] MOV rbx, [rbp - 152]
+[325] <- [331] MOV r14, [rbp - 136]
+[326] <- [332] MOV r13, [rbp - 128]
+[327] <- [333] MOV r15, [rbp - 144]
+[328] <- [334] MOV r12, [rbp - 120]
+[329] <- [206] MOV rsp, rbp
+[330] <- [207] POP rbp
+[331] <- [208] ret 

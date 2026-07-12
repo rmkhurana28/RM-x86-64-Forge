@@ -86,6 +86,7 @@ inline std::unordered_set<string> extract_memory_vars(const string& operand) {
     }
 
     string inner = operand.substr(1, operand.length() - 2);
+    if (inner.find("rbp - ") != string::npos) return vars;
     size_t plus_pos = inner.find(" + ");
     
     if (plus_pos != string::npos) {
@@ -123,6 +124,7 @@ inline std::string map_memory_operand(const std::string& op, const std::unordere
     if (!is_memory_operand(op)) return op;
     
     std::string in = op.substr(1, op.length() - 2);
+    if (in.find("rbp - ") != string::npos) return op;
     size_t p = in.find(" + ");
     
     // Tiny lambda to map a single variable string if it exists

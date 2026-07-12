@@ -24,6 +24,14 @@ int main() {
             instr.print();
         }
         
+        std::cout << "\n--- Phase 0: Address-Taken Analysis ---\n";
+        for (const auto& instr : instructions) {
+            if (instr.get_type() == rm_forge::InstructionType::AddressOf) {
+                rm_forge::addressTakenVars.insert(instr.get_arg1());
+            }
+        }
+        std::cout << "Identified " << rm_forge::addressTakenVars.size() << " address-taken variables.\n";
+
         freopen("output/02_2-addr_code.txt", "w", stdout);
         std::cout << "\n--- Phase 1: Instruction Selection (TAC to 2AC) ---\n";
         

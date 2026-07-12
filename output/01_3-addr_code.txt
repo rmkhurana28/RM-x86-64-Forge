@@ -1,78 +1,120 @@
 Successfully parsed 3-Address Code:
-[001] (F) func foo:
+[001] (F) func helper1:
 [002] (P) param a
 [003] (P) param b
 [004] (B) t1 = a + b
 [005] (B) t2 = t1 * a
-[006] (B) t3 = t2 - b
-[007] (B) cmp = t3 > t1
-[008] (?) if cmp goto L1
-[009] (B) t4 = t3 + a
-[010] (G) goto L2
-[011] (L) L1:
-[012] (B) t4 = t3 - b
-[013] (L) L2:
-[014] (R) return t4
-[015] (F) func main:
-[016] (=) a = 5
-[017] (=) b = 10
-[018] (=) c = 15
-[019] (=) d = 20
-[020] (=) e = 25
-[021] (=) f = 30
-[022] (=) g = 35
-[023] (=) h = 40
-[024] (B) t1 = a + b
-[025] (B) t2 = t1 * c
-[026] (B) t3 = t2 / d
-[027] (B) t4 = t3 % b
-[028] (B) t5 = t4 & a
-[029] (B) t6 = t5 | c
-[030] (B) t7 = t6 ^ d
-[031] (B) t8 = t7 << 3
-[032] (B) t9 = t8 >> 1
-[033] (U) t10 = - t9
-[034] (U) t11 = ~ t10
-[035] (U) t12 = ! t11
-[036] (B) cmp1 = t12 == a
-[037] (B) cmp2 = t12 != b
-[038] (B) cmp3 = t12 < c
-[039] (B) cmp4 = t12 <= d
-[040] (B) cmp5 = t12 > a
-[041] (B) cmp6 = t12 >= b
-[042] (&) ptr = &t12
-[043] (#) *ptr = cmp1
-[044] (*) x = *ptr
-[045] (]) arr[0] = x
-[046] (]) arr[1] = cmp2
-[047] (]) arr[2] = cmp3
-[048] (]) arr[3] = cmp4
-[049] (]) arr[4] = cmp5
-[050] (]) arr[5] = cmp6
-[051] ([) y = arr[5]
-[052] ([) z = arr[0]
-[053] (P) param a
-[054] (P) param b
-[055] (P) param c
-[056] (P) param d
-[057] (P) param e
-[058] (P) param f
-[059] (P) param g
-[060] (P) param h
-[061] (K) ret1 = call foo, 8
-[062] (B) u1 = ret1 + y
-[063] (B) u2 = u1 * z
-[064] (B) cmp7 = u2 > t4
-[065] (?) if cmp7 goto L3
-[066] (?F) ifFalse cmp2 goto L4
-[067] (G) goto L5
-[068] (L) L3:
-[069] (B) t13 = u2 + ret1
-[070] (R) return t13
-[071] (L) L4:
-[072] ([) t14 = arr[3]
-[073] (*) t15 = *ptr
-[074] (B) t16 = t14 + t15
-[075] (R) return t16
-[076] (L) L5:
-[077] (R) return y
+[006] (B) t3 = t2 / b
+[007] (B) t4 = t3 % a
+[008] (B) cmp1 = t4 > t1
+[009] (?) if cmp1 goto L1
+[010] (B) t5 = t4 + b
+[011] (G) goto L2
+[012] (L) L1:
+[013] (B) t5 = t4 - a
+[014] (L) L2:
+[015] (R) return t5
+[016] (F) func helper2:
+[017] (P) param x
+[018] (B) t1 = x + x
+[019] (B) t2 = t1 << 2
+[020] (B) t3 = t2 >> 1
+[021] (U) t4 = - t3
+[022] (U) t5 = ~ t4
+[023] (U) t6 = ! t5
+[024] (R) return t6
+[025] (F) func main:
+[026] (=) a = 5
+[027] (=) b = 10
+[028] (=) c = 15
+[029] (=) d = 20
+[030] (=) e = 25
+[031] (=) f = 30
+[032] (=) g = 35
+[033] (=) h = 40
+[034] (=) i = 2
+[035] (=) j = 3
+[036] (B) k = i + j
+[037] (B) t1 = a + b
+[038] (B) t2 = c + d
+[039] (B) t3 = e + f
+[040] (B) t4 = g + h
+[041] (B) t5 = t1 * t2
+[042] (B) t6 = t3 * t4
+[043] (B) t7 = t5 + t6
+[044] (B) t8 = t7 / d
+[045] (B) t9 = t8 % b
+[046] (B) t10 = t9 & a
+[047] (B) t11 = t10 | c
+[048] (B) t12 = t11 ^ d
+[049] (B) t13 = t12 << 3
+[050] (B) t14 = t13 >> 2
+[051] (U) t15 = - t14
+[052] (U) t16 = ~ t15
+[053] (U) t17 = ! t16
+[054] (B) cmp1 = t17 == a
+[055] (B) cmp2 = t17 != b
+[056] (B) cmp3 = t17 < c
+[057] (B) cmp4 = t17 <= d
+[058] (B) cmp5 = t17 > e
+[059] (B) cmp6 = t17 >= f
+[060] (&) ptr1 = &t17
+[061] (#) *ptr1 = cmp1
+[062] (*) x1 = *ptr1
+[063] (]) arr[0] = x1
+[064] (]) arr[1] = cmp2
+[065] (]) arr[2] = cmp3
+[066] (]) arr[3] = cmp4
+[067] (]) arr[4] = cmp5
+[068] (]) arr[5] = cmp6
+[069] (]) arr[i] = t7
+[070] (]) arr[k] = t8
+[071] ([) y1 = arr[0]
+[072] ([) y2 = arr[1]
+[073] ([) y3 = arr[i]
+[074] ([) y4 = arr[k]
+[075] (P) param a
+[076] (P) param b
+[077] (P) param c
+[078] (P) param d
+[079] (P) param e
+[080] (P) param f
+[081] (P) param g
+[082] (P) param h
+[083] (K) ret1 = call helper1, 8
+[084] (P) param ret1
+[085] (K) ret2 = call helper2, 1
+[086] (B) u1 = ret1 + ret2
+[087] (B) u2 = u1 + y1
+[088] (B) u3 = u2 + y2
+[089] (B) u4 = u3 + y3
+[090] (B) u5 = u4 + y4
+[091] (B) cmp7 = u5 > t9
+[092] (?) if cmp7 goto L3
+[093] (?F) ifFalse cmp2 goto L4
+[094] (?) if u1 < u2 goto L5
+[095] (?F) ifFalse u3 >= u4 goto L6
+[096] (G) goto L7
+[097] (L) L3:
+[098] (&) ptr2 = &u5
+[099] (#) *ptr2 = ret2
+[100] (*) v1 = *ptr2
+[101] (R) return v1
+[102] (L) L4:
+[103] ([) v2 = arr[3]
+[104] ([) v3 = arr[4]
+[105] (B) v4 = v2 + v3
+[106] (R) return v4
+[107] (L) L5:
+[108] (P) param u5
+[109] (C) call helper2, 1
+[110] (G) goto L7
+[111] (L) L6:
+[112] (]) arr[6] = ret2
+[113] ([) v5 = arr[6]
+[114] (R) return v5
+[115] (L) L7:
+[116] (R) return u5
+
+--- Phase 0: Address-Taken Analysis ---
+Identified 2 address-taken variables.

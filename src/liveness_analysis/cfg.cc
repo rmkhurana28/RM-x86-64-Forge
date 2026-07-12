@@ -3,6 +3,7 @@
 #include <fstream>
 #include <algorithm>
 #include <unordered_map>
+#include <regex>
 
 typedef struct{
     int nodeId; // unique nodeId for each node
@@ -17,6 +18,79 @@ typedef struct{
 } Node;
 
 namespace rm_forge {
+
+std::unordered_set<std::string> addressTakenVars;
+
+bool handle_memory_spill_rewrite(
+    TwoAddressInstruction currInstruction,
+    const string& spillName,
+    int& helperCount,
+    const string& stackAddr,
+    vector<TwoAddressInstruction>& modifiedInstructions
+) {
+    string originalOp1 = currInstruction.getOperand1();
+    string originalOp2 = currInstruction.getOperand2();
+    
+    bool isMemOp1 = is_memory_operand(originalOp1);
+    bool isMemOp2 = is_memory_operand(originalOp2);
+    
+    bool foundInMemOp1 = false;
+    bool foundInMemOp2 = false;
+
+    if (isMemOp1) {
+        auto extracted = extract_memory_vars(originalOp1);
+        if (extracted.count(spillName) > 0) foundInMemOp1 = true;
+    }
+    if (isMemOp2) {
+        auto extracted = extract_memory_vars(originalOp2);
+        if (extracted.count(spillName) > 0) foundInMemOp2 = true;
+    }
+    
+    if (foundInMemOp1 || foundInMemOp2) {
+        // LEA exception: drop the stack address directly!
+        if (currInstruction.getOpcode() == "LEA") {
+            currInstruction.setOperand2(stackAddr);
+            
+            // EDGE CASE: LEA a, [a] (op1 is also the spillName!)
+            if (!isMemOp1 && originalOp1 == spillName) {
+                string helperName = spillName + "_helper_" + to_string(helperCount++);
+                currInstruction.setOperand1(helperName);
+                modifiedInstructions.push_back(currInstruction);
+                // LEA modifies op1, so we push the result back to the stack
+                modifiedInstructions.push_back(makeInstruction("MOV", stackAddr, helperName));
+            } else {
+                modifiedInstructions.push_back(currInstruction);
+            }
+            return true;
+        }
+
+        string helperName = spillName + "_helper_" + to_string(helperCount++);
+        
+        modifiedInstructions.push_back(makeInstruction("MOV", helperName, stackAddr));
+        
+        if (foundInMemOp1) {
+            string newOp1 = std::regex_replace(originalOp1, std::regex("\\b" + spillName + "\\b"), helperName);
+            currInstruction.setOperand1(newOp1);
+        }
+        if (foundInMemOp2) {
+            string newOp2 = std::regex_replace(originalOp2, std::regex("\\b" + spillName + "\\b"), helperName);
+            currInstruction.setOperand2(newOp2);
+        }
+
+        // If the other operand is a direct match, replace it too!
+        if (!isMemOp1 && originalOp1 == spillName) {
+            currInstruction.setOperand1(helperName);
+        }
+        if (!isMemOp2 && originalOp2 == spillName) {
+            currInstruction.setOperand2(helperName);
+        }
+        
+        modifiedInstructions.push_back(currInstruction);
+        return true; 
+    }
+    
+    return false;
+}
 
 void drawInterferenceEdges(const string& defVar, 
                            const unordered_set<string>& currentLive, 
@@ -1329,6 +1403,8 @@ void ControlFlowGraph::computeLiveness() {
 
         // degree is 14 or more
         if(myGraph[i].degree >= 14){
+            if (myGraph[i].name.find("_helper_") != string::npos) continue;
+
             if(highestDegreeIndex == -1){
                 highestDegreeIndex = i;
             } else{
@@ -1400,6 +1476,11 @@ void ControlFlowGraph::computeLiveness() {
 
         // if any color index remians in the set, assign the first color index
         if(!checkRegAvail.empty()) regAvail = *checkRegAvail.begin();
+
+        // if the var belongs to the address-of operand, move it to stack, never assign register to it
+        if (addressTakenVars.count(myGraph[popedVar].name) > 0) {
+            regAvail = -1;
+        }
 
         if(regAvail != -1){
             // reg is found, add in the mapping
@@ -1537,13 +1618,30 @@ void ControlFlowGraph::computeLiveness() {
         for(size_t j=0 ; j<basic_blocks.size() ; j++){
 
             // go through all insturctions of this block
-            for(size_t k=0 ; k<basic_blocks[j]->getInstructions().size() ; k++){
+            for(size_t k=0 ; k<basic_blocks[j]->getInstructions().size() ; k++){                
 
                 // if spillName is NOT in this instruciton, copy that to modified instructions as it is
-                if(basic_blocks[j]->getInstructions()[k].getOperand1() != spillName && basic_blocks[j]->getInstructions()[k].getOperand2() != spillName){
+                // continue only if none of them is memory operand
+                if(basic_blocks[j]->getInstructions()[k].getOperand1() != spillName && basic_blocks[j]->getInstructions()[k].getOperand2() != spillName && !is_memory_operand(basic_blocks[j]->getInstructions()[k].getOperand1()) && !is_memory_operand(basic_blocks[j]->getInstructions()[k].getOperand2())){
                     modifiedInstructions.push_back(basic_blocks[j]->getInstructions()[k]);
                     continue;
                 }
+
+                // if any of them is memory operand
+                if(is_memory_operand(basic_blocks[j]->getInstructions()[k].getOperand1()) || is_memory_operand(basic_blocks[j]->getInstructions()[k].getOperand2())){
+                    // call the func here
+
+                    if (handle_memory_spill_rewrite(basic_blocks[j]->getInstructions()[k], spillName, helperCount, stackAddr, modifiedInstructions)) 
+                    {
+                        // The memory operand contained the spillName and was successfully rewritten.
+                        // We continue so it doesn't reach the direct spillName section below.
+                        continue;
+                    }
+                }
+
+                /*
+                    if we reach here, it means the spillName is direclty in either op1 or op2
+                */
 
                 // copy the current instruction
                 auto currInstruction = basic_blocks[j]->getInstructions()[k];

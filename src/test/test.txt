@@ -1,23 +1,36 @@
-func foo:
+func helper1:
 param a
 param b
 
 t1 = a + b
 t2 = t1 * a
-t3 = t2 - b
+t3 = t2 / b
+t4 = t3 % a
 
-cmp = t3 > t1
+cmp1 = t4 > t1
 
-if cmp goto L1
+if cmp1 goto L1
 
-t4 = t3 + a
+t5 = t4 + b
 goto L2
 
 L1:
-t4 = t3 - b
+t5 = t4 - a
 
 L2:
-return t4
+return t5
+
+func helper2:
+param x
+
+t1 = x + x
+t2 = t1 << 2
+t3 = t2 >> 1
+t4 = -t3
+t5 = ~t4
+t6 = !t5
+
+return t6
 
 func main:
 
@@ -30,41 +43,59 @@ f = 30
 g = 35
 h = 40
 
+i = 2
+j = 3
+k = i + j
+
 t1 = a + b
-t2 = t1 * c
-t3 = t2 / d
-t4 = t3 % b
+t2 = c + d
+t3 = e + f
+t4 = g + h
 
-t5 = t4 & a
-t6 = t5 | c
-t7 = t6 ^ d
-t8 = t7 << 3
-t9 = t8 >> 1
+t5 = t1 * t2
+t6 = t3 * t4
+t7 = t5 + t6
+t8 = t7 / d
+t9 = t8 % b
 
-t10 = -t9
-t11 = ~t10
-t12 = !t11
+t10 = t9 & a
+t11 = t10 | c
+t12 = t11 ^ d
 
-cmp1 = t12 == a
-cmp2 = t12 != b
-cmp3 = t12 < c
-cmp4 = t12 <= d
-cmp5 = t12 > a
-cmp6 = t12 >= b
+t13 = t12 << 3
+t14 = t13 >> 2
 
-ptr = &t12
-*ptr = cmp1
-x = *ptr
+t15 = -t14
+t16 = ~t15
+t17 = !t16
 
-arr[0] = x
+cmp1 = t17 == a
+cmp2 = t17 != b
+cmp3 = t17 < c
+cmp4 = t17 <= d
+cmp5 = t17 > e
+cmp6 = t17 >= f
+
+ptr1 = &t17
+
+*ptr1 = cmp1
+
+x1 = *ptr1
+
+arr[0] = x1
 arr[1] = cmp2
 arr[2] = cmp3
 arr[3] = cmp4
 arr[4] = cmp5
 arr[5] = cmp6
 
-y = arr[5]
-z = arr[0]
+arr[i] = t7
+arr[k] = t8
+
+y1 = arr[0]
+y2 = arr[1]
+y3 = arr[i]
+y4 = arr[k]
 
 param a
 param b
@@ -75,28 +106,64 @@ param f
 param g
 param h
 
-ret1 = call foo, 8
+ret1 = call helper1, 8
 
-u1 = ret1 + y
-u2 = u1 * z
+param ret1
 
-cmp7 = u2 > t4
+ret2 = call helper2, 1
+
+u1 = ret1 + ret2
+u2 = u1 + y1
+u3 = u2 + y2
+u4 = u3 + y3
+u5 = u4 + y4
+
+cmp7 = u5 > t9
 
 if cmp7 goto L3
 
 ifFalse cmp2 goto L4
 
-goto L5
+if u1 < u2 goto L5
+
+ifFalse u3 >= u4 goto L6
+
+goto L7
 
 L3:
-t13 = u2 + ret1
-return t13
+
+ptr2 = &u5
+
+*ptr2 = ret2
+
+v1 = *ptr2
+
+return v1
 
 L4:
-t14 = arr[3]
-t15 = *ptr
-t16 = t14 + t15
-return t16
+
+v2 = arr[3]
+v3 = arr[4]
+v4 = v2 + v3
+
+return v4
 
 L5:
-return y
+
+param u5
+
+call helper2, 1
+
+goto L7
+
+L6:
+
+arr[6] = ret2
+
+v5 = arr[6]
+
+return v5
+
+L7:
+
+return u5
