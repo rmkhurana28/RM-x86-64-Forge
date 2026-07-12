@@ -104,8 +104,10 @@ Instructions:
 [028] FUNC main
 [029] MOV a, 5
 [030] MOV b, 10
-[031] MOV c, 15
-[032] MOV d, 20
+[031] MOV c_helper_1, 15
+[164] MOV [rbp - 64], c_helper_1
+[032] MOV d_helper_1, 20
+[159] MOV [rbp - 56], d_helper_1
 [033] MOV t1_helper_1, a
 [146] MOV [rbp - 32], t1_helper_1
 [147] MOV t1_helper_2, [rbp - 32]
@@ -115,12 +117,14 @@ Instructions:
 [035] MOV t2_helper_1, t1_helper_4
 [140] MOV [rbp - 24], t2_helper_1
 [141] MOV t2_helper_2, [rbp - 24]
-[036] IMUL t2_helper_2, c
+[165] MOV c_helper_2, [rbp - 64]
+[036] IMUL t2_helper_2, c_helper_2
 [142] MOV [rbp - 24], t2_helper_2
 [143] MOV t2_helper_4, [rbp - 24]
 [037] MOV rax, t2_helper_4
 [038] CQO 
-[039] IDIV d
+[160] MOV d_helper_2, [rbp - 56]
+[039] IDIV d_helper_2
 [040] MOV t3_helper_1, rax
 [152] MOV [rbp - 40], t3_helper_1
 [153] MOV t3_helper_2, [rbp - 40]
@@ -133,9 +137,11 @@ Instructions:
 [045] MOV t5, t4_helper_2
 [046] AND t5, a
 [047] MOV t6, t5
-[048] OR t6, c
+[166] MOV c_helper_3, [rbp - 64]
+[048] OR t6, c_helper_3
 [049] MOV t7, t6
-[050] XOR t7, d
+[161] MOV d_helper_3, [rbp - 56]
+[050] XOR t7, d_helper_3
 [051] MOV t8, t7
 [052] MOV rcx, 3
 [053] SHL t8, cl
@@ -151,15 +157,18 @@ Instructions:
 [063] MOVZX t12, al
 [064] CMP t12, a
 [065] SETE al
-[066] MOVZX cmp1, al
+[066] MOVZX cmp1_helper_1, al
+[156] MOV [rbp - 48], cmp1_helper_1
 [067] CMP t12, b
 [068] SETNE al
 [069] MOVZX cmp2_helper_1, al
 [133] MOV [rbp - 8], cmp2_helper_1
-[070] CMP t12, c
+[167] MOV c_helper_4, [rbp - 64]
+[070] CMP t12, c_helper_4
 [071] SETL al
 [072] MOVZX cmp3, al
-[073] CMP t12, d
+[162] MOV d_helper_4, [rbp - 56]
+[073] CMP t12, d_helper_4
 [074] SETLE al
 [075] MOVZX cmp4, al
 [076] CMP t12, a
@@ -169,7 +178,8 @@ Instructions:
 [080] SETGE al
 [081] MOVZX cmp6, al
 [082] LEA ptr, [t12]
-[083] MOV [ptr], cmp1
+[157] MOV cmp1_helper_2, [rbp - 48]
+[083] MOV [ptr], cmp1_helper_2
 [084] MOV x, [ptr]
 [085] MOV [arr + 0*8], x
 [134] MOV cmp2_helper_2, [rbp - 8]
@@ -181,8 +191,10 @@ Instructions:
 [091] MOV y, [arr + 5*8]
 [092] MOV rdi, a
 [093] MOV rsi, b
-[094] MOV rdx, c
-[095] MOV rcx, d
+[168] MOV c_helper_5, [rbp - 64]
+[094] MOV rdx, c_helper_5
+[163] MOV d_helper_5, [rbp - 56]
+[095] MOV rcx, d_helper_5
 [150] MOV t1_helper_5, [rbp - 32]
 [096] MOV r8, t1_helper_5
 [144] MOV t2_helper_5, [rbp - 24]
@@ -194,16 +206,17 @@ Instructions:
 [100] CALL foo, 8
 [101] MOV ret1, rax
 [102] ADD rsp, 16
-[103] CMP cmp1, 0
+[158] MOV cmp1_helper_3, [rbp - 48]
+[103] CMP cmp1_helper_3, 0
 [104] JNE L3
 ------------------------------------------
 CFG IN:   { Φ }
 CFG OUT:  { 6 10 }
 ------------------------------------------
-DEF:      { r8 rsi y x ptr cmp6 cmp5 cmp4 cmp3 cmp2 t12 t11 t10 r11 t9 r10 rcx t8 t5 t4 t7 rdx r9 cmp1 t3 rax t2 rdi t1 ret1 d c t6 b a }
-USE:      { arr }
-LIVE IN:  { arr }
-LIVE OUT: { y x t3 rax t1 t2 t4 ret1 cmp2 }
+DEF:      { cmp1_helper_3 t3_helper_3 c_helper_5 rdi y cmp1_helper_2 cmp2_helper_2 ptr cmp6 cmp5 cmp4 cmp3 c_helper_4 cmp2_helper_1 cmp1_helper_1 t2_helper_5 t12 t11 d_helper_4 t10 r11 t9 r10 rcx t8 ret1 d_helper_3 c_helper_3 t5 t4_helper_2 t3_helper_2 t1_helper_5 d_helper_2 t4_helper_3 t7 rdx r9 rax t3_helper_1 c_helper_2 t2_helper_2 x t2_helper_1 t1_helper_4 r8 t1_helper_2 d_helper_5 rsi t1_helper_1 d_helper_1 t6 t4_helper_1 t2_helper_4 b c_helper_1 a }
+USE:      { arr rbp - 48 rbp - 16 rbp - 40 rbp - 32 rbp - 8 rbp - 56 rbp - 24 rbp - 64 }
+LIVE IN:  { arr rbp - 48 rbp - 16 rbp - 40 rbp - 32 rbp - 8 rbp - 56 rbp - 24 rbp - 64 }
+LIVE OUT: { y rbp - 16 rbp - 40 rax rbp - 24 rbp - 32 ret1 x rbp - 8 }
 ==========================================
 
 ==========================================
@@ -217,10 +230,10 @@ Instructions:
 CFG IN:   { 5 }
 CFG OUT:  { 7 11 }
 ------------------------------------------
-DEF:      { Φ }
-USE:      { cmp2 }
-LIVE IN:  { y t4 t3 x t2 t1 rax cmp2 }
-LIVE OUT: { y x t3 t4 rax t1 t2 }
+DEF:      { cmp2_helper_3 }
+USE:      { rbp - 8 }
+LIVE IN:  { y rbp - 40 rbp - 16 rbp - 32 rbp - 24 rax x rbp - 8 }
+LIVE OUT: { y x rbp - 16 rbp - 40 rax rbp - 24 rbp - 32 }
 ==========================================
 
 ==========================================
@@ -235,10 +248,10 @@ Instructions:
 CFG IN:   { 6 }
 CFG OUT:  { 8 12 }
 ------------------------------------------
-DEF:      { Φ }
-USE:      { t2 t1 }
-LIVE IN:  { y t4 t3 x t2 t1 }
-LIVE OUT: { y x t3 t4 }
+DEF:      { t1_helper_6 t2_helper_6 }
+USE:      { rbp - 32 rbp - 24 }
+LIVE IN:  { y rbp - 40 rbp - 16 x rbp - 32 rbp - 24 }
+LIVE OUT: { y x rbp - 16 rbp - 40 }
 ==========================================
 
 ==========================================
@@ -253,9 +266,9 @@ Instructions:
 CFG IN:   { 7 }
 CFG OUT:  { 9 13 }
 ------------------------------------------
-DEF:      { Φ }
-USE:      { t4 t3 }
-LIVE IN:  { y t4 t3 }
+DEF:      { t3_helper_4 t4_helper_4 }
+USE:      { rbp - 40 rbp - 16 }
+LIVE IN:  { y rbp - 40 rbp - 16 }
 LIVE OUT: { y }
 ==========================================
 

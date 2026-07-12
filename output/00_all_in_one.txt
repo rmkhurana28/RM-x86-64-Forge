@@ -319,8 +319,10 @@ Instructions:
 [028] FUNC main
 [029] MOV a, 5
 [030] MOV b, 10
-[031] MOV c, 15
-[032] MOV d, 20
+[031] MOV c_helper_1, 15
+[164] MOV [rbp - 64], c_helper_1
+[032] MOV d_helper_1, 20
+[159] MOV [rbp - 56], d_helper_1
 [033] MOV t1_helper_1, a
 [146] MOV [rbp - 32], t1_helper_1
 [147] MOV t1_helper_2, [rbp - 32]
@@ -330,12 +332,14 @@ Instructions:
 [035] MOV t2_helper_1, t1_helper_4
 [140] MOV [rbp - 24], t2_helper_1
 [141] MOV t2_helper_2, [rbp - 24]
-[036] IMUL t2_helper_2, c
+[165] MOV c_helper_2, [rbp - 64]
+[036] IMUL t2_helper_2, c_helper_2
 [142] MOV [rbp - 24], t2_helper_2
 [143] MOV t2_helper_4, [rbp - 24]
 [037] MOV rax, t2_helper_4
 [038] CQO 
-[039] IDIV d
+[160] MOV d_helper_2, [rbp - 56]
+[039] IDIV d_helper_2
 [040] MOV t3_helper_1, rax
 [152] MOV [rbp - 40], t3_helper_1
 [153] MOV t3_helper_2, [rbp - 40]
@@ -348,9 +352,11 @@ Instructions:
 [045] MOV t5, t4_helper_2
 [046] AND t5, a
 [047] MOV t6, t5
-[048] OR t6, c
+[166] MOV c_helper_3, [rbp - 64]
+[048] OR t6, c_helper_3
 [049] MOV t7, t6
-[050] XOR t7, d
+[161] MOV d_helper_3, [rbp - 56]
+[050] XOR t7, d_helper_3
 [051] MOV t8, t7
 [052] MOV rcx, 3
 [053] SHL t8, cl
@@ -366,15 +372,18 @@ Instructions:
 [063] MOVZX t12, al
 [064] CMP t12, a
 [065] SETE al
-[066] MOVZX cmp1, al
+[066] MOVZX cmp1_helper_1, al
+[156] MOV [rbp - 48], cmp1_helper_1
 [067] CMP t12, b
 [068] SETNE al
 [069] MOVZX cmp2_helper_1, al
 [133] MOV [rbp - 8], cmp2_helper_1
-[070] CMP t12, c
+[167] MOV c_helper_4, [rbp - 64]
+[070] CMP t12, c_helper_4
 [071] SETL al
 [072] MOVZX cmp3, al
-[073] CMP t12, d
+[162] MOV d_helper_4, [rbp - 56]
+[073] CMP t12, d_helper_4
 [074] SETLE al
 [075] MOVZX cmp4, al
 [076] CMP t12, a
@@ -384,7 +393,8 @@ Instructions:
 [080] SETGE al
 [081] MOVZX cmp6, al
 [082] LEA ptr, [t12]
-[083] MOV [ptr], cmp1
+[157] MOV cmp1_helper_2, [rbp - 48]
+[083] MOV [ptr], cmp1_helper_2
 [084] MOV x, [ptr]
 [085] MOV [arr + 0*8], x
 [134] MOV cmp2_helper_2, [rbp - 8]
@@ -396,8 +406,10 @@ Instructions:
 [091] MOV y, [arr + 5*8]
 [092] MOV rdi, a
 [093] MOV rsi, b
-[094] MOV rdx, c
-[095] MOV rcx, d
+[168] MOV c_helper_5, [rbp - 64]
+[094] MOV rdx, c_helper_5
+[163] MOV d_helper_5, [rbp - 56]
+[095] MOV rcx, d_helper_5
 [150] MOV t1_helper_5, [rbp - 32]
 [096] MOV r8, t1_helper_5
 [144] MOV t2_helper_5, [rbp - 24]
@@ -409,16 +421,17 @@ Instructions:
 [100] CALL foo, 8
 [101] MOV ret1, rax
 [102] ADD rsp, 16
-[103] CMP cmp1, 0
+[158] MOV cmp1_helper_3, [rbp - 48]
+[103] CMP cmp1_helper_3, 0
 [104] JNE L3
 ------------------------------------------
 CFG IN:   { Φ }
 CFG OUT:  { 6 10 }
 ------------------------------------------
-DEF:      { r8 rsi y x ptr cmp6 cmp5 cmp4 cmp3 cmp2 t12 t11 t10 r11 t9 r10 rcx t8 t5 t4 t7 rdx r9 cmp1 t3 rax t2 rdi t1 ret1 d c t6 b a }
-USE:      { arr }
-LIVE IN:  { arr }
-LIVE OUT: { y x t3 rax t1 t2 t4 ret1 cmp2 }
+DEF:      { cmp1_helper_3 t3_helper_3 c_helper_5 rdi y cmp1_helper_2 cmp2_helper_2 ptr cmp6 cmp5 cmp4 cmp3 c_helper_4 cmp2_helper_1 cmp1_helper_1 t2_helper_5 t12 t11 d_helper_4 t10 r11 t9 r10 rcx t8 ret1 d_helper_3 c_helper_3 t5 t4_helper_2 t3_helper_2 t1_helper_5 d_helper_2 t4_helper_3 t7 rdx r9 rax t3_helper_1 c_helper_2 t2_helper_2 x t2_helper_1 t1_helper_4 r8 t1_helper_2 d_helper_5 rsi t1_helper_1 d_helper_1 t6 t4_helper_1 t2_helper_4 b c_helper_1 a }
+USE:      { arr rbp - 48 rbp - 16 rbp - 40 rbp - 32 rbp - 8 rbp - 56 rbp - 24 rbp - 64 }
+LIVE IN:  { arr rbp - 48 rbp - 16 rbp - 40 rbp - 32 rbp - 8 rbp - 56 rbp - 24 rbp - 64 }
+LIVE OUT: { y rbp - 16 rbp - 40 rax rbp - 24 rbp - 32 ret1 x rbp - 8 }
 ==========================================
 
 ==========================================
@@ -432,10 +445,10 @@ Instructions:
 CFG IN:   { 5 }
 CFG OUT:  { 7 11 }
 ------------------------------------------
-DEF:      { Φ }
-USE:      { cmp2 }
-LIVE IN:  { y t4 t3 x t2 t1 rax cmp2 }
-LIVE OUT: { y x t3 t4 rax t1 t2 }
+DEF:      { cmp2_helper_3 }
+USE:      { rbp - 8 }
+LIVE IN:  { y rbp - 40 rbp - 16 rbp - 32 rbp - 24 rax x rbp - 8 }
+LIVE OUT: { y x rbp - 16 rbp - 40 rax rbp - 24 rbp - 32 }
 ==========================================
 
 ==========================================
@@ -450,10 +463,10 @@ Instructions:
 CFG IN:   { 6 }
 CFG OUT:  { 8 12 }
 ------------------------------------------
-DEF:      { Φ }
-USE:      { t2 t1 }
-LIVE IN:  { y t4 t3 x t2 t1 }
-LIVE OUT: { y x t3 t4 }
+DEF:      { t1_helper_6 t2_helper_6 }
+USE:      { rbp - 32 rbp - 24 }
+LIVE IN:  { y rbp - 40 rbp - 16 x rbp - 32 rbp - 24 }
+LIVE OUT: { y x rbp - 16 rbp - 40 }
 ==========================================
 
 ==========================================
@@ -468,9 +481,9 @@ Instructions:
 CFG IN:   { 7 }
 CFG OUT:  { 9 13 }
 ------------------------------------------
-DEF:      { Φ }
-USE:      { t4 t3 }
-LIVE IN:  { y t4 t3 }
+DEF:      { t3_helper_4 t4_helper_4 }
+USE:      { rbp - 40 rbp - 16 }
+LIVE IN:  { y rbp - 40 rbp - 16 }
 LIVE OUT: { y }
 ==========================================
 
@@ -610,160 +623,173 @@ LIVE OUT: { Φ }
 [028] <- [028] FUNC main
 [029] <- [029] MOV a, 5
 [030] <- [030] MOV b, 10
-[031] <- [031] MOV c, 15
-[032] <- [032] MOV d, 20
-[033] <- [033] MOV t1_helper_1, a
-[034] <- [146] MOV [rbp - 32], t1_helper_1
-[035] <- [147] MOV t1_helper_2, [rbp - 32]
-[036] <- [034] ADD t1_helper_2, b
-[037] <- [148] MOV [rbp - 32], t1_helper_2
-[038] <- [149] MOV t1_helper_4, [rbp - 32]
-[039] <- [035] MOV t2_helper_1, t1_helper_4
-[040] <- [140] MOV [rbp - 24], t2_helper_1
-[041] <- [141] MOV t2_helper_2, [rbp - 24]
-[042] <- [036] IMUL t2_helper_2, c
-[043] <- [142] MOV [rbp - 24], t2_helper_2
-[044] <- [143] MOV t2_helper_4, [rbp - 24]
-[045] <- [037] MOV rax, t2_helper_4
-[046] <- [038] CQO 
-[047] <- [039] IDIV d
-[048] <- [040] MOV t3_helper_1, rax
-[049] <- [152] MOV [rbp - 40], t3_helper_1
-[050] <- [153] MOV t3_helper_2, [rbp - 40]
-[051] <- [041] MOV rax, t3_helper_2
-[052] <- [042] CQO 
-[053] <- [043] IDIV b
-[054] <- [044] MOV t4_helper_1, rdx
-[055] <- [136] MOV [rbp - 16], t4_helper_1
-[056] <- [137] MOV t4_helper_2, [rbp - 16]
-[057] <- [045] MOV t5, t4_helper_2
-[058] <- [046] AND t5, a
-[059] <- [047] MOV t6, t5
-[060] <- [048] OR t6, c
-[061] <- [049] MOV t7, t6
-[062] <- [050] XOR t7, d
-[063] <- [051] MOV t8, t7
-[064] <- [052] MOV rcx, 3
-[065] <- [053] SHL t8, cl
-[066] <- [054] MOV t9, t8
-[067] <- [055] MOV rcx, 1
-[068] <- [056] SAR t9, cl
-[069] <- [057] MOV t10, t9
-[070] <- [058] NEG t10
-[071] <- [059] MOV t11, t10
-[072] <- [060] NOT t11
-[073] <- [061] CMP t11, 0
-[074] <- [062] SETE al
-[075] <- [063] MOVZX t12, al
-[076] <- [064] CMP t12, a
-[077] <- [065] SETE al
-[078] <- [066] MOVZX cmp1, al
-[079] <- [067] CMP t12, b
-[080] <- [068] SETNE al
-[081] <- [069] MOVZX cmp2_helper_1, al
-[082] <- [133] MOV [rbp - 8], cmp2_helper_1
-[083] <- [070] CMP t12, c
-[084] <- [071] SETL al
-[085] <- [072] MOVZX cmp3, al
-[086] <- [073] CMP t12, d
-[087] <- [074] SETLE al
-[088] <- [075] MOVZX cmp4, al
-[089] <- [076] CMP t12, a
-[090] <- [077] SETG al
-[091] <- [078] MOVZX cmp5, al
-[092] <- [079] CMP t12, b
-[093] <- [080] SETGE al
-[094] <- [081] MOVZX cmp6, al
-[095] <- [082] LEA ptr, [t12]
-[096] <- [083] MOV [ptr], cmp1
-[097] <- [084] MOV x, [ptr]
-[098] <- [085] MOV [arr + 0*8], x
-[099] <- [134] MOV cmp2_helper_2, [rbp - 8]
-[100] <- [086] MOV [arr + 1*8], cmp2_helper_2
-[101] <- [087] MOV [arr + 2*8], cmp3
-[102] <- [088] MOV [arr + 3*8], cmp4
-[103] <- [089] MOV [arr + 4*8], cmp5
-[104] <- [090] MOV [arr + 5*8], cmp6
-[105] <- [091] MOV y, [arr + 5*8]
-[106] <- [092] MOV rdi, a
-[107] <- [093] MOV rsi, b
-[108] <- [094] MOV rdx, c
-[109] <- [095] MOV rcx, d
-[110] <- [150] MOV t1_helper_5, [rbp - 32]
-[111] <- [096] MOV r8, t1_helper_5
-[112] <- [144] MOV t2_helper_5, [rbp - 24]
-[113] <- [097] MOV r9, t2_helper_5
-[114] <- [138] MOV t4_helper_3, [rbp - 16]
-[115] <- [098] PUSH t4_helper_3
-[116] <- [154] MOV t3_helper_3, [rbp - 40]
-[117] <- [099] PUSH t3_helper_3
-[118] <- [100] CALL foo, 8
-[119] <- [101] MOV ret1, rax
-[120] <- [102] ADD rsp, 16
-[121] <- [103] CMP cmp1, 0
-[122] <- [104] JNE L3
-[123] <- [135] MOV cmp2_helper_3, [rbp - 8]
-[124] <- [105] CMP cmp2_helper_3, 0
-[125] <- [106] JE L4
-[126] <- [145] MOV t2_helper_6, [rbp - 24]
-[127] <- [151] MOV t1_helper_6, [rbp - 32]
-[128] <- [107] CMP t1_helper_6, t2_helper_6
-[129] <- [108] JL L5
-[130] <- [139] MOV t4_helper_4, [rbp - 16]
-[131] <- [155] MOV t3_helper_4, [rbp - 40]
-[132] <- [109] CMP t3_helper_4, t4_helper_4
-[133] <- [110] JL L6
-[134] <- [111] JMP L7
-[135] <- [112] L3 
-[136] <- [113] MOV rax, ret1
-[137] <- [114] MOV rsp, rbp
-[138] <- [115] POP rbp
-[139] <- [116] ret 
-[140] <- [117] L4 
-[141] <- [118] MOV rsp, rbp
-[142] <- [119] POP rbp
-[143] <- [120] ret 
-[144] <- [121] L5 
-[145] <- [122] MOV rdi, x
-[146] <- [123] CALL foo, 1
-[147] <- [124] JMP L7
-[148] <- [125] L6 
-[149] <- [128] L7 
-[150] <- [129] MOV rax, y
-[151] <- [130] MOV rsp, rbp
-[152] <- [131] POP rbp
-[153] <- [132] ret 
+[031] <- [031] MOV c_helper_1, 15
+[032] <- [164] MOV [rbp - 64], c_helper_1
+[033] <- [032] MOV d_helper_1, 20
+[034] <- [159] MOV [rbp - 56], d_helper_1
+[035] <- [033] MOV t1_helper_1, a
+[036] <- [146] MOV [rbp - 32], t1_helper_1
+[037] <- [147] MOV t1_helper_2, [rbp - 32]
+[038] <- [034] ADD t1_helper_2, b
+[039] <- [148] MOV [rbp - 32], t1_helper_2
+[040] <- [149] MOV t1_helper_4, [rbp - 32]
+[041] <- [035] MOV t2_helper_1, t1_helper_4
+[042] <- [140] MOV [rbp - 24], t2_helper_1
+[043] <- [141] MOV t2_helper_2, [rbp - 24]
+[044] <- [165] MOV c_helper_2, [rbp - 64]
+[045] <- [036] IMUL t2_helper_2, c_helper_2
+[046] <- [142] MOV [rbp - 24], t2_helper_2
+[047] <- [143] MOV t2_helper_4, [rbp - 24]
+[048] <- [037] MOV rax, t2_helper_4
+[049] <- [038] CQO 
+[050] <- [160] MOV d_helper_2, [rbp - 56]
+[051] <- [039] IDIV d_helper_2
+[052] <- [040] MOV t3_helper_1, rax
+[053] <- [152] MOV [rbp - 40], t3_helper_1
+[054] <- [153] MOV t3_helper_2, [rbp - 40]
+[055] <- [041] MOV rax, t3_helper_2
+[056] <- [042] CQO 
+[057] <- [043] IDIV b
+[058] <- [044] MOV t4_helper_1, rdx
+[059] <- [136] MOV [rbp - 16], t4_helper_1
+[060] <- [137] MOV t4_helper_2, [rbp - 16]
+[061] <- [045] MOV t5, t4_helper_2
+[062] <- [046] AND t5, a
+[063] <- [047] MOV t6, t5
+[064] <- [166] MOV c_helper_3, [rbp - 64]
+[065] <- [048] OR t6, c_helper_3
+[066] <- [049] MOV t7, t6
+[067] <- [161] MOV d_helper_3, [rbp - 56]
+[068] <- [050] XOR t7, d_helper_3
+[069] <- [051] MOV t8, t7
+[070] <- [052] MOV rcx, 3
+[071] <- [053] SHL t8, cl
+[072] <- [054] MOV t9, t8
+[073] <- [055] MOV rcx, 1
+[074] <- [056] SAR t9, cl
+[075] <- [057] MOV t10, t9
+[076] <- [058] NEG t10
+[077] <- [059] MOV t11, t10
+[078] <- [060] NOT t11
+[079] <- [061] CMP t11, 0
+[080] <- [062] SETE al
+[081] <- [063] MOVZX t12, al
+[082] <- [064] CMP t12, a
+[083] <- [065] SETE al
+[084] <- [066] MOVZX cmp1_helper_1, al
+[085] <- [156] MOV [rbp - 48], cmp1_helper_1
+[086] <- [067] CMP t12, b
+[087] <- [068] SETNE al
+[088] <- [069] MOVZX cmp2_helper_1, al
+[089] <- [133] MOV [rbp - 8], cmp2_helper_1
+[090] <- [167] MOV c_helper_4, [rbp - 64]
+[091] <- [070] CMP t12, c_helper_4
+[092] <- [071] SETL al
+[093] <- [072] MOVZX cmp3, al
+[094] <- [162] MOV d_helper_4, [rbp - 56]
+[095] <- [073] CMP t12, d_helper_4
+[096] <- [074] SETLE al
+[097] <- [075] MOVZX cmp4, al
+[098] <- [076] CMP t12, a
+[099] <- [077] SETG al
+[100] <- [078] MOVZX cmp5, al
+[101] <- [079] CMP t12, b
+[102] <- [080] SETGE al
+[103] <- [081] MOVZX cmp6, al
+[104] <- [082] LEA ptr, [t12]
+[105] <- [157] MOV cmp1_helper_2, [rbp - 48]
+[106] <- [083] MOV [ptr], cmp1_helper_2
+[107] <- [084] MOV x, [ptr]
+[108] <- [085] MOV [arr + 0*8], x
+[109] <- [134] MOV cmp2_helper_2, [rbp - 8]
+[110] <- [086] MOV [arr + 1*8], cmp2_helper_2
+[111] <- [087] MOV [arr + 2*8], cmp3
+[112] <- [088] MOV [arr + 3*8], cmp4
+[113] <- [089] MOV [arr + 4*8], cmp5
+[114] <- [090] MOV [arr + 5*8], cmp6
+[115] <- [091] MOV y, [arr + 5*8]
+[116] <- [092] MOV rdi, a
+[117] <- [093] MOV rsi, b
+[118] <- [168] MOV c_helper_5, [rbp - 64]
+[119] <- [094] MOV rdx, c_helper_5
+[120] <- [163] MOV d_helper_5, [rbp - 56]
+[121] <- [095] MOV rcx, d_helper_5
+[122] <- [150] MOV t1_helper_5, [rbp - 32]
+[123] <- [096] MOV r8, t1_helper_5
+[124] <- [144] MOV t2_helper_5, [rbp - 24]
+[125] <- [097] MOV r9, t2_helper_5
+[126] <- [138] MOV t4_helper_3, [rbp - 16]
+[127] <- [098] PUSH t4_helper_3
+[128] <- [154] MOV t3_helper_3, [rbp - 40]
+[129] <- [099] PUSH t3_helper_3
+[130] <- [100] CALL foo, 8
+[131] <- [101] MOV ret1, rax
+[132] <- [102] ADD rsp, 16
+[133] <- [158] MOV cmp1_helper_3, [rbp - 48]
+[134] <- [103] CMP cmp1_helper_3, 0
+[135] <- [104] JNE L3
+[136] <- [135] MOV cmp2_helper_3, [rbp - 8]
+[137] <- [105] CMP cmp2_helper_3, 0
+[138] <- [106] JE L4
+[139] <- [145] MOV t2_helper_6, [rbp - 24]
+[140] <- [151] MOV t1_helper_6, [rbp - 32]
+[141] <- [107] CMP t1_helper_6, t2_helper_6
+[142] <- [108] JL L5
+[143] <- [139] MOV t4_helper_4, [rbp - 16]
+[144] <- [155] MOV t3_helper_4, [rbp - 40]
+[145] <- [109] CMP t3_helper_4, t4_helper_4
+[146] <- [110] JL L6
+[147] <- [111] JMP L7
+[148] <- [112] L3 
+[149] <- [113] MOV rax, ret1
+[150] <- [114] MOV rsp, rbp
+[151] <- [115] POP rbp
+[152] <- [116] ret 
+[153] <- [117] L4 
+[154] <- [118] MOV rsp, rbp
+[155] <- [119] POP rbp
+[156] <- [120] ret 
+[157] <- [121] L5 
+[158] <- [122] MOV rdi, x
+[159] <- [123] CALL foo, 1
+[160] <- [124] JMP L7
+[161] <- [125] L6 
+[162] <- [128] L7 
+[163] <- [129] MOV rax, y
+[164] <- [130] MOV rsp, rbp
+[165] <- [131] POP rbp
+[166] <- [132] ret 
 
 --- Phase 3: Interference Graph ---
-Node: rax (ID: 0, Physical: Yes, Degree: 26)
-  Interferes With: b d c cmp2 t4 cmp1 t2 a rcx cmp3 rdx cmp4 rsi cmp6 rdi arr r8 y cmp5 r9 x r10 t3 t12 r11 t1 ret1 
+Node: rax (ID: 0, Physical: Yes, Degree: 31)
+  Interferes With: cmp2_helper_3 cmp1_helper_1 ret1 cmp1_helper_3 r11 a r10 b rbp - 16 r9 rbp - 64 y d_helper_2 r8 rdi rbp - 56 rsi rdx rbp - 48 rcx rbp - 40 cmp2_helper_1 rbp - 24 rbp - 32 x rbp - 8 t12 cmp5 arr cmp4 cmp6 cmp3 
 
 Node: rbx (ID: 1, Physical: Yes, Degree: INF)
   Interferes With: None
 
-Node: rcx (ID: 2, Physical: Yes, Degree: 25)
-  Interferes With: t8 b t9 d a t12 cmp3 rdx c rax cmp2 y arr r8 x cmp5 r9 t3 t1 t2 cmp1 t4 cmp4 rsi cmp6 rdi 
+Node: rcx (ID: 2, Physical: Yes, Degree: 31)
+  Interferes With: t8 cmp3 cmp6 t2_helper_5 t4_helper_3 t3_helper_3 rax x t9 rbp - 32 rbp - 24 cmp1_helper_1 rbp - 40 cmp2_helper_1 r9 rbp - 64 rbp - 16 y rbp - 48 rbp - 8 r8 t1_helper_5 rdx rdi rbp - 56 rsi t12 cmp5 arr a b cmp4 
 
-Node: rdx (ID: 3, Physical: Yes, Degree: 23)
-  Interferes With: b cmp3 t12 cmp6 rdi cmp4 rsi c rax cmp2 y arr r8 x cmp5 r9 t3 t1 t2 cmp1 t4 a rcx d 
+Node: rdx (ID: 3, Physical: Yes, Degree: 31)
+  Interferes With: cmp3 cmp6 t2_helper_5 rcx t4_helper_3 t3_helper_3 rax x rbp - 32 rbp - 24 cmp1_helper_1 rbp - 40 cmp2_helper_1 r9 rbp - 64 rbp - 16 y rbp - 48 rbp - 8 d_helper_2 r8 t1_helper_5 d_helper_5 rsi rbp - 56 rdi t12 cmp5 arr a b cmp4 
 
-Node: rsi (ID: 4, Physical: Yes, Degree: 15)
-  Interferes With: d rdx c rax cmp2 rdi y r8 x r9 t3 t1 t2 cmp1 t4 rcx 
+Node: rsi (ID: 4, Physical: Yes, Degree: 21)
+  Interferes With: d_helper_5 rdx t1_helper_5 c_helper_5 r8 rcx t2_helper_5 rbp - 8 rbp - 56 rdi rbp - 48 y rbp - 16 rbp - 64 r9 rbp - 40 rbp - 24 rbp - 32 x rax t3_helper_3 t4_helper_3 
 
-Node: rdi (ID: 5, Physical: Yes, Degree: 17)
-  Interferes With: b d rdx rcx c rax cmp2 rsi m2 y r8 x r9 t3 t1 t2 cmp1 t4 
+Node: rdi (ID: 5, Physical: Yes, Degree: 23)
+  Interferes With: rbp - 56 b rdx t1_helper_5 c_helper_5 r8 rcx t2_helper_5 rbp - 64 r9 rbp - 8 d_helper_5 rsi t4_helper_3 m2 rax t3_helper_3 rbp - 48 y rbp - 16 rbp - 40 rbp - 24 rbp - 32 x 
 
-Node: r8 (ID: 6, Physical: Yes, Degree: 13)
-  Interferes With: rdx rax cmp2 y x r9 t3 t1 t2 cmp1 t4 rcx rsi rdi 
+Node: r8 (ID: 6, Physical: Yes, Degree: 16)
+  Interferes With: rdx rsi rdi rbp - 8 rbp - 48 y rbp - 16 r9 rbp - 40 rbp - 24 rbp - 32 x rax t3_helper_3 t4_helper_3 rcx t2_helper_5 
 
-Node: r9 (ID: 7, Physical: Yes, Degree: 13)
-  Interferes With: r8 rax cmp2 y x t3 t1 t2 cmp1 t4 rcx rsi rdi rdx 
+Node: r9 (ID: 7, Physical: Yes, Degree: 15)
+  Interferes With: rcx rdx r8 rbp - 8 rbp - 48 y rbp - 16 rbp - 40 rbp - 24 rbp - 32 x rax t3_helper_3 t4_helper_3 rsi rdi 
 
 Node: r10 (ID: 8, Physical: Yes, Degree: 8)
-  Interferes With: t4 cmp1 t2 t1 t3 x y cmp2 rax 
+  Interferes With: x rbp - 32 rbp - 24 rbp - 40 rbp - 16 y rbp - 48 rbp - 8 rax 
 
 Node: r11 (ID: 9, Physical: Yes, Degree: 8)
-  Interferes With: t4 cmp1 t2 t1 t3 x y cmp2 rax 
+  Interferes With: x rbp - 32 rbp - 24 rbp - 40 rbp - 16 y rbp - 48 rbp - 8 rax 
 
 Node: r12 (ID: 10, Physical: Yes, Degree: INF)
   Interferes With: None
@@ -792,86 +818,188 @@ Node: m1 (ID: 17, Physical: No, Degree: 1)
 Node: res (ID: 18, Physical: No, Degree: 0)
   Interferes With: None
 
-Node: y (ID: 19, Physical: No, Degree: 21)
-  Interferes With: t1 t4 x t3 b t2 d cmp1 ret1 cmp2 rdx rax c rsi rdi rcx a r8 r9 r10 r11 
+Node: y (ID: 19, Physical: No, Degree: 33)
+  Interferes With: t3_helper_4 t2_helper_6 t1_helper_6 r11 a r10 b r9 rbp - 64 r8 c_helper_5 rdi rbp - 56 t4_helper_3 rsi d_helper_5 t3_helper_3 rax rdx t1_helper_5 rcx t2_helper_5 ret1 cmp1_helper_3 x rbp - 32 rbp - 24 rbp - 40 t4_helper_4 rbp - 16 rbp - 48 rbp - 8 cmp2_helper_3 
 
-Node: x (ID: 20, Physical: No, Degree: 26)
-  Interferes With: t1 t4 t3 b t2 d cmp1 cmp2 ret1 c rax a rcx cmp6 rdi arr r8 y rdx cmp3 cmp5 r9 rsi cmp4 r10 r11 
+Node: rbp - 16 (ID: 20, Physical: No, Degree: 59)
+  Interferes With: t2_helper_6 t1_helper_6 cmp2_helper_3 a b c_helper_1 d_helper_1 t1_helper_1 t1_helper_2 t1_helper_4 t2_helper_1 t5 t6 d_helper_3 t7 t8 t9 t10 t11 t12 cmp1_helper_1 c_helper_2 r11 t2_helper_2 r10 t2_helper_4 r9 d_helper_2 r8 c_helper_5 t3_helper_1 rdi t4_helper_3 t3_helper_2 rsi d_helper_5 t3_helper_3 c_helper_3 rax t4_helper_1 rdx t1_helper_5 t4_helper_2 rcx t2_helper_5 ret1 cmp1_helper_3 y d_helper_4 cmp2_helper_2 x cmp1_helper_2 ptr cmp6 cmp5 cmp4 cmp3 c_helper_4 cmp2_helper_1 
 
-Node: t3 (ID: 21, Physical: No, Degree: 35)
-  Interferes With: t1 b t2 d c a ptr r10 r11 t12 x r9 cmp5 y r8 arr rdi cmp6 rsi cmp4 rdx cmp3 rcx rax ret1 cmp2 cmp1 t11 t10 t9 t8 t7 t6 t5 t4 
+Node: rbp - 40 (ID: 21, Physical: No, Degree: 60)
+  Interferes With: t4_helper_4 cmp2_helper_1 c_helper_4 cmp3 cmp4 cmp5 cmp6 ptr cmp1_helper_2 x cmp2_helper_2 d_helper_4 y cmp1_helper_3 ret1 t2_helper_5 rcx t4_helper_2 t1_helper_5 rdx t4_helper_1 rax c_helper_3 t3_helper_3 d_helper_5 rsi t3_helper_2 t4_helper_3 rdi t3_helper_1 c_helper_5 r8 d_helper_2 r9 t2_helper_4 r10 t2_helper_2 r11 c_helper_2 cmp1_helper_1 t12 t11 t10 t9 t8 t7 d_helper_3 t6 t5 t2_helper_1 t1_helper_4 t1_helper_2 t1_helper_1 d_helper_1 c_helper_1 b a cmp2_helper_3 t1_helper_6 t2_helper_6 
 
-Node: t1 (ID: 22, Physical: No, Degree: 35)
-  Interferes With: b d c a arr t2 ptr r10 r11 t12 x r9 cmp5 y r8 rdi cmp6 rsi cmp4 rdx cmp3 rcx rax ret1 cmp2 cmp1 t11 t10 t9 t8 t7 t6 t5 t4 t3 
+Node: rbp - 24 (ID: 22, Physical: No, Degree: 57)
+  Interferes With: cmp2_helper_3 a b c_helper_1 d_helper_1 t1_helper_1 t1_helper_2 t1_helper_4 t2_helper_1 t5 t6 d_helper_3 t7 t8 t9 t10 t11 t12 cmp1_helper_1 c_helper_2 r11 t2_helper_2 r10 t2_helper_4 r9 d_helper_2 r8 c_helper_5 t3_helper_1 rdi t4_helper_3 t3_helper_2 rsi d_helper_5 t3_helper_3 c_helper_3 rax t4_helper_1 rdx t1_helper_5 t4_helper_2 rcx t2_helper_5 ret1 cmp1_helper_3 y d_helper_4 cmp2_helper_2 x cmp1_helper_2 ptr cmp6 cmp5 cmp4 cmp3 c_helper_4 cmp2_helper_1 
 
-Node: t2 (ID: 23, Physical: No, Degree: 35)
-  Interferes With: t1 b d c a arr ptr r10 r11 t12 x r9 cmp5 y r8 rdi cmp6 rsi cmp4 rdx cmp3 rcx rax ret1 cmp2 cmp1 t11 t10 t9 t8 t7 t6 t5 t4 t3 
+Node: rbp - 32 (ID: 23, Physical: No, Degree: 58)
+  Interferes With: t2_helper_6 cmp2_helper_3 a b c_helper_1 d_helper_1 t1_helper_1 t1_helper_2 t1_helper_4 t2_helper_1 t5 t6 d_helper_3 t7 t8 t9 t10 t11 t12 cmp1_helper_1 c_helper_2 r11 t2_helper_2 r10 t2_helper_4 r9 d_helper_2 r8 c_helper_5 t3_helper_1 rdi t4_helper_3 t3_helper_2 rsi d_helper_5 t3_helper_3 c_helper_3 rax t4_helper_1 rdx t1_helper_5 t4_helper_2 rcx t2_helper_5 ret1 cmp1_helper_3 y d_helper_4 cmp2_helper_2 x cmp1_helper_2 ptr cmp6 cmp5 cmp4 cmp3 c_helper_4 cmp2_helper_1 
 
-Node: t4 (ID: 24, Physical: No, Degree: 35)
-  Interferes With: t1 t3 b t2 d c ptr r10 r11 t12 x r9 cmp5 y r8 arr rdi cmp6 rsi cmp4 rdx cmp3 rcx a rax ret1 cmp2 cmp1 t11 t10 t9 t8 t7 t6 t5 
+Node: ret1 (ID: 24, Physical: No, Degree: 10)
+  Interferes With: x rbp - 32 rbp - 24 rbp - 8 rax rbp - 40 rbp - 16 y rbp - 48 cmp1_helper_3 
 
-Node: ret1 (ID: 25, Physical: No, Degree: 9)
-  Interferes With: t4 cmp1 t2 t1 cmp2 rax t3 x y 
+Node: x (ID: 25, Physical: No, Degree: 37)
+  Interferes With: t2_helper_6 t1_helper_6 cmp2_helper_3 rbp - 8 rbp - 48 cmp3 rbp - 16 rbp - 40 r11 a r10 b r9 rbp - 64 r8 c_helper_5 rdi rbp - 56 t4_helper_3 rsi d_helper_5 t3_helper_3 rax rdx t1_helper_5 rcx t2_helper_5 ret1 cmp1_helper_3 y cmp2_helper_2 cmp5 arr cmp4 rbp - 32 rbp - 24 cmp6 
 
-Node: cmp2 (ID: 26, Physical: No, Degree: 35)
-  Interferes With: t5 t6 t7 t8 t9 t10 ptr r10 r11 t12 x r9 cmp5 y r8 arr rdi cmp6 rsi cmp4 rdx cmp3 rcx a rax c ret1 cmp1 d t2 b t3 t4 t1 t11 
+Node: rbp - 8 (ID: 26, Physical: No, Degree: 56)
+  Interferes With: a b c_helper_1 d_helper_1 t1_helper_1 t1_helper_2 t1_helper_4 t2_helper_1 t5 t6 d_helper_3 t7 t8 t9 t10 t11 t12 cmp1_helper_1 c_helper_2 r11 t2_helper_2 r10 t2_helper_4 r9 d_helper_2 r8 c_helper_5 t3_helper_1 rdi t4_helper_3 t3_helper_2 rsi d_helper_5 t3_helper_3 c_helper_3 rax t4_helper_1 rdx t1_helper_5 t4_helper_2 rcx t2_helper_5 ret1 cmp1_helper_3 y d_helper_4 cmp2_helper_2 x cmp1_helper_2 ptr cmp6 cmp5 cmp4 cmp3 c_helper_4 cmp2_helper_1 
 
-Node: cmp1 (ID: 27, Physical: No, Degree: 35)
-  Interferes With: t5 t6 t7 t8 t9 t10 ptr r10 r11 t12 x r9 cmp5 y r8 arr rdi cmp6 rsi cmp4 rdx cmp3 rcx a rax c ret1 cmp2 d t2 b t3 t4 t1 t11 
+Node: cmp1_helper_3 (ID: 27, Physical: No, Degree: 9)
+  Interferes With: x ret1 rbp - 32 rbp - 24 rbp - 8 rax rbp - 40 rbp - 16 y 
 
-Node: d (ID: 28, Physical: No, Degree: 30)
-  Interferes With: b cmp1 cmp5 cmp2 rax c cmp6 rdi ptr cmp4 rsi x cmp3 rdx y t12 t11 t10 t9 rcx a t8 t7 t6 t5 t4 t3 t2 t1 arr 
+Node: rbp - 48 (ID: 28, Physical: No, Degree: 55)
+  Interferes With: a b c_helper_1 d_helper_1 t1_helper_1 t1_helper_2 t1_helper_4 t2_helper_1 t5 t6 d_helper_3 t7 t8 t9 t10 t11 t12 c_helper_2 r11 t2_helper_2 r10 t2_helper_4 r9 d_helper_2 r8 c_helper_5 t2_helper_5 t4_helper_2 rcx t3_helper_1 rdi t4_helper_3 t3_helper_2 rsi d_helper_5 t3_helper_3 c_helper_3 rax t4_helper_1 rdx t1_helper_5 ret1 y d_helper_4 cmp2_helper_2 x cmp1_helper_2 ptr cmp6 cmp5 cmp4 cmp3 c_helper_4 cmp2_helper_1 cmp1_helper_1 
 
-Node: c (ID: 29, Physical: No, Degree: 30)
-  Interferes With: b t12 cmp1 cmp5 cmp2 rax cmp6 rdi ptr cmp4 rsi x cmp3 rdx y t11 t10 t9 rcx a t8 t7 t6 t5 t4 t3 t2 t1 d arr 
+Node: t3_helper_3 (ID: 29, Physical: No, Degree: 14)
+  Interferes With: rcx x rbp - 32 rbp - 24 rdi rbp - 40 rbp - 16 r9 y r8 rbp - 48 rsi rbp - 8 rdx 
 
-Node: b (ID: 30, Physical: No, Degree: 29)
-  Interferes With: arr d t1 t2 t3 t4 t5 t6 t7 t8 a rcx t9 t10 y rdx cmp3 x cmp4 ptr rdi cmp6 c rax cmp2 t11 cmp5 cmp1 t12 
+Node: t4_helper_3 (ID: 30, Physical: No, Degree: 14)
+  Interferes With: rcx x rbp - 32 rbp - 24 rdi rbp - 40 rbp - 16 r9 y r8 rbp - 48 rsi rbp - 8 rdx 
 
-Node: a (ID: 31, Physical: No, Degree: 28)
-  Interferes With: arr b d t1 t2 t3 t4 t5 t6 t7 t8 rcx t9 y rdx cmp3 x cmp4 ptr cmp6 c rax cmp2 t11 cmp5 cmp1 t10 t12 
+Node: t2_helper_5 (ID: 31, Physical: No, Degree: 13)
+  Interferes With: rdx rbp - 8 rsi rcx rbp - 48 r8 y rbp - 16 rbp - 40 rdi rbp - 24 rbp - 32 x 
 
-Node: cmp3 (ID: 32, Physical: No, Degree: 27)
-  Interferes With: rdx t5 t6 t7 t8 t9 t10 t11 t1 t4 t3 b t2 x cmp4 ptr cmp6 cmp2 cmp5 t12 arr rcx a rax c cmp1 d 
+Node: t1_helper_5 (ID: 32, Physical: No, Degree: 12)
+  Interferes With: rdx rbp - 8 rsi rcx rbp - 48 y rbp - 16 rbp - 40 rdi rbp - 24 rbp - 32 x 
 
-Node: cmp4 (ID: 33, Physical: No, Degree: 27)
-  Interferes With: t5 t6 t7 t8 t9 t10 t11 t1 t4 t3 b t2 x ptr cmp6 cmp2 cmp5 t12 rdx cmp3 arr rcx a rax c cmp1 d 
+Node: d_helper_5 (ID: 33, Physical: No, Degree: 11)
+  Interferes With: rdx rbp - 8 rsi rbp - 48 y rbp - 16 rbp - 40 rdi rbp - 24 rbp - 32 x 
 
-Node: cmp6 (ID: 34, Physical: No, Degree: 27)
-  Interferes With: t5 t6 t7 t8 t9 t10 t11 t1 t4 cmp5 t3 x cmp4 ptr t12 rdx cmp3 arr rcx a rax c cmp2 cmp1 d t2 b 
+Node: rbp - 56 (ID: 34, Physical: No, Degree: 45)
+  Interferes With: a b c_helper_1 d_helper_1 t1_helper_1 t1_helper_2 t1_helper_4 t2_helper_1 c_helper_2 t2_helper_2 t2_helper_4 d_helper_2 cmp5 ptr x t9 t6 cmp2_helper_2 cmp1_helper_2 y d_helper_4 t3_helper_1 rdi cmp6 t3_helper_2 rsi c_helper_5 cmp4 t4_helper_1 rdx cmp3 c_helper_4 cmp2_helper_1 cmp1_helper_1 t12 t11 t10 t4_helper_2 rcx t5 t8 t7 d_helper_3 rax c_helper_3 
 
-Node: arr (ID: 35, Physical: No, Degree: 27)
-  Interferes With: b d t1 t2 t3 t4 t5 t6 t7 t8 a rcx x cmp4 ptr cmp6 c rax cmp2 t11 cmp5 rdx cmp3 cmp1 t10 t12 t9 
+Node: c_helper_5 (ID: 35, Physical: No, Degree: 11)
+  Interferes With: rbp - 8 rsi rbp - 48 y rbp - 16 rdi rbp - 24 rbp - 32 x rbp - 40 rbp - 56 
 
-Node: cmp5 (ID: 36, Physical: No, Degree: 27)
-  Interferes With: t5 t6 t7 t8 t9 t10 t11 t1 t4 t3 b t2 x cmp4 ptr cmp6 cmp2 t12 rdx cmp3 arr rcx a rax c cmp1 d 
+Node: rbp - 64 (ID: 36, Physical: No, Degree: 44)
+  Interferes With: a b c_helper_1 d_helper_1 t1_helper_1 t1_helper_2 t1_helper_4 t2_helper_1 c_helper_2 t2_helper_2 t2_helper_4 d_helper_2 d_helper_4 y cmp4 cmp5 ptr x t9 t6 cmp2_helper_2 cmp1_helper_2 cmp3 t3_helper_1 rdi cmp6 t3_helper_2 rsi rdx t4_helper_1 c_helper_4 cmp2_helper_1 cmp1_helper_1 t12 t11 t10 t5 t8 t7 d_helper_3 rax c_helper_3 rcx t4_helper_2 
 
-Node: ptr (ID: 37, Physical: No, Degree: 15)
-  Interferes With: t1 t4 cmp3 cmp4 cmp6 t3 arr a c cmp2 cmp1 d t2 cmp5 b 
+Node: b (ID: 37, Physical: No, Degree: 51)
+  Interferes With: rbp - 8 rbp - 48 rbp - 16 rbp - 40 rbp - 24 rbp - 32 rbp - 56 rbp - 64 a arr c_helper_1 d_helper_1 t1_helper_1 t1_helper_2 t1_helper_4 t2_helper_1 c_helper_2 t2_helper_2 t2_helper_4 d_helper_2 t3_helper_2 c_helper_4 d_helper_4 y cmp4 cmp5 cmp6 ptr x t9 t6 cmp2_helper_2 cmp1_helper_2 cmp3 t3_helper_1 rdi cmp2_helper_1 cmp1_helper_1 t12 t11 t10 t5 t8 t7 d_helper_3 rax c_helper_3 rcx t4_helper_2 rdx t4_helper_1 
 
-Node: t12 (ID: 38, Physical: No, Degree: 25)
-  Interferes With: t5 t6 t7 t8 t9 t10 t11 t1 t4 t3 cmp6 cmp2 cmp5 t2 cmp4 rdx cmp3 cmp1 arr rcx a rax c d b 
+Node: a (ID: 38, Physical: No, Degree: 50)
+  Interferes With: rbp - 8 rbp - 48 rbp - 16 rbp - 40 rbp - 24 rbp - 32 rbp - 56 rbp - 64 arr b c_helper_1 d_helper_1 t1_helper_1 t1_helper_2 t1_helper_4 t2_helper_1 c_helper_2 t2_helper_2 t2_helper_4 d_helper_2 t3_helper_1 cmp2_helper_1 c_helper_4 cmp3 d_helper_4 y cmp4 cmp5 cmp6 ptr x t9 t6 cmp2_helper_2 cmp1_helper_2 cmp1_helper_1 t12 t11 t10 t5 t8 t7 d_helper_3 rax c_helper_3 rcx t4_helper_2 rdx t4_helper_1 t3_helper_2 
 
-Node: t11 (ID: 39, Physical: No, Degree: 16)
-  Interferes With: t1 t4 cmp5 t12 cmp1 cmp2 cmp3 cmp4 cmp6 t3 arr a c d t2 b 
+Node: cmp2_helper_2 (ID: 39, Physical: No, Degree: 16)
+  Interferes With: rbp - 8 rbp - 48 cmp3 cmp5 arr a x b rbp - 64 rbp - 32 cmp4 rbp - 56 rbp - 40 rbp - 24 cmp6 rbp - 16 
 
-Node: t10 (ID: 40, Physical: No, Degree: 16)
-  Interferes With: t1 t4 cmp5 t12 cmp1 cmp2 cmp3 cmp4 cmp6 t3 arr a c d t2 b 
+Node: cmp5 (ID: 40, Physical: No, Degree: 49)
+  Interferes With: c_helper_1 d_helper_1 t1_helper_1 t1_helper_2 t1_helper_4 t2_helper_1 c_helper_2 t2_helper_2 t2_helper_4 d_helper_2 t3_helper_1 t3_helper_2 rdx t4_helper_1 t5 t6 d_helper_3 t7 cmp4 rbp - 64 b arr rbp - 56 t12 cmp6 ptr cmp1_helper_2 a x t9 c_helper_3 rax cmp2_helper_2 rbp - 32 t11 rbp - 24 cmp1_helper_1 rbp - 40 cmp2_helper_1 rbp - 16 c_helper_4 cmp3 rbp - 48 rbp - 8 t8 d_helper_4 t10 t4_helper_2 rcx 
 
-Node: t9 (ID: 41, Physical: No, Degree: 17)
-  Interferes With: t1 t4 cmp5 t12 cmp1 cmp2 cmp3 cmp4 cmp6 t3 arr rcx a c d t2 b 
+Node: arr (ID: 41, Physical: No, Degree: 41)
+  Interferes With: a b c_helper_1 d_helper_1 t1_helper_1 t1_helper_2 t1_helper_4 t2_helper_1 c_helper_2 t2_helper_2 t2_helper_4 d_helper_2 cmp2_helper_1 c_helper_4 cmp3 d_helper_4 cmp4 cmp5 cmp6 ptr cmp1_helper_2 cmp1_helper_1 x t9 t6 cmp2_helper_2 t12 t11 t10 t5 t8 t7 d_helper_3 rax c_helper_3 rcx t4_helper_2 rdx t4_helper_1 t3_helper_2 t3_helper_1 
 
-Node: t8 (ID: 42, Physical: No, Degree: 17)
-  Interferes With: t1 t4 cmp5 t12 cmp1 cmp2 cmp3 cmp4 cmp6 t3 arr rcx a c d t2 b 
+Node: cmp4 (ID: 42, Physical: No, Degree: 49)
+  Interferes With: c_helper_1 d_helper_1 t1_helper_1 t1_helper_2 t1_helper_4 t2_helper_1 c_helper_2 t2_helper_2 t2_helper_4 d_helper_2 t3_helper_1 t3_helper_2 rdx t4_helper_1 t5 t6 d_helper_3 t7 rbp - 64 b arr rbp - 56 t12 cmp5 cmp6 ptr cmp1_helper_2 a x t9 c_helper_3 rax cmp2_helper_2 rbp - 32 t11 rbp - 24 cmp1_helper_1 rbp - 40 cmp2_helper_1 rbp - 16 c_helper_4 cmp3 rbp - 48 rbp - 8 t8 d_helper_4 t10 t4_helper_2 rcx 
 
-Node: t7 (ID: 43, Physical: No, Degree: 16)
-  Interferes With: t1 t4 cmp5 t12 cmp1 cmp2 cmp3 cmp4 cmp6 t3 arr a c d t2 b 
+Node: cmp6 (ID: 43, Physical: No, Degree: 49)
+  Interferes With: c_helper_1 d_helper_1 t1_helper_1 t1_helper_2 t1_helper_4 t2_helper_1 c_helper_2 t2_helper_2 t2_helper_4 d_helper_2 t3_helper_1 t3_helper_2 rdx t4_helper_1 t5 t6 d_helper_3 t7 cmp4 rbp - 32 t11 rbp - 64 b arr cmp5 rbp - 56 t12 ptr cmp1_helper_2 a x t9 cmp2_helper_2 rbp - 24 cmp1_helper_1 rbp - 40 cmp2_helper_1 rbp - 16 c_helper_4 cmp3 rbp - 48 rbp - 8 t8 c_helper_3 rax d_helper_4 t10 t4_helper_2 rcx 
 
-Node: t6 (ID: 44, Physical: No, Degree: 16)
-  Interferes With: t1 t4 cmp5 t12 cmp1 cmp2 cmp3 cmp4 cmp6 t3 arr a c d t2 b 
+Node: cmp3 (ID: 44, Physical: No, Degree: 49)
+  Interferes With: c_helper_1 d_helper_1 t1_helper_1 t1_helper_2 t1_helper_4 t2_helper_1 c_helper_2 t2_helper_2 t2_helper_4 d_helper_2 t3_helper_1 t3_helper_2 rdx t4_helper_1 t5 t6 d_helper_3 t7 b arr t12 d_helper_4 cmp4 cmp5 cmp6 ptr cmp1_helper_2 a x t9 c_helper_3 rax cmp2_helper_2 rbp - 64 rbp - 56 rbp - 32 t11 rbp - 24 cmp1_helper_1 rbp - 40 cmp2_helper_1 rbp - 16 c_helper_4 rbp - 48 rbp - 8 t8 t10 t4_helper_2 rcx 
 
-Node: t5 (ID: 45, Physical: No, Degree: 16)
-  Interferes With: t1 t4 cmp5 t12 cmp1 cmp2 cmp3 cmp4 cmp6 t3 arr a c d t2 b 
+Node: cmp1_helper_2 (ID: 45, Physical: No, Degree: 16)
+  Interferes With: rbp - 8 rbp - 48 cmp3 cmp5 arr a b rbp - 64 rbp - 32 cmp4 rbp - 56 rbp - 40 rbp - 24 ptr rbp - 16 cmp6 
+
+Node: ptr (ID: 46, Physical: No, Degree: 16)
+  Interferes With: rbp - 8 rbp - 48 cmp3 cmp1_helper_2 cmp5 arr a b rbp - 64 rbp - 32 cmp4 rbp - 56 rbp - 40 rbp - 24 cmp6 rbp - 16 
+
+Node: t12 (ID: 47, Physical: No, Degree: 45)
+  Interferes With: c_helper_1 d_helper_1 t1_helper_1 t1_helper_2 t1_helper_4 t2_helper_1 c_helper_2 t2_helper_2 t2_helper_4 d_helper_2 t3_helper_1 t3_helper_2 rdx t4_helper_1 t5 arr a cmp1_helper_1 rbp - 24 b cmp2_helper_1 rbp - 40 rbp - 64 c_helper_4 rbp - 16 cmp3 d_helper_4 cmp4 cmp5 t6 cmp6 rbp - 56 rbp - 32 t11 rbp - 48 d_helper_3 rbp - 8 t8 t10 t9 t4_helper_2 rcx t7 rax c_helper_3 
+
+Node: d_helper_4 (ID: 48, Physical: No, Degree: 16)
+  Interferes With: rbp - 8 rbp - 48 cmp3 cmp5 t12 rbp - 56 rbp - 40 arr a b rbp - 64 rbp - 32 cmp4 rbp - 24 cmp6 rbp - 16 
+
+Node: c_helper_4 (ID: 49, Physical: No, Degree: 16)
+  Interferes With: rbp - 8 rbp - 48 cmp3 cmp5 t12 rbp - 56 rbp - 40 arr a b rbp - 64 rbp - 32 cmp4 rbp - 24 cmp6 rbp - 16 
+
+Node: cmp2_helper_1 (ID: 50, Physical: No, Degree: 43)
+  Interferes With: c_helper_1 d_helper_1 t1_helper_1 t1_helper_2 t1_helper_4 t2_helper_1 c_helper_2 t2_helper_2 t2_helper_4 d_helper_2 t3_helper_1 t3_helper_2 rdx t4_helper_1 rbp - 16 cmp6 rbp - 24 cmp1_helper_1 cmp4 rbp - 32 t11 rbp - 64 b a arr rbp - 40 rbp - 56 t12 cmp5 cmp3 rbp - 48 d_helper_3 rbp - 8 t8 t6 t10 t9 t5 t7 rax c_helper_3 rcx t4_helper_2 
+
+Node: cmp1_helper_1 (ID: 51, Physical: No, Degree: 43)
+  Interferes With: c_helper_1 d_helper_1 t1_helper_1 t1_helper_2 t1_helper_4 t2_helper_1 c_helper_2 t2_helper_2 t2_helper_4 d_helper_2 t3_helper_1 t3_helper_2 rdx t4_helper_1 cmp6 rbp - 24 cmp4 rbp - 32 t11 rbp - 64 a arr rbp - 40 cmp2_helper_1 rbp - 56 t12 cmp5 b rbp - 16 cmp3 rbp - 48 d_helper_3 rbp - 8 t8 t6 t10 t9 t5 t7 rax c_helper_3 rcx t4_helper_2 
+
+Node: t11 (ID: 52, Physical: No, Degree: 18)
+  Interferes With: rbp - 8 rbp - 48 cmp3 rbp - 16 t12 rbp - 56 a rbp - 40 cmp2_helper_1 b cmp5 arr rbp - 64 rbp - 32 cmp4 cmp1_helper_1 rbp - 24 cmp6 
+
+Node: t10 (ID: 53, Physical: No, Degree: 18)
+  Interferes With: rbp - 8 rbp - 48 cmp3 rbp - 16 t12 rbp - 56 a rbp - 40 cmp2_helper_1 b cmp5 arr rbp - 64 rbp - 32 cmp4 cmp1_helper_1 rbp - 24 cmp6 
+
+Node: t9 (ID: 54, Physical: No, Degree: 19)
+  Interferes With: rcx rbp - 8 rbp - 48 cmp3 rbp - 16 t12 rbp - 56 a rbp - 40 cmp2_helper_1 b cmp5 arr rbp - 64 rbp - 32 cmp4 cmp1_helper_1 rbp - 24 cmp6 
+
+Node: t8 (ID: 55, Physical: No, Degree: 19)
+  Interferes With: rcx rbp - 8 rbp - 48 cmp3 rbp - 16 t12 rbp - 56 a rbp - 40 cmp2_helper_1 b cmp5 arr rbp - 64 rbp - 32 cmp4 cmp1_helper_1 rbp - 24 cmp6 
+
+Node: t7 (ID: 56, Physical: No, Degree: 19)
+  Interferes With: rbp - 8 d_helper_3 rbp - 48 cmp3 rbp - 16 t12 rbp - 56 a rbp - 40 cmp2_helper_1 b cmp5 arr rbp - 64 rbp - 32 cmp4 cmp1_helper_1 rbp - 24 cmp6 
+
+Node: d_helper_3 (ID: 57, Physical: No, Degree: 19)
+  Interferes With: rbp - 8 rbp - 48 cmp3 rbp - 16 t7 t12 rbp - 56 a rbp - 40 cmp2_helper_1 b cmp5 arr rbp - 64 rbp - 32 cmp4 cmp1_helper_1 rbp - 24 cmp6 
+
+Node: t6 (ID: 58, Physical: No, Degree: 19)
+  Interferes With: c_helper_3 rbp - 8 rbp - 48 cmp3 rbp - 16 t12 rbp - 56 a rbp - 40 cmp2_helper_1 b cmp5 arr rbp - 64 rbp - 32 cmp4 cmp1_helper_1 rbp - 24 cmp6 
+
+Node: c_helper_3 (ID: 59, Physical: No, Degree: 19)
+  Interferes With: rbp - 8 rbp - 48 cmp3 rbp - 16 cmp6 t12 rbp - 56 a rbp - 40 cmp2_helper_1 b cmp5 arr rbp - 64 rbp - 32 cmp4 t6 cmp1_helper_1 rbp - 24 
+
+Node: t5 (ID: 60, Physical: No, Degree: 18)
+  Interferes With: rbp - 8 rbp - 48 cmp3 rbp - 16 t12 rbp - 56 a rbp - 40 cmp2_helper_1 b cmp5 arr rbp - 64 rbp - 32 cmp4 cmp1_helper_1 rbp - 24 cmp6 
+
+Node: t4_helper_2 (ID: 61, Physical: No, Degree: 18)
+  Interferes With: rbp - 8 rbp - 48 cmp3 rbp - 16 t12 rbp - 56 a rbp - 40 cmp2_helper_1 b cmp5 arr rbp - 64 rbp - 32 cmp4 cmp1_helper_1 rbp - 24 cmp6 
+
+Node: t4_helper_1 (ID: 62, Physical: No, Degree: 18)
+  Interferes With: rbp - 8 rbp - 48 cmp3 rbp - 16 t12 rbp - 56 a rbp - 40 cmp2_helper_1 b cmp5 arr rbp - 64 rbp - 32 cmp4 cmp1_helper_1 rbp - 24 cmp6 
+
+Node: t3_helper_2 (ID: 63, Physical: No, Degree: 18)
+  Interferes With: rbp - 8 rbp - 48 cmp3 rbp - 16 t12 rbp - 56 a rbp - 40 cmp2_helper_1 b cmp5 arr rbp - 64 rbp - 32 cmp4 cmp1_helper_1 rbp - 24 cmp6 
+
+Node: t3_helper_1 (ID: 64, Physical: No, Degree: 18)
+  Interferes With: rbp - 8 rbp - 48 cmp3 rbp - 16 t12 rbp - 56 a rbp - 40 cmp2_helper_1 b cmp5 arr rbp - 64 rbp - 32 cmp4 cmp1_helper_1 rbp - 24 cmp6 
+
+Node: d_helper_2 (ID: 65, Physical: No, Degree: 20)
+  Interferes With: rbp - 8 rdx rbp - 48 cmp3 rbp - 16 cmp6 rax t12 rbp - 56 a rbp - 40 cmp2_helper_1 b cmp5 arr rbp - 64 rbp - 32 cmp4 cmp1_helper_1 rbp - 24 
+
+Node: t2_helper_4 (ID: 66, Physical: No, Degree: 18)
+  Interferes With: rbp - 8 rbp - 48 cmp3 rbp - 16 t12 rbp - 56 a rbp - 40 cmp2_helper_1 b cmp5 arr rbp - 64 rbp - 32 cmp4 cmp1_helper_1 rbp - 24 cmp6 
+
+Node: t2_helper_2 (ID: 67, Physical: No, Degree: 19)
+  Interferes With: c_helper_2 rbp - 8 rbp - 48 cmp3 rbp - 16 t12 rbp - 56 a rbp - 40 cmp2_helper_1 b cmp5 arr rbp - 64 rbp - 32 cmp4 cmp1_helper_1 rbp - 24 cmp6 
+
+Node: c_helper_2 (ID: 68, Physical: No, Degree: 19)
+  Interferes With: rbp - 8 rbp - 48 cmp3 rbp - 16 cmp6 arr t12 rbp - 56 t2_helper_2 a rbp - 40 cmp2_helper_1 b cmp5 rbp - 64 rbp - 32 cmp4 cmp1_helper_1 rbp - 24 
+
+Node: t2_helper_1 (ID: 69, Physical: No, Degree: 18)
+  Interferes With: rbp - 8 rbp - 48 cmp3 rbp - 16 t12 rbp - 56 a rbp - 40 cmp2_helper_1 b cmp5 arr rbp - 64 rbp - 32 cmp4 cmp1_helper_1 rbp - 24 cmp6 
+
+Node: t1_helper_4 (ID: 70, Physical: No, Degree: 18)
+  Interferes With: rbp - 8 rbp - 48 cmp3 rbp - 16 t12 rbp - 56 a rbp - 40 cmp2_helper_1 b cmp5 arr rbp - 64 rbp - 32 cmp4 cmp1_helper_1 rbp - 24 cmp6 
+
+Node: t1_helper_2 (ID: 71, Physical: No, Degree: 18)
+  Interferes With: rbp - 8 rbp - 48 cmp3 rbp - 16 t12 rbp - 56 a rbp - 40 cmp2_helper_1 b cmp5 arr rbp - 64 rbp - 32 cmp4 cmp1_helper_1 rbp - 24 cmp6 
+
+Node: t1_helper_1 (ID: 72, Physical: No, Degree: 18)
+  Interferes With: rbp - 8 rbp - 48 cmp3 rbp - 16 t12 rbp - 56 a rbp - 40 cmp2_helper_1 b cmp5 arr rbp - 64 rbp - 32 cmp4 cmp1_helper_1 rbp - 24 cmp6 
+
+Node: d_helper_1 (ID: 73, Physical: No, Degree: 18)
+  Interferes With: rbp - 8 rbp - 48 cmp3 rbp - 16 t12 rbp - 56 a rbp - 40 cmp2_helper_1 b cmp5 arr rbp - 64 rbp - 32 cmp4 cmp1_helper_1 rbp - 24 cmp6 
+
+Node: c_helper_1 (ID: 74, Physical: No, Degree: 18)
+  Interferes With: rbp - 8 rbp - 48 cmp3 rbp - 16 t12 rbp - 56 a rbp - 40 cmp2_helper_1 b cmp5 arr rbp - 64 rbp - 32 cmp4 cmp1_helper_1 rbp - 24 cmp6 
+
+Node: cmp2_helper_3 (ID: 75, Physical: No, Degree: 7)
+  Interferes With: rbp - 32 rbp - 24 rax rbp - 40 rbp - 16 x y 
+
+Node: t1_helper_6 (ID: 76, Physical: No, Degree: 5)
+  Interferes With: rbp - 40 rbp - 16 x t2_helper_6 y 
+
+Node: t2_helper_6 (ID: 77, Physical: No, Degree: 6)
+  Interferes With: rbp - 40 rbp - 16 x y rbp - 32 t1_helper_6 
+
+Node: t3_helper_4 (ID: 78, Physical: No, Degree: 2)
+  Interferes With: y t4_helper_4 
+
+Node: t4_helper_4 (ID: 79, Physical: No, Degree: 3)
+  Interferes With: y rbp - 40 t3_helper_4 
 
 
 --- Graph After Simplify (Should only be Physical Registers) ---
@@ -891,33 +1019,67 @@ Node: r14 (ID: 12, Physical: Yes, Degree: INF)
 Node: r15 (ID: 13, Physical: Yes, Degree: INF)
 
 --- Phase 4: Stack (Pop Order / Top to Bottom) ---
-Stack Level [31]: Node cmp1 (ID: 27)
-Stack Level [30]: Node x (ID: 20)
-Stack Level [29]: Node y (ID: 19)
-Stack Level [28]: Node a (ID: 31)
-Stack Level [27]: Node b (ID: 30)
-Stack Level [26]: Node c (ID: 29)
-Stack Level [25]: Node d (ID: 28)
-Stack Level [24]: Node cmp5 (ID: 36)
-Stack Level [23]: Node arr (ID: 35)
-Stack Level [22]: Node cmp6 (ID: 34)
-Stack Level [21]: Node cmp4 (ID: 33)
-Stack Level [20]: Node cmp3 (ID: 32)
-Stack Level [19]: Node t12 (ID: 38)
-Stack Level [18]: Node cmp2 (ID: 26)
-Stack Level [17]: Node t8 (ID: 42)
-Stack Level [16]: Node t9 (ID: 41)
-Stack Level [15]: Node t4 (ID: 24)
-Stack Level [14]: Node t5 (ID: 45)
-Stack Level [13]: Node t6 (ID: 44)
-Stack Level [12]: Node t7 (ID: 43)
-Stack Level [11]: Node t10 (ID: 40)
-Stack Level [10]: Node t11 (ID: 39)
-Stack Level [9]: Node t2 (ID: 23)
-Stack Level [8]: Node ptr (ID: 37)
-Stack Level [7]: Node t1 (ID: 22)
-Stack Level [6]: Node t3 (ID: 21)
-Stack Level [5]: Node ret1 (ID: 25)
+Stack Level [65]: Node rbp - 48 (ID: 28)
+Stack Level [64]: Node rbp - 8 (ID: 26)
+Stack Level [63]: Node x (ID: 25)
+Stack Level [62]: Node y (ID: 19)
+Stack Level [61]: Node cmp3 (ID: 44)
+Stack Level [60]: Node cmp6 (ID: 43)
+Stack Level [59]: Node cmp4 (ID: 42)
+Stack Level [58]: Node cmp5 (ID: 40)
+Stack Level [57]: Node rbp - 64 (ID: 36)
+Stack Level [56]: Node rbp - 56 (ID: 34)
+Stack Level [55]: Node cmp1_helper_1 (ID: 51)
+Stack Level [54]: Node cmp2_helper_1 (ID: 50)
+Stack Level [53]: Node t12 (ID: 47)
+Stack Level [52]: Node d_helper_2 (ID: 65)
+Stack Level [51]: Node arr (ID: 41)
+Stack Level [50]: Node c_helper_2 (ID: 68)
+Stack Level [49]: Node t2_helper_2 (ID: 67)
+Stack Level [48]: Node c_helper_3 (ID: 59)
+Stack Level [47]: Node t6 (ID: 58)
+Stack Level [46]: Node d_helper_3 (ID: 57)
+Stack Level [45]: Node t7 (ID: 56)
+Stack Level [44]: Node t8 (ID: 55)
+Stack Level [43]: Node t9 (ID: 54)
+Stack Level [42]: Node rbp - 32 (ID: 23)
+Stack Level [41]: Node c_helper_1 (ID: 74)
+Stack Level [40]: Node d_helper_1 (ID: 73)
+Stack Level [39]: Node t1_helper_1 (ID: 72)
+Stack Level [38]: Node t1_helper_2 (ID: 71)
+Stack Level [37]: Node t1_helper_4 (ID: 70)
+Stack Level [36]: Node t2_helper_1 (ID: 69)
+Stack Level [35]: Node t2_helper_4 (ID: 66)
+Stack Level [34]: Node t3_helper_1 (ID: 64)
+Stack Level [33]: Node t3_helper_2 (ID: 63)
+Stack Level [32]: Node t4_helper_1 (ID: 62)
+Stack Level [31]: Node t4_helper_2 (ID: 61)
+Stack Level [30]: Node t5 (ID: 60)
+Stack Level [29]: Node t10 (ID: 53)
+Stack Level [28]: Node t11 (ID: 52)
+Stack Level [27]: Node rbp - 24 (ID: 22)
+Stack Level [26]: Node rbp - 40 (ID: 21)
+Stack Level [25]: Node c_helper_4 (ID: 49)
+Stack Level [24]: Node d_helper_4 (ID: 48)
+Stack Level [23]: Node ptr (ID: 46)
+Stack Level [22]: Node cmp1_helper_2 (ID: 45)
+Stack Level [21]: Node cmp2_helper_2 (ID: 39)
+Stack Level [20]: Node a (ID: 38)
+Stack Level [19]: Node t4_helper_3 (ID: 30)
+Stack Level [18]: Node t3_helper_3 (ID: 29)
+Stack Level [17]: Node rbp - 16 (ID: 20)
+Stack Level [16]: Node b (ID: 37)
+Stack Level [15]: Node t4_helper_4 (ID: 79)
+Stack Level [14]: Node t3_helper_4 (ID: 78)
+Stack Level [13]: Node t2_helper_6 (ID: 77)
+Stack Level [12]: Node t1_helper_6 (ID: 76)
+Stack Level [11]: Node cmp2_helper_3 (ID: 75)
+Stack Level [10]: Node c_helper_5 (ID: 35)
+Stack Level [9]: Node d_helper_5 (ID: 33)
+Stack Level [8]: Node t1_helper_5 (ID: 32)
+Stack Level [7]: Node t2_helper_5 (ID: 31)
+Stack Level [6]: Node cmp1_helper_3 (ID: 27)
+Stack Level [5]: Node ret1 (ID: 24)
 Stack Level [4]: Node res (ID: 18)
 Stack Level [3]: Node m1 (ID: 17)
 Stack Level [2]: Node m2 (ID: 16)
@@ -926,81 +1088,158 @@ Stack Level [0]: Node m4 (ID: 14)
 
 --- Phase 4: Register Mapping and Spills ---
 Mapping (Var -> Physical Color ID):
-  [001] ret1 -> 2 (rcx)
+  [001] m4 -> 0 (rax)
   [002] m2 -> 2 (rcx)
-  [003] t10 -> 0 (rax)
-  [004] t7 -> 0 (rax)
-  [005] t6 -> 0 (rax)
-  [006] t5 -> 0 (rax)
-  [007] cmp1 -> 1 (rbx)
-  [008] x -> 10 (r12)
-  [009] a -> 4 (rsi)
-  [010] m1 -> 0 (rax)
-  [011] d -> 8 (r10)
-  [012] t11 -> 0 (rax)
-  [013] t8 -> 0 (rax)
-  [014] arr -> 9 (r11)
-  [015] res -> 0 (rax)
-  [016] t9 -> 0 (rax)
-  [017] b -> 6 (r8)
-  [018] c -> 7 (r9)
-  [019] m4 -> 0 (rax)
-  [020] m3 -> 0 (rax)
-  [021] y -> 11 (r13)
-  [022] cmp5 -> 5 (rdi)
-  [023] ptr -> 0 (rax)
-  [024] cmp6 -> 11 (r13)
-  [025] cmp4 -> 12 (r14)
-  [026] cmp3 -> 13 (r15)
-  [027] t12 -> 10 (r12)
+  [003] m1 -> 0 (rax)
+  [004] res -> 0 (rax)
+  [005] ret1 -> 3 (rdx)
+  [006] t1_helper_2 -> 0 (rax)
+  [007] d_helper_1 -> 0 (rax)
+  [008] t9 -> 0 (rax)
+  [009] rbp - 24 -> 1 (rbx)
+  [010] t4_helper_3 -> 0 (rax)
+  [011] m3 -> 0 (rax)
+  [012] t5 -> 0 (rax)
+  [013] t6 -> 2 (rcx)
+  [014] t2_helper_4 -> 0 (rax)
+  [015] t4_helper_1 -> 0 (rax)
+  [016] b -> 13 (r15)
+  [017] c_helper_3 -> 0 (rax)
+  [018] t2_helper_2 -> 2 (rcx)
+  [019] rbp - 8 -> 1 (rbx)
+  [020] rbp - 48 -> 1 (rbx)
+  [021] arr -> 8 (r10)
+  [022] d_helper_2 -> 2 (rcx)
+  [023] t1_helper_4 -> 0 (rax)
+  [024] t4_helper_4 -> 0 (rax)
+  [025] x -> 10 (r12)
+  [026] rbp - 32 -> 1 (rbx)
+  [027] t2_helper_1 -> 0 (rax)
+  [028] c_helper_2 -> 0 (rax)
+  [029] t3_helper_1 -> 0 (rax)
+  [030] t3_helper_4 -> 2 (rcx)
+  [031] cmp1_helper_1 -> 9 (r11)
+  [032] d_helper_5 -> 0 (rax)
+  [033] cmp3 -> 4 (rsi)
+  [034] c_helper_1 -> 0 (rax)
+  [035] cmp2_helper_1 -> 10 (r12)
+  [036] a -> 12 (r14)
+  [037] cmp6 -> 5 (rdi)
+  [038] ptr -> 0 (rax)
+  [039] cmp2_helper_2 -> 0 (rax)
+  [040] t8 -> 0 (rax)
+  [041] rbp - 56 -> 8 (r10)
+  [042] t1_helper_6 -> 2 (rcx)
+  [043] cmp4 -> 6 (r8)
+  [044] y -> 11 (r13)
+  [045] cmp5 -> 7 (r9)
+  [046] t1_helper_5 -> 0 (rax)
+  [047] rbp - 64 -> 8 (r10)
+  [048] t12 -> 11 (r13)
+  [049] t1_helper_1 -> 0 (rax)
+  [050] t2_helper_5 -> 0 (rax)
+  [051] t3_helper_2 -> 0 (rax)
+  [052] t4_helper_2 -> 0 (rax)
+  [053] t10 -> 0 (rax)
+  [054] d_helper_4 -> 0 (rax)
+  [055] t7 -> 2 (rcx)
+  [056] t11 -> 0 (rax)
+  [057] d_helper_3 -> 0 (rax)
+  [058] rbp - 40 -> 1 (rbx)
+  [059] c_helper_4 -> 0 (rax)
+  [060] cmp1_helper_2 -> 2 (rcx)
+  [061] t3_helper_3 -> 0 (rax)
+  [062] cmp1_helper_3 -> 2 (rcx)
+  [063] c_helper_5 -> 0 (rax)
+  [064] rbp - 16 -> 1 (rbx)
+  [065] t2_helper_6 -> 0 (rax)
+  [066] cmp2_helper_3 -> 2 (rcx)
 
 Spill Needed Stack (Node IDs):
-  [001] cmp2 (ID: 26)
-  [002] t4 (ID: 24)
-  [003] t2 (ID: 23)
-  [004] t1 (ID: 22)
-  [005] t3 (ID: 21)
+  None
 
 Variable to Function Context Map:
-  [001] L5 -> main
-  [002] L4 -> main
-  [003] y -> main
-  [004] x -> main
-  [005] L6 -> main
-  [006] ptr -> main
-  [007] cmp6 -> main
-  [008] cmp5 -> main
-  [009] cmp4 -> main
-  [010] cmp3 -> main
-  [011] arr -> main
-  [012] L1 -> foo
-  [013] m4 -> math_ops
-  [014] m3 -> math_ops
-  [015] t4 -> main
-  [016] res -> foo
-  [017] L7 -> main
-  [018] t9 -> main
-  [019] a -> main
-  [020] foo -> foo
-  [021] b -> main
-  [022] t6 -> main
-  [023] t5 -> main
-  [024] main -> main
-  [025] c -> main
-  [026] L2 -> foo
-  [027] m2 -> math_ops
-  [028] L3 -> main
-  [029] t10 -> main
-  [030] t7 -> main
-  [031] m1 -> math_ops
-  [032] ret1 -> main
-  [033] d -> main
-  [034] t2 -> main
-  [035] math_ops -> math_ops
-  [036] t1 -> main
-  [037] t8 -> main
-  [038] t11 -> main
-  [039] t12 -> main
-  [040] t3 -> main
-  [041] cmp1 -> main
-  [042] cmp2 -> main
+  [001] c_helper_4 -> main
+  [002] c_helper_2 -> main
+  [003] d_helper_5 -> main
+  [004] d_helper_2 -> main
+  [005] d_helper_1 -> main
+  [006] c_helper_5 -> main
+  [007] cmp1_helper_3 -> main
+  [008] cmp1_helper_2 -> main
+  [009] rbp - 48 -> main
+  [010] cmp1_helper_1 -> main
+  [011] t3_helper_4 -> main
+  [012] t1_helper_6 -> main
+  [013] t2_helper_6 -> main
+  [014] cmp2_helper_3 -> main
+  [015] t3_helper_3 -> main
+  [016] t4_helper_3 -> main
+  [017] rbp - 64 -> main
+  [018] t1_helper_5 -> main
+  [019] c_helper_3 -> main
+  [020] cmp2 -> main
+  [021] t3 -> main
+  [022] t12 -> main
+  [023] rbp - 56 -> main
+  [024] t8 -> main
+  [025] t1 -> main
+  [026] math_ops -> math_ops
+  [027] c_helper_1 -> main
+  [028] t2 -> main
+  [029] d -> main
+  [030] cmp1 -> main
+  [031] ret1 -> main
+  [032] m1 -> math_ops
+  [033] t11 -> main
+  [034] t7 -> main
+  [035] t10 -> main
+  [036] L3 -> main
+  [037] m2 -> math_ops
+  [038] t3_helper_2 -> main
+  [039] L2 -> foo
+  [040] c -> main
+  [041] main -> main
+  [042] t6 -> main
+  [043] b -> main
+  [044] t2_helper_4 -> main
+  [045] t4_helper_1 -> main
+  [046] foo -> foo
+  [047] t2_helper_2 -> main
+  [048] rbp - 8 -> main
+  [049] t9 -> main
+  [050] L7 -> main
+  [051] res -> foo
+  [052] d_helper_4 -> main
+  [053] t4 -> main
+  [054] t5 -> main
+  [055] m3 -> math_ops
+  [056] m4 -> math_ops
+  [057] L1 -> foo
+  [058] arr -> main
+  [059] cmp3 -> main
+  [060] cmp4 -> main
+  [061] cmp5 -> main
+  [062] cmp6 -> main
+  [063] ptr -> main
+  [064] rbp - 24 -> main
+  [065] L6 -> main
+  [066] cmp2_helper_2 -> main
+  [067] rbp - 32 -> main
+  [068] t2_helper_1 -> main
+  [069] y -> main
+  [070] L4 -> main
+  [071] L5 -> main
+  [072] t2_helper_5 -> main
+  [073] t1_helper_1 -> main
+  [074] t1_helper_2 -> main
+  [075] t4_helper_4 -> main
+  [076] x -> main
+  [077] t1_helper_4 -> main
+  [078] t3_helper_1 -> main
+  [079] d_helper_3 -> main
+  [080] rbp - 40 -> main
+  [081] rbp - 16 -> main
+  [082] t4_helper_2 -> main
+  [083] a -> main
+  [084] cmp2_helper_1 -> main

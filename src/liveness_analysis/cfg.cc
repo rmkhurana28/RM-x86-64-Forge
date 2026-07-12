@@ -328,12 +328,20 @@ void ControlFlowGraph::buildCFG(const std::vector<TwoAddressInstruction>& instru
 void ControlFlowGraph::computeLiveness() {
     // Logic to calculate USE/DEF per block, and iterate LIVE IN/OUT equations
 
+    unordered_map<string , string> varFuncMap;
+    unordered_map<string , int> funcOffsetMap;
+    unordered_map<string , int> funcCalleeOffsetMap;
+    unordered_map<string, unordered_map<string, string>> calleeSavedMap;
+
+
+    runLiveAnalysisAgain:
+
     vector<int> deleteVector;
     vector<TwoAddressInstruction> optInstructions;
     vector<TwoAddressInstruction> modifiedInstructions;
 
-    unordered_map<string , string> varFuncMap;
-    unordered_map<string , int> funcOffsetMap;
+    
+    
 
     evaluateAgain:
 
@@ -1497,7 +1505,10 @@ void ControlFlowGraph::computeLiveness() {
 
     // now, we need to deal with the variables in the spillNeeded vector
 
+    
     unordered_map<string , string> replacerMap;
+
+    bool isSpillNeededEmpty = spillNeeded.empty(); 
 
     for(size_t i=0 ; i<spillNeeded.size() ; i++){
 
@@ -1587,22 +1598,102 @@ void ControlFlowGraph::computeLiveness() {
             modifiedInstructions.clear();
         }
     }
-    
-    std::cerr << "\n\n=== POST-REWRITE SPILLED INSTRUCTIONS ===\n";
-    for(size_t b=0; b<basic_blocks.size(); b++){
-        for(size_t i=0; i<basic_blocks[b]->getInstructions().size(); i++){
-            // Temporarily use fprintf to stderr to ensure it bypasses stdout redirection
-            fprintf(stderr, "[%03d] %s %s", 
-                basic_blocks[b]->getInstructions()[i].getId(), 
-                basic_blocks[b]->getInstructions()[i].getOpcode().c_str(), 
-                basic_blocks[b]->getInstructions()[i].getOperand1().c_str());
-            if (!basic_blocks[b]->getInstructions()[i].getOperand2().empty()) {
-                fprintf(stderr, ", %s", basic_blocks[b]->getInstructions()[i].getOperand2().c_str());
+
+    // now the spillStack is empty and if it was NOT empty beofre, we need to start the entire live analysis again
+
+    if(!isSpillNeededEmpty){
+        // run the entire live analysis again
+
+        for(size_t i=0 ; i<basic_blocks.size() ; i++){
+            basic_blocks[i]->use_set.clear();
+            basic_blocks[i]->def_set.clear();
+            basic_blocks[i]->live_in.clear();
+            basic_blocks[i]->live_out.clear();
+        }
+
+        goto runLiveAnalysisAgain;
+    }
+
+    // now, all the variables have been properly spilled and proeprly mapped to registers
+    // varRegMap contains the proper mapping
+
+    /*
+        now, we need to take care of the callee-saved registers, if they are used, then we need to save them to stack and bring them back when there is ret
+        we are gonna use smae offset map since their locaiton will be allocated with the spillSection itself
+    */
+
+    currFunc = "";
+
+    for(size_t i=0 ; i<basic_blocks.size() ; i++){
+        for(size_t j=0 ; j<basic_blocks[i]->getInstructions().size() ; j++){
+
+            if(basic_blocks[i]->getInstructions()[j].getOpcode() == "FUNC"){
+                currFunc = basic_blocks[i]->getInstructions()[j].getOperand1();
+                continue;
             }
-            fprintf(stderr, "\n");
+            
+            auto currInstruction = basic_blocks[i]->getInstructions()[j];
+
+            string op1 = currInstruction.getOperand1();
+            string op2 = currInstruction.getOperand2();
+
+            if(!isOp1Modified(currInstruction.getOpcode())) continue;
+
+            // if(replacerMap.count(op1) != 0) continue;
+
+            unordered_set<string> calleeSaved = {"rbx" , "r12" , "r13" , "r14" , "r15"};
+            unordered_set<int> calleeSavedId = {1 , 10 , 11 , 12 , 13};
+
+            unordered_set<string> helperSet;
+
+            if(calleeSaved.count(op1) != 0){                
+                string phyReg = op1;
+
+                if(calleeSavedMap[currFunc].count(phyReg) != 0) continue;
+                
+                if(funcCalleeOffsetMap.count(currFunc) == 0){
+                    funcCalleeOffsetMap[currFunc] = 0;
+                }
+
+                int offset = funcCalleeOffsetMap[currFunc]++ + funcOffsetMap[currFunc] + 1;
+
+                string stackAddr = "[rbp - " + to_string(offset * 8) + "]";
+
+                // replacerMap[phyReg] = stackAddr;
+                calleeSavedMap[currFunc][phyReg] = stackAddr; 
+
+            } else if(calleeSavedId.count(varRegMap[op1]) != 0){
+                string phyReg = getPhysicalRegisterName(varRegMap[op1]);
+                
+                string func = varFuncMap[op1];
+
+                if(calleeSavedMap[func].count(phyReg) != 0) continue;
+
+                if(funcCalleeOffsetMap.count(func) == 0){
+                    funcCalleeOffsetMap[func] = 0;
+                }
+
+                int offset = funcCalleeOffsetMap[func]++ + funcOffsetMap[func] + 1;
+
+                string stackAddr = "[rbp - " + to_string(offset * 8) + "]";
+
+                // replacerMap[op1] = stackAddr;
+                calleeSavedMap[func][phyReg] = stackAddr; 
+            }
+
         }
     }
-    std::cerr << "=========================================\n\n";
+
+    // here, i want to print the varRegMap in the termianl 
+
+        std::cerr << "\n\n=== FINAL REGISTER MAPPING ===\n";
+        vector<string> physicalRegisterNames = { "rax", "rbx", "rcx", "rdx", "rsi", "rdi", "r8", "r9", "r10", "r11", "r12", "r13", "r14", "r15" };
+        for (const auto& pair : varRegMap) {
+            std::cerr << pair.first << " -> " << physicalRegisterNames[pair.second] << " (Color: " << pair.second << ")\n";
+        }
+        std::cerr << "==============================\n\n";
+
+
 }
 
 std::vector<TwoAddressInstruction> ControlFlowGraph::getOptimizedInstructions() const {
@@ -1630,3 +1721,16 @@ void ControlFlowGraph::print() const {
 
 
 
+// Helper: Convert graph color ID to physical x86-64 register string
+inline std::string getPhysicalRegisterName(int id) {
+    static const std::string regNames[] = {
+        "rax", "rbx", "rcx", "rdx", "rsi", "rdi", 
+        "r8", "r9", "r10", "r11", "r12", "r13", "r14", "r15"
+    };
+    
+    if (id >= 0 && id < 14) {
+        return regNames[id];
+    }
+    
+    return "UNKNOWN_REG"; // Fallback, should never be hit if coloring was successful
+}

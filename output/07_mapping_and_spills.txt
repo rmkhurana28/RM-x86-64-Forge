@@ -1,81 +1,158 @@
 
 --- Phase 4: Register Mapping and Spills ---
 Mapping (Var -> Physical Color ID):
-  [001] ret1 -> 2 (rcx)
+  [001] m4 -> 0 (rax)
   [002] m2 -> 2 (rcx)
-  [003] t10 -> 0 (rax)
-  [004] t7 -> 0 (rax)
-  [005] t6 -> 0 (rax)
-  [006] t5 -> 0 (rax)
-  [007] cmp1 -> 1 (rbx)
-  [008] x -> 10 (r12)
-  [009] a -> 4 (rsi)
-  [010] m1 -> 0 (rax)
-  [011] d -> 8 (r10)
-  [012] t11 -> 0 (rax)
-  [013] t8 -> 0 (rax)
-  [014] arr -> 9 (r11)
-  [015] res -> 0 (rax)
-  [016] t9 -> 0 (rax)
-  [017] b -> 6 (r8)
-  [018] c -> 7 (r9)
-  [019] m4 -> 0 (rax)
-  [020] m3 -> 0 (rax)
-  [021] y -> 11 (r13)
-  [022] cmp5 -> 5 (rdi)
-  [023] ptr -> 0 (rax)
-  [024] cmp6 -> 11 (r13)
-  [025] cmp4 -> 12 (r14)
-  [026] cmp3 -> 13 (r15)
-  [027] t12 -> 10 (r12)
+  [003] m1 -> 0 (rax)
+  [004] res -> 0 (rax)
+  [005] ret1 -> 3 (rdx)
+  [006] t1_helper_2 -> 0 (rax)
+  [007] d_helper_1 -> 0 (rax)
+  [008] t9 -> 0 (rax)
+  [009] rbp - 24 -> 1 (rbx)
+  [010] t4_helper_3 -> 0 (rax)
+  [011] m3 -> 0 (rax)
+  [012] t5 -> 0 (rax)
+  [013] t6 -> 2 (rcx)
+  [014] t2_helper_4 -> 0 (rax)
+  [015] t4_helper_1 -> 0 (rax)
+  [016] b -> 13 (r15)
+  [017] c_helper_3 -> 0 (rax)
+  [018] t2_helper_2 -> 2 (rcx)
+  [019] rbp - 8 -> 1 (rbx)
+  [020] rbp - 48 -> 1 (rbx)
+  [021] arr -> 8 (r10)
+  [022] d_helper_2 -> 2 (rcx)
+  [023] t1_helper_4 -> 0 (rax)
+  [024] t4_helper_4 -> 0 (rax)
+  [025] x -> 10 (r12)
+  [026] rbp - 32 -> 1 (rbx)
+  [027] t2_helper_1 -> 0 (rax)
+  [028] c_helper_2 -> 0 (rax)
+  [029] t3_helper_1 -> 0 (rax)
+  [030] t3_helper_4 -> 2 (rcx)
+  [031] cmp1_helper_1 -> 9 (r11)
+  [032] d_helper_5 -> 0 (rax)
+  [033] cmp3 -> 4 (rsi)
+  [034] c_helper_1 -> 0 (rax)
+  [035] cmp2_helper_1 -> 10 (r12)
+  [036] a -> 12 (r14)
+  [037] cmp6 -> 5 (rdi)
+  [038] ptr -> 0 (rax)
+  [039] cmp2_helper_2 -> 0 (rax)
+  [040] t8 -> 0 (rax)
+  [041] rbp - 56 -> 8 (r10)
+  [042] t1_helper_6 -> 2 (rcx)
+  [043] cmp4 -> 6 (r8)
+  [044] y -> 11 (r13)
+  [045] cmp5 -> 7 (r9)
+  [046] t1_helper_5 -> 0 (rax)
+  [047] rbp - 64 -> 8 (r10)
+  [048] t12 -> 11 (r13)
+  [049] t1_helper_1 -> 0 (rax)
+  [050] t2_helper_5 -> 0 (rax)
+  [051] t3_helper_2 -> 0 (rax)
+  [052] t4_helper_2 -> 0 (rax)
+  [053] t10 -> 0 (rax)
+  [054] d_helper_4 -> 0 (rax)
+  [055] t7 -> 2 (rcx)
+  [056] t11 -> 0 (rax)
+  [057] d_helper_3 -> 0 (rax)
+  [058] rbp - 40 -> 1 (rbx)
+  [059] c_helper_4 -> 0 (rax)
+  [060] cmp1_helper_2 -> 2 (rcx)
+  [061] t3_helper_3 -> 0 (rax)
+  [062] cmp1_helper_3 -> 2 (rcx)
+  [063] c_helper_5 -> 0 (rax)
+  [064] rbp - 16 -> 1 (rbx)
+  [065] t2_helper_6 -> 0 (rax)
+  [066] cmp2_helper_3 -> 2 (rcx)
 
 Spill Needed Stack (Node IDs):
-  [001] cmp2 (ID: 26)
-  [002] t4 (ID: 24)
-  [003] t2 (ID: 23)
-  [004] t1 (ID: 22)
-  [005] t3 (ID: 21)
+  None
 
 Variable to Function Context Map:
-  [001] L5 -> main
-  [002] L4 -> main
-  [003] y -> main
-  [004] x -> main
-  [005] L6 -> main
-  [006] ptr -> main
-  [007] cmp6 -> main
-  [008] cmp5 -> main
-  [009] cmp4 -> main
-  [010] cmp3 -> main
-  [011] arr -> main
-  [012] L1 -> foo
-  [013] m4 -> math_ops
-  [014] m3 -> math_ops
-  [015] t4 -> main
-  [016] res -> foo
-  [017] L7 -> main
-  [018] t9 -> main
-  [019] a -> main
-  [020] foo -> foo
-  [021] b -> main
-  [022] t6 -> main
-  [023] t5 -> main
-  [024] main -> main
-  [025] c -> main
-  [026] L2 -> foo
-  [027] m2 -> math_ops
-  [028] L3 -> main
-  [029] t10 -> main
-  [030] t7 -> main
-  [031] m1 -> math_ops
-  [032] ret1 -> main
-  [033] d -> main
-  [034] t2 -> main
-  [035] math_ops -> math_ops
-  [036] t1 -> main
-  [037] t8 -> main
-  [038] t11 -> main
-  [039] t12 -> main
-  [040] t3 -> main
-  [041] cmp1 -> main
-  [042] cmp2 -> main
+  [001] c_helper_4 -> main
+  [002] c_helper_2 -> main
+  [003] d_helper_5 -> main
+  [004] d_helper_2 -> main
+  [005] d_helper_1 -> main
+  [006] c_helper_5 -> main
+  [007] cmp1_helper_3 -> main
+  [008] cmp1_helper_2 -> main
+  [009] rbp - 48 -> main
+  [010] cmp1_helper_1 -> main
+  [011] t3_helper_4 -> main
+  [012] t1_helper_6 -> main
+  [013] t2_helper_6 -> main
+  [014] cmp2_helper_3 -> main
+  [015] t3_helper_3 -> main
+  [016] t4_helper_3 -> main
+  [017] rbp - 64 -> main
+  [018] t1_helper_5 -> main
+  [019] c_helper_3 -> main
+  [020] cmp2 -> main
+  [021] t3 -> main
+  [022] t12 -> main
+  [023] rbp - 56 -> main
+  [024] t8 -> main
+  [025] t1 -> main
+  [026] math_ops -> math_ops
+  [027] c_helper_1 -> main
+  [028] t2 -> main
+  [029] d -> main
+  [030] cmp1 -> main
+  [031] ret1 -> main
+  [032] m1 -> math_ops
+  [033] t11 -> main
+  [034] t7 -> main
+  [035] t10 -> main
+  [036] L3 -> main
+  [037] m2 -> math_ops
+  [038] t3_helper_2 -> main
+  [039] L2 -> foo
+  [040] c -> main
+  [041] main -> main
+  [042] t6 -> main
+  [043] b -> main
+  [044] t2_helper_4 -> main
+  [045] t4_helper_1 -> main
+  [046] foo -> foo
+  [047] t2_helper_2 -> main
+  [048] rbp - 8 -> main
+  [049] t9 -> main
+  [050] L7 -> main
+  [051] res -> foo
+  [052] d_helper_4 -> main
+  [053] t4 -> main
+  [054] t5 -> main
+  [055] m3 -> math_ops
+  [056] m4 -> math_ops
+  [057] L1 -> foo
+  [058] arr -> main
+  [059] cmp3 -> main
+  [060] cmp4 -> main
+  [061] cmp5 -> main
+  [062] cmp6 -> main
+  [063] ptr -> main
+  [064] rbp - 24 -> main
+  [065] L6 -> main
+  [066] cmp2_helper_2 -> main
+  [067] rbp - 32 -> main
+  [068] t2_helper_1 -> main
+  [069] y -> main
+  [070] L4 -> main
+  [071] L5 -> main
+  [072] t2_helper_5 -> main
+  [073] t1_helper_1 -> main
+  [074] t1_helper_2 -> main
+  [075] t4_helper_4 -> main
+  [076] x -> main
+  [077] t1_helper_4 -> main
+  [078] t3_helper_1 -> main
+  [079] d_helper_3 -> main
+  [080] rbp - 40 -> main
+  [081] rbp - 16 -> main
+  [082] t4_helper_2 -> main
+  [083] a -> main
+  [084] cmp2_helper_1 -> main

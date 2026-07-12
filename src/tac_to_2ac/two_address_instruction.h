@@ -56,11 +56,6 @@ inline bool isOp1Read(const string& opcode) {
             opcode == "PUSH");
 }
 
-// Helper 3: Returns true if Operand 2 is modified (DEF)
-inline bool isOp2Modified(const string& opcode) {
-    // In x86-64 Intel syntax, operand 2 is never the destination for these standard instructions.
-    return false;
-}
 
 // Helper 4: Returns true if Operand 2 is read (USE)
 inline bool isOp2Read(const string& opcode) {
