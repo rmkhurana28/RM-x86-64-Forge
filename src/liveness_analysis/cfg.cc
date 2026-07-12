@@ -1684,14 +1684,107 @@ void ControlFlowGraph::computeLiveness() {
         }
     }
 
-    // here, i want to print the varRegMap in the termianl 
+    // now, we everything we need for the final asm generation
+    // spilled vars addresses are stored in replacerMap and the callee-saved registers addresses are stored n calleeSavedMap
 
-        std::cerr << "\n\n=== FINAL REGISTER MAPPING ===\n";
-        vector<string> physicalRegisterNames = { "rax", "rbx", "rcx", "rdx", "rsi", "rdi", "r8", "r9", "r10", "r11", "r12", "r13", "r14", "r15" };
-        for (const auto& pair : varRegMap) {
-            std::cerr << pair.first << " -> " << physicalRegisterNames[pair.second] << " (Color: " << pair.second << ")\n";
+    modifiedInstructions.clear();
+
+    currFunc = "";
+
+    for(size_t i=0 ; i<basic_blocks.size() ; i++){
+        auto currBlock = basic_blocks[i];
+        for(size_t j=0 ; j<currBlock->getInstructions().size() ; j++){
+            auto currInstruction = currBlock->getInstructions()[j];
+
+            if(currInstruction.getOpcode() == "FUNC"){
+                // prolouge
+
+                currFunc = currInstruction.getOperand1();
+
+                // get the total number of vars
+                // vars spilled for this func and the callee-saved vars being accessed by this func
+                int count = funcOffsetMap[currInstruction.getOperand1()] + funcCalleeOffsetMap[currInstruction.getOperand1()];
+
+                // if count is even, it is perfectly 16-byte aligned, if odd, add extra 8-bytes to align it
+                string offset = to_string(count%2 == 0 ? count*8 : count*8 + 8);
+
+                // push the funcInstruction
+                modifiedInstructions.push_back(currInstruction);
+
+                // setting the rsp and rbp for the func
+                modifiedInstructions.push_back(makeInstruction("PUSH" , "rbp"));
+                modifiedInstructions.push_back(makeInstruction("MOV" , "rbp" , "rsp"));
+
+                // prolouge instruction
+                modifiedInstructions.push_back(makeInstruction("SUB" , "rsp" , offset));
+
+                // now, add MOV intructions for callee saved registers
+                // the callee-saved vars being accessed by this func
+                count = funcCalleeOffsetMap[currInstruction.getOperand1()];
+
+                for(const auto& func : calleeSavedMap[currFunc]){
+                    string phy = func.first;
+                    string stackAddr = func.second;
+                    
+                    modifiedInstructions.push_back(makeInstruction("MOV" , stackAddr , phy));
+                }
+
+                continue;
+            }
+            
+            if(j+2 < currBlock->getInstructions().size() && currBlock->getInstructions()[j+2].getOpcode() == "ret"){
+                // epilouge
+                // current instruction is      MOV rbp , rsp
+                // next instruction is         POP rbp
+                // next to next instruction is ret
+
+                
+                // the callee-saved vars being accessed by this func
+                // int count = funcCalleeOffsetMap[currInstruction.getOperand1()];
+
+                for(const auto& func : calleeSavedMap[currFunc]){
+                    string phy = func.first;
+                    string stackAddr = func.second;
+                    
+                    modifiedInstructions.push_back(makeInstruction("MOV" , phy , stackAddr));
+                }
+
+                modifiedInstructions.push_back(currBlock->getInstructions()[j]); // adding MOV rbp , rsp
+                modifiedInstructions.push_back(currBlock->getInstructions()[j+1]); // adding POP rbp
+                modifiedInstructions.push_back(currBlock->getInstructions()[j+2]); // adding ret
+
+                j += 2;
+
+                continue;
+            } 
+            
+            // other instructions, replace the var wiht their register mappings and push 
+            string op1 = currInstruction.getOperand1();
+            string op2 = currInstruction.getOperand2();
+            
+            if(!isConstant(op1) && !isPhysicalRegister(op1) && op1 != "" && !isJumpOrCall(currInstruction.getOpcode())){
+                if(is_memory_operand(op1)){                    
+                    currInstruction.setOperand1(map_memory_operand(op1, varRegMap));
+                } else{
+                    currInstruction.setOperand1(getPhysicalRegisterName(varRegMap[op1]));
+                }
+            }
+
+            if(!isConstant(op2) && !isPhysicalRegister(op2) && op2 != "" && !isJumpOrCall(currInstruction.getOpcode())){
+                if(is_memory_operand(op2)){
+                    currInstruction.setOperand2(map_memory_operand(op2, varRegMap));
+                } else{
+                    currInstruction.setOperand2(getPhysicalRegisterName(varRegMap[op2]));
+                }
+            }
+
+            modifiedInstructions.push_back(currInstruction);
+                            
         }
-        std::cerr << "==============================\n\n";
+
+        currBlock->getInstructionsMutable() = modifiedInstructions;
+        modifiedInstructions.clear(); // Clear it for the next basic block!
+    }
 
 
 }
@@ -1717,6 +1810,8 @@ void ControlFlowGraph::print() const {
     }
 }
 
+
+
 } // namespace rm_forge
 
 
@@ -1734,3 +1829,8 @@ inline std::string getPhysicalRegisterName(int id) {
     
     return "UNKNOWN_REG"; // Fallback, should never be hit if coloring was successful
 }
+
+
+
+
+

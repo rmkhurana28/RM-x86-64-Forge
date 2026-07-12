@@ -3,6 +3,7 @@
 
 #include <string>
 #include <unordered_set>
+#include <unordered_map>
 
 using namespace std;
 
@@ -65,6 +66,13 @@ inline bool isOp2Read(const string& opcode) {
             opcode == "MOVZX" || opcode == "SHL" || opcode == "SAR");
 }
 
+// Helper 5: Returns true if the instruction is a Jump or Call (Target is a label or function)
+inline bool isJumpOrCall(const string& opcode) {
+    return (opcode == "JMP" || opcode == "JE" || opcode == "JNE" || 
+            opcode == "JL" || opcode == "JLE" || opcode == "JG" || 
+            opcode == "JGE" || opcode == "CALL");
+}
+
 inline bool is_memory_operand(const string& operand) {
     if (operand.length() < 2) return false;
     return operand.front() == '[' && operand.back() == ']';
@@ -98,6 +106,41 @@ inline std::unordered_set<string> extract_memory_vars(const string& operand) {
     }
     
     return vars;
+}
+
+// Helper: Convert graph color ID to physical x86-64 register string
+inline std::string getPhysicalRegisterName(int id) {
+    static const std::string regNames[] = {
+        "rax", "rbx", "rcx", "rdx", "rsi", "rdi", 
+        "r8", "r9", "r10", "r11", "r12", "r13", "r14", "r15"
+    };
+    if (id >= 0 && id < 14) return regNames[id];
+    return "UNKNOWN_REG";
+}
+
+// Helper: Reconstructs a memory operand string with physical registers
+inline std::string map_memory_operand(const std::string& op, const std::unordered_map<std::string, int>& varRegMap) {
+    if (!is_memory_operand(op)) return op;
+    
+    std::string in = op.substr(1, op.length() - 2);
+    size_t p = in.find(" + ");
+    
+    // Tiny lambda to map a single variable string if it exists
+    auto mapVar = [&](std::string v) {
+        if (!isConstant(v) && !isPhysicalRegister(v) && v != "" && varRegMap.count(v) > 0) {
+            return getPhysicalRegisterName(varRegMap.at(v));
+        }
+        return v;
+    };
+
+    // Reconstruct the string perfectly
+    if (p != std::string::npos) {
+        std::string v1 = in.substr(0, p);
+        std::string v2 = in.substr(p + 3, in.find("*8") - p - 3);
+        return "[" + mapVar(v1) + " + " + mapVar(v2) + "*8]";
+    }
+    
+    return "[" + mapVar(in) + "]";
 }
 
 class TwoAddressInstruction {

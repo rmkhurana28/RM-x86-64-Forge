@@ -4,370 +4,404 @@
 Block ID: 0
 ------------------------------------------
 Instructions:
-[001] FUNC math_ops
-[002] MOV m1, 10
-[003] MOV m2, 20
-[004] MOV m3, m1
-[005] ADD m3, m2
-[006] MOV m4, m3
-[007] IMUL m4, 2
-[008] MOV rax, m4
-[009] MOV rsp, rbp
-[010] POP rbp
-[011] ret 
+[001] FUNC foo
+[251] PUSH rbp
+[252] MOV rbp, rsp
+[253] SUB rsp, 32
+[240] MOV rax, [r10]
+[004] MOV rcx, rax
+[175] MOV rax, [r8]
+[005] ADD rcx, rax
+[006] MOV rax, rcx
+[241] MOV rdx, [r10]
+[007] IMUL rax, rdx
+[008] MOV rdx, rax
+[176] MOV rax, [r8]
+[009] SUB rdx, rax
+[010] CMP rdx, rcx
+[011] SETG al
+[012] MOVZX rsi, al
+[013] CMP rsi, 0
+[014] JNE L1
 ------------------------------------------
 CFG IN:   { Φ }
-CFG OUT:  { Φ }
+CFG OUT:  { 1 2 }
 ------------------------------------------
-DEF:      { rax m4 m3 m2 m1 }
-USE:      { Φ }
-LIVE IN:  { Φ }
-LIVE OUT: { Φ }
+DEF:      { cmp rax b_helper_2 t3 a_helper_2 t2 b_helper_1 t1 a_helper_1 }
+USE:      { rbp - 16 rbp - 24 }
+LIVE IN:  { rbp - 8 rbp - 16 rbp - 24 }
+LIVE OUT: { rbp - 16 t3 rbp - 24 rbp - 8 }
 ==========================================
 
 ==========================================
 Block ID: 1
 ------------------------------------------
 Instructions:
-[012] FUNC foo
-[013] MOV rdi, m1
-[014] MOV rsi, m2
-[015] CALL math_ops, 2
-[016] MOV res, rax
-[017] CMP res, 50
-[018] JG L1
+[015] MOV rax, rdx
+[142] MOV [r13], rax
+[143] MOV rcx, [r13]
+[242] MOV rax, [r10]
+[016] ADD rcx, rax
+[144] MOV [r13], rcx
+[017] JMP L2
 ------------------------------------------
-CFG IN:   { Φ }
-CFG OUT:  { 2 3 }
+CFG IN:   { 0 }
+CFG OUT:  { 3 }
 ------------------------------------------
-DEF:      { res r11 r8 rdx r10 rcx rax rsi r9 rdi }
-USE:      { m2 m1 }
-LIVE IN:  { m2 m1 }
-LIVE OUT: { res }
+DEF:      { a_helper_3 t4_helper_2 t4_helper_1 }
+USE:      { rbp - 8 rbp - 24 t3 }
+LIVE IN:  { rbp - 8 rbp - 24 t3 }
+LIVE OUT: { rbp - 8 }
 ==========================================
 
 ==========================================
 Block ID: 2
 ------------------------------------------
 Instructions:
-[019] ADD res, 10
-[020] JMP L2
+[018] L1 
+[019] MOV rax, rdx
+[145] MOV [r13], rax
+[146] MOV rcx, [r13]
+[177] MOV rax, [r8]
+[020] SUB rcx, rax
+[147] MOV [r13], rcx
 ------------------------------------------
-CFG IN:   { 1 }
-CFG OUT:  { 4 }
+CFG IN:   { 0 }
+CFG OUT:  { 3 }
 ------------------------------------------
-DEF:      { res }
-USE:      { res }
-LIVE IN:  { res }
-LIVE OUT: { res }
+DEF:      { b_helper_3 t4_helper_5 t4_helper_4 }
+USE:      { rbp - 16 rbp - 8 t3 }
+LIVE IN:  { rbp - 16 rbp - 8 t3 }
+LIVE OUT: { rbp - 8 }
 ==========================================
 
 ==========================================
 Block ID: 3
 ------------------------------------------
 Instructions:
-[021] L1 
-[022] SUB res, 10
+[021] L2 
+[148] MOV rax, [r13]
+[022] MOV rax, rax
+[023] MOV rsp, rbp
+[024] POP rbp
+[025] ret 
 ------------------------------------------
-CFG IN:   { 1 }
-CFG OUT:  { 4 }
+CFG IN:   { 1 2 }
+CFG OUT:  { Φ }
 ------------------------------------------
-DEF:      { res }
-USE:      { res }
-LIVE IN:  { res }
-LIVE OUT: { res }
+DEF:      { rax t4_helper_7 }
+USE:      { rbp - 8 }
+LIVE IN:  { rbp - 8 }
+LIVE OUT: { Φ }
 ==========================================
 
 ==========================================
 Block ID: 4
 ------------------------------------------
 Instructions:
-[023] L2 
-[024] MOV rax, res
-[025] MOV rsp, rbp
-[026] POP rbp
-[027] ret 
+[026] FUNC main
+[254] PUSH rbp
+[255] MOV rbp, rsp
+[256] SUB rsp, 352
+[257] MOV [rbp - 344], rbx
+[258] MOV [rbp - 352], r15
+[259] MOV [rbp - 336], r12
+[260] MOV [rbp - 328], r14
+[027] MOV rax, 5
+[243] MOV [r10], rax
+[028] MOV rax, 10
+[178] MOV [r8], rax
+[029] MOV rax, 15
+[161] MOV [r8], rax
+[030] MOV rax, 20
+[166] MOV [r8], rax
+[031] MOV rax, 25
+[171] MOV [r8], rax
+[032] MOV rax, 30
+[139] MOV [r13], rax
+[033] MOV rax, 35
+[154] MOV [r10], rax
+[034] MOV rax, 40
+[152] MOV [r10], rax
+[244] MOV rax, [r10]
+[035] MOV rcx, rax
+[179] MOV rax, [r8]
+[036] ADD rcx, rax
+[037] MOV rax, rcx
+[162] MOV rcx, [r8]
+[038] IMUL rax, rcx
+[039] MOV rax, rax
+[040] CQO 
+[167] MOV rcx, [r8]
+[041] IDIV rcx
+[042] MOV rdx, rax
+[043] MOV rax, rdx
+[044] CQO 
+[180] MOV rcx, [r8]
+[045] IDIV rcx
+[046] MOV rax, rdx
+[149] MOV [r13], rax
+[150] MOV rax, [r13]
+[047] MOV rcx, rax
+[245] MOV rax, [r10]
+[048] AND rcx, rax
+[049] MOV rcx, rcx
+[163] MOV rax, [r8]
+[050] OR rcx, rax
+[051] MOV rcx, rcx
+[168] MOV rax, [r8]
+[052] XOR rcx, rax
+[053] MOV rax, rcx
+[054] MOV rcx, 3
+[055] SHL rax, cl
+[056] MOV rax, rax
+[057] MOV rcx, 1
+[058] SAR rax, cl
+[059] MOV rax, rax
+[060] NEG rax
+[061] MOV rax, rax
+[062] NOT rax
+[063] CMP rax, 0
+[064] SETE al
+[065] MOVZX rdi, al
+[246] MOV rax, [r10]
+[066] CMP rdi, rax
+[067] SETE al
+[068] MOVZX r9, al
+[181] MOV rax, [r8]
+[069] CMP rdi, rax
+[070] SETNE al
+[071] MOVZX rsi, al
+[158] MOV [r13], rsi
+[164] MOV rax, [r8]
+[072] CMP rdi, rax
+[073] SETL al
+[074] MOVZX r14, al
+[169] MOV rax, [r8]
+[075] CMP rdi, rax
+[076] SETLE al
+[077] MOVZX r11, al
+[247] MOV rax, [r10]
+[078] CMP rdi, rax
+[079] SETG al
+[080] MOVZX r12, al
+[182] MOV rax, [r8]
+[081] CMP rdi, rax
+[082] SETGE al
+[083] MOVZX rbx, al
+[084] LEA rax, [rdi]
+[141] MOV [r8], rax
+[085] MOV [r13], r9
+[086] MOV rax, [r13]
+[087] MOV [r13 + 0*8], rax
+[159] MOV rax, [r13]
+[088] MOV [r13 + 1*8], rax
+[089] MOV [r13 + 2*8], r14
+[090] MOV [r13 + 3*8], r11
+[091] MOV [r13 + 4*8], r12
+[092] MOV [r13 + 5*8], rbx
+[093] MOV rbx, [r13 + 5*8]
+[094] MOV r12, [r13 + 0*8]
+[248] MOV rax, [r10]
+[095] MOV rdi, rax
+[183] MOV rax, [r8]
+[096] MOV rsi, rax
+[165] MOV rax, [r8]
+[097] MOV rdx, rax
+[170] MOV rax, [r8]
+[098] MOV rcx, rax
+[172] MOV rax, [r8]
+[099] MOV r8, rax
+[140] MOV rax, [r13]
+[100] MOV r9, rax
+[153] MOV rax, [r10]
+[101] PUSH rax
+[155] MOV rax, [r10]
+[102] PUSH rax
+[103] CALL foo, 8
+[104] MOV rcx, rax
+[105] ADD rsp, 16
+[106] MOV rax, rcx
+[107] ADD rax, rbx
+[108] MOV rdx, rax
+[109] IMUL rdx, r12
+[151] MOV rax, [r13]
+[110] CMP rdx, rax
+[111] SETG al
+[112] MOVZX r15, al
+[249] MOV [r13], r15
+[250] MOV rax, [r13]
+[238] MOV [r13], rax
+[239] MOV rax, [r13]
+[236] MOV [r13], rax
+[237] MOV rax, [r13]
+[234] MOV [r13], rax
+[235] MOV rax, [r13]
+[232] MOV [r13], rax
+[233] MOV rax, [r13]
+[230] MOV [r13], rax
+[231] MOV rax, [r13]
+[228] MOV [r13], rax
+[229] MOV rax, [r13]
+[226] MOV [r13], rax
+[227] MOV rax, [r13]
+[224] MOV [r13], rax
+[225] MOV rax, [r13]
+[222] MOV [r13], rax
+[223] MOV rax, [r13]
+[220] MOV [r13], rax
+[221] MOV rax, [r13]
+[218] MOV [r13], rax
+[219] MOV rax, [r13]
+[216] MOV [r13], rax
+[217] MOV rax, [r13]
+[214] MOV [r13], rax
+[215] MOV rax, [r13]
+[212] MOV [r13], rax
+[213] MOV rax, [r13]
+[210] MOV [r13], rax
+[211] MOV rax, [r13]
+[208] MOV [r13], rax
+[209] MOV rax, [r13]
+[206] MOV [r13], rax
+[207] MOV rax, [r13]
+[204] MOV [r13], rax
+[205] MOV rax, [r13]
+[202] MOV [r13], rax
+[203] MOV rax, [r13]
+[200] MOV [r13], rax
+[201] MOV rax, [r13]
+[198] MOV [r13], rax
+[199] MOV rax, [r13]
+[196] MOV [r13], rax
+[197] MOV rax, [r13]
+[194] MOV [r13], rax
+[195] MOV rax, [r13]
+[192] MOV [r13], rax
+[193] MOV rax, [r13]
+[190] MOV [r13], rax
+[191] MOV rax, [r13]
+[188] MOV [r13], rax
+[189] MOV rax, [r13]
+[186] MOV [r13], rax
+[187] MOV rax, [r13]
+[184] MOV [r13], rax
+[185] MOV rax, [r13]
+[173] MOV [r13], rax
+[174] MOV rax, [r13]
+[156] MOV [r13], rax
+[157] MOV rax, [r13]
+[113] CMP rax, 0
+[114] JNE L3
 ------------------------------------------
-CFG IN:   { 2 3 }
-CFG OUT:  { Φ }
+CFG IN:   { Φ }
+CFG OUT:  { 5 7 }
 ------------------------------------------
-DEF:      { rax }
-USE:      { res }
-LIVE IN:  { res }
-LIVE OUT: { Φ }
+DEF:      { cmp7_helper_1_helper_1_helper_1_helper_1_helper_2 cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 cmp7_helper_1_helper_2 cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 u2 r11 g_helper_2 t4_helper_10 u1 f_helper_2 r8 cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 d_helper_5 c_helper_5 rsi b_helper_9 rdi a_helper_9 cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 y cmp2_helper_2 ptr_helper_1 cmp6 b_helper_8 cmp5 cmp4 d_helper_4 cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 r9 cmp3 c_helper_4 cmp2_helper_1 cmp7_helper_1_helper_1_helper_1_helper_2 b_helper_7 ret1 cmp1 a_helper_7 t12 t10 r10 h_helper_2 t9 cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 t8 cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 d_helper_3 t11 t7 t6 t5 cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 t4_helper_8 b_helper_6 cmp7_helper_2 cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 t3 d_helper_2 cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1 x t4_helper_9 rdx cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 c_helper_3 rax cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 rcx c_helper_2 a_helper_8 b_helper_5 e_helper_2 t1 cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 a_helper_5 cmp7_helper_1_helper_1_helper_2 h_helper_1 g_helper_1 f_helper_1 cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 z e_helper_1 a_helper_6 d_helper_1 t2 c_helper_1 b_helper_4 a_helper_4 }
+USE:      { rbp - 96 rbp - 40 rbp - 104 rbp - 112 rbp - 128 rbp - 144 rbp - 168 rbp - 176 rbp - 184 rbp - 192 rbp - 200 rbp - 208 rbp - 216 rbp - 224 rbp - 88 rbp - 232 rbp - 248 rbp - 256 rbp - 264 rbp - 272 rbp - 280 rbp - 288 rbp - 240 rbp - 296 rbp - 304 rbp - 312 rbp - 160 arr ptr rbp - 320 rbp - 32 rbp - 136 rbp - 48 rbp - 8 rbp - 80 rbp - 72 rbp - 152 rbp - 64 rbp - 120 rbp - 16 rbp - 24 }
+LIVE IN:  { rbp - 96 rbp - 40 rbp - 104 rbp - 112 rbp - 128 rbp - 144 rbp - 168 rbp - 176 rbp - 184 rbp - 192 rbp - 200 rbp - 208 rbp - 216 rbp - 224 rbp - 88 rbp - 232 rbp - 248 rbp - 256 rbp - 264 rbp - 272 rbp - 280 rbp - 288 rbp - 240 rbp - 296 rbp - 304 rbp - 312 rbp - 160 arr ptr rbp - 320 rbp - 32 rbp - 136 rbp - 48 rbp - 8 rbp - 80 rbp - 72 rbp - 152 rbp - 64 rbp - 120 rbp - 16 rbp - 24 }
+LIVE OUT: { y arr u2 ptr ret1 rbp - 48 }
 ==========================================
 
 ==========================================
 Block ID: 5
 ------------------------------------------
 Instructions:
-[028] FUNC main
-[029] MOV a, 5
-[030] MOV b, 10
-[031] MOV c_helper_1, 15
-[164] MOV [rbp - 64], c_helper_1
-[032] MOV d_helper_1, 20
-[159] MOV [rbp - 56], d_helper_1
-[033] MOV t1_helper_1, a
-[146] MOV [rbp - 32], t1_helper_1
-[147] MOV t1_helper_2, [rbp - 32]
-[034] ADD t1_helper_2, b
-[148] MOV [rbp - 32], t1_helper_2
-[149] MOV t1_helper_4, [rbp - 32]
-[035] MOV t2_helper_1, t1_helper_4
-[140] MOV [rbp - 24], t2_helper_1
-[141] MOV t2_helper_2, [rbp - 24]
-[165] MOV c_helper_2, [rbp - 64]
-[036] IMUL t2_helper_2, c_helper_2
-[142] MOV [rbp - 24], t2_helper_2
-[143] MOV t2_helper_4, [rbp - 24]
-[037] MOV rax, t2_helper_4
-[038] CQO 
-[160] MOV d_helper_2, [rbp - 56]
-[039] IDIV d_helper_2
-[040] MOV t3_helper_1, rax
-[152] MOV [rbp - 40], t3_helper_1
-[153] MOV t3_helper_2, [rbp - 40]
-[041] MOV rax, t3_helper_2
-[042] CQO 
-[043] IDIV b
-[044] MOV t4_helper_1, rdx
-[136] MOV [rbp - 16], t4_helper_1
-[137] MOV t4_helper_2, [rbp - 16]
-[045] MOV t5, t4_helper_2
-[046] AND t5, a
-[047] MOV t6, t5
-[166] MOV c_helper_3, [rbp - 64]
-[048] OR t6, c_helper_3
-[049] MOV t7, t6
-[161] MOV d_helper_3, [rbp - 56]
-[050] XOR t7, d_helper_3
-[051] MOV t8, t7
-[052] MOV rcx, 3
-[053] SHL t8, cl
-[054] MOV t9, t8
-[055] MOV rcx, 1
-[056] SAR t9, cl
-[057] MOV t10, t9
-[058] NEG t10
-[059] MOV t11, t10
-[060] NOT t11
-[061] CMP t11, 0
-[062] SETE al
-[063] MOVZX t12, al
-[064] CMP t12, a
-[065] SETE al
-[066] MOVZX cmp1_helper_1, al
-[156] MOV [rbp - 48], cmp1_helper_1
-[067] CMP t12, b
-[068] SETNE al
-[069] MOVZX cmp2_helper_1, al
-[133] MOV [rbp - 8], cmp2_helper_1
-[167] MOV c_helper_4, [rbp - 64]
-[070] CMP t12, c_helper_4
-[071] SETL al
-[072] MOVZX cmp3, al
-[162] MOV d_helper_4, [rbp - 56]
-[073] CMP t12, d_helper_4
-[074] SETLE al
-[075] MOVZX cmp4, al
-[076] CMP t12, a
-[077] SETG al
-[078] MOVZX cmp5, al
-[079] CMP t12, b
-[080] SETGE al
-[081] MOVZX cmp6, al
-[082] LEA ptr, [t12]
-[157] MOV cmp1_helper_2, [rbp - 48]
-[083] MOV [ptr], cmp1_helper_2
-[084] MOV x, [ptr]
-[085] MOV [arr + 0*8], x
-[134] MOV cmp2_helper_2, [rbp - 8]
-[086] MOV [arr + 1*8], cmp2_helper_2
-[087] MOV [arr + 2*8], cmp3
-[088] MOV [arr + 3*8], cmp4
-[089] MOV [arr + 4*8], cmp5
-[090] MOV [arr + 5*8], cmp6
-[091] MOV y, [arr + 5*8]
-[092] MOV rdi, a
-[093] MOV rsi, b
-[168] MOV c_helper_5, [rbp - 64]
-[094] MOV rdx, c_helper_5
-[163] MOV d_helper_5, [rbp - 56]
-[095] MOV rcx, d_helper_5
-[150] MOV t1_helper_5, [rbp - 32]
-[096] MOV r8, t1_helper_5
-[144] MOV t2_helper_5, [rbp - 24]
-[097] MOV r9, t2_helper_5
-[138] MOV t4_helper_3, [rbp - 16]
-[098] PUSH t4_helper_3
-[154] MOV t3_helper_3, [rbp - 40]
-[099] PUSH t3_helper_3
-[100] CALL foo, 8
-[101] MOV ret1, rax
-[102] ADD rsp, 16
-[158] MOV cmp1_helper_3, [rbp - 48]
-[103] CMP cmp1_helper_3, 0
-[104] JNE L3
+[160] MOV rax, [r13]
+[115] CMP rax, 0
+[116] JE L4
 ------------------------------------------
-CFG IN:   { Φ }
-CFG OUT:  { 6 10 }
+CFG IN:   { 4 }
+CFG OUT:  { 6 8 }
 ------------------------------------------
-DEF:      { cmp1_helper_3 t3_helper_3 c_helper_5 rdi y cmp1_helper_2 cmp2_helper_2 ptr cmp6 cmp5 cmp4 cmp3 c_helper_4 cmp2_helper_1 cmp1_helper_1 t2_helper_5 t12 t11 d_helper_4 t10 r11 t9 r10 rcx t8 ret1 d_helper_3 c_helper_3 t5 t4_helper_2 t3_helper_2 t1_helper_5 d_helper_2 t4_helper_3 t7 rdx r9 rax t3_helper_1 c_helper_2 t2_helper_2 x t2_helper_1 t1_helper_4 r8 t1_helper_2 d_helper_5 rsi t1_helper_1 d_helper_1 t6 t4_helper_1 t2_helper_4 b c_helper_1 a }
-USE:      { arr rbp - 48 rbp - 16 rbp - 40 rbp - 32 rbp - 8 rbp - 56 rbp - 24 rbp - 64 }
-LIVE IN:  { arr rbp - 48 rbp - 16 rbp - 40 rbp - 32 rbp - 8 rbp - 56 rbp - 24 rbp - 64 }
-LIVE OUT: { y rbp - 16 rbp - 40 rax rbp - 24 rbp - 32 ret1 x rbp - 8 }
+DEF:      { cmp2_helper_3 }
+USE:      { rbp - 48 }
+LIVE IN:  { y ptr arr rbp - 48 }
+LIVE OUT: { y arr ptr }
 ==========================================
 
 ==========================================
 Block ID: 6
 ------------------------------------------
 Instructions:
-[135] MOV cmp2_helper_3, [rbp - 8]
-[105] CMP cmp2_helper_3, 0
-[106] JE L4
+[117] JMP L5
 ------------------------------------------
 CFG IN:   { 5 }
-CFG OUT:  { 7 11 }
+CFG OUT:  { 9 }
 ------------------------------------------
-DEF:      { cmp2_helper_3 }
-USE:      { rbp - 8 }
-LIVE IN:  { y rbp - 40 rbp - 16 rbp - 32 rbp - 24 rax x rbp - 8 }
-LIVE OUT: { y x rbp - 16 rbp - 40 rax rbp - 24 rbp - 32 }
+DEF:      { Φ }
+USE:      { Φ }
+LIVE IN:  { y }
+LIVE OUT: { y }
 ==========================================
 
 ==========================================
 Block ID: 7
 ------------------------------------------
 Instructions:
-[145] MOV t2_helper_6, [rbp - 24]
-[151] MOV t1_helper_6, [rbp - 32]
-[107] CMP t1_helper_6, t2_helper_6
-[108] JL L5
+[118] L3 
+[119] MOV rax, rdx
+[120] ADD rax, rcx
+[121] MOV rax, rax
+[261] MOV rbx, [rbp - 344]
+[262] MOV r15, [rbp - 352]
+[263] MOV r12, [rbp - 336]
+[264] MOV r14, [rbp - 328]
+[122] MOV rsp, rbp
+[123] POP rbp
+[124] ret 
 ------------------------------------------
-CFG IN:   { 6 }
-CFG OUT:  { 8 12 }
+CFG IN:   { 4 }
+CFG OUT:  { Φ }
 ------------------------------------------
-DEF:      { t1_helper_6 t2_helper_6 }
-USE:      { rbp - 32 rbp - 24 }
-LIVE IN:  { y rbp - 40 rbp - 16 x rbp - 32 rbp - 24 }
-LIVE OUT: { y x rbp - 16 rbp - 40 }
+DEF:      { rax t13 }
+USE:      { ret1 u2 }
+LIVE IN:  { ret1 u2 }
+LIVE OUT: { Φ }
 ==========================================
 
 ==========================================
 Block ID: 8
 ------------------------------------------
 Instructions:
-[139] MOV t4_helper_4, [rbp - 16]
-[155] MOV t3_helper_4, [rbp - 40]
-[109] CMP t3_helper_4, t4_helper_4
-[110] JL L6
+[125] L4 
+[126] MOV rax, [r13 + 3*8]
+[127] MOV rcx, [r13]
+[128] MOV rax, rax
+[129] ADD rax, rcx
+[130] MOV rax, rax
+[265] MOV rbx, [rbp - 344]
+[266] MOV r15, [rbp - 352]
+[267] MOV r12, [rbp - 336]
+[268] MOV r14, [rbp - 328]
+[131] MOV rsp, rbp
+[132] POP rbp
+[133] ret 
 ------------------------------------------
-CFG IN:   { 7 }
-CFG OUT:  { 9 13 }
+CFG IN:   { 5 }
+CFG OUT:  { Φ }
 ------------------------------------------
-DEF:      { t3_helper_4 t4_helper_4 }
-USE:      { rbp - 40 rbp - 16 }
-LIVE IN:  { y rbp - 40 rbp - 16 }
-LIVE OUT: { y }
+DEF:      { rax t16 t15 t14 }
+USE:      { ptr arr }
+LIVE IN:  { ptr arr }
+LIVE OUT: { Φ }
 ==========================================
 
 ==========================================
 Block ID: 9
 ------------------------------------------
 Instructions:
-[111] JMP L7
-------------------------------------------
-CFG IN:   { 8 }
-CFG OUT:  { 14 }
-------------------------------------------
-DEF:      { Φ }
-USE:      { Φ }
-LIVE IN:  { y }
-LIVE OUT: { y }
-==========================================
-
-==========================================
-Block ID: 10
-------------------------------------------
-Instructions:
-[112] L3 
-[113] MOV rax, ret1
-[114] MOV rsp, rbp
-[115] POP rbp
-[116] ret 
-------------------------------------------
-CFG IN:   { 5 }
-CFG OUT:  { Φ }
-------------------------------------------
-DEF:      { rax }
-USE:      { ret1 }
-LIVE IN:  { ret1 }
-LIVE OUT: { Φ }
-==========================================
-
-==========================================
-Block ID: 11
-------------------------------------------
-Instructions:
-[117] L4 
-[118] MOV rsp, rbp
-[119] POP rbp
-[120] ret 
+[134] L5 
+[135] MOV rax, rbx
+[269] MOV rbx, [rbp - 344]
+[270] MOV r15, [rbp - 352]
+[271] MOV r12, [rbp - 336]
+[272] MOV r14, [rbp - 328]
+[136] MOV rsp, rbp
+[137] POP rbp
+[138] ret 
 ------------------------------------------
 CFG IN:   { 6 }
-CFG OUT:  { Φ }
-------------------------------------------
-DEF:      { Φ }
-USE:      { rax }
-LIVE IN:  { rax }
-LIVE OUT: { Φ }
-==========================================
-
-==========================================
-Block ID: 12
-------------------------------------------
-Instructions:
-[121] L5 
-[122] MOV rdi, x
-[123] CALL foo, 1
-[124] JMP L7
-------------------------------------------
-CFG IN:   { 7 }
-CFG OUT:  { 14 }
-------------------------------------------
-DEF:      { r11 r8 rsi rdx r10 rcx rax r9 rdi }
-USE:      { x }
-LIVE IN:  { y x }
-LIVE OUT: { y }
-==========================================
-
-==========================================
-Block ID: 13
-------------------------------------------
-Instructions:
-[125] L6 
-------------------------------------------
-CFG IN:   { 8 }
-CFG OUT:  { 14 }
-------------------------------------------
-DEF:      { Φ }
-USE:      { Φ }
-LIVE IN:  { y }
-LIVE OUT: { y }
-==========================================
-
-==========================================
-Block ID: 14
-------------------------------------------
-Instructions:
-[128] L7 
-[129] MOV rax, y
-[130] MOV rsp, rbp
-[131] POP rbp
-[132] ret 
-------------------------------------------
-CFG IN:   { 9 12 13 }
 CFG OUT:  { Φ }
 ------------------------------------------
 DEF:      { rax }

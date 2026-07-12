@@ -1,158 +1,335 @@
 
 --- Phase 4: Register Mapping and Spills ---
 Mapping (Var -> Physical Color ID):
-  [001] m4 -> 0 (rax)
-  [002] m2 -> 2 (rcx)
-  [003] m1 -> 0 (rax)
-  [004] res -> 0 (rax)
-  [005] ret1 -> 3 (rdx)
-  [006] t1_helper_2 -> 0 (rax)
-  [007] d_helper_1 -> 0 (rax)
-  [008] t9 -> 0 (rax)
-  [009] rbp - 24 -> 1 (rbx)
-  [010] t4_helper_3 -> 0 (rax)
-  [011] m3 -> 0 (rax)
-  [012] t5 -> 0 (rax)
-  [013] t6 -> 2 (rcx)
-  [014] t2_helper_4 -> 0 (rax)
-  [015] t4_helper_1 -> 0 (rax)
-  [016] b -> 13 (r15)
-  [017] c_helper_3 -> 0 (rax)
-  [018] t2_helper_2 -> 2 (rcx)
-  [019] rbp - 8 -> 1 (rbx)
-  [020] rbp - 48 -> 1 (rbx)
-  [021] arr -> 8 (r10)
-  [022] d_helper_2 -> 2 (rcx)
-  [023] t1_helper_4 -> 0 (rax)
-  [024] t4_helper_4 -> 0 (rax)
-  [025] x -> 10 (r12)
-  [026] rbp - 32 -> 1 (rbx)
-  [027] t2_helper_1 -> 0 (rax)
-  [028] c_helper_2 -> 0 (rax)
-  [029] t3_helper_1 -> 0 (rax)
-  [030] t3_helper_4 -> 2 (rcx)
-  [031] cmp1_helper_1 -> 9 (r11)
-  [032] d_helper_5 -> 0 (rax)
-  [033] cmp3 -> 4 (rsi)
-  [034] c_helper_1 -> 0 (rax)
-  [035] cmp2_helper_1 -> 10 (r12)
-  [036] a -> 12 (r14)
-  [037] cmp6 -> 5 (rdi)
-  [038] ptr -> 0 (rax)
-  [039] cmp2_helper_2 -> 0 (rax)
-  [040] t8 -> 0 (rax)
-  [041] rbp - 56 -> 8 (r10)
-  [042] t1_helper_6 -> 2 (rcx)
-  [043] cmp4 -> 6 (r8)
-  [044] y -> 11 (r13)
-  [045] cmp5 -> 7 (r9)
-  [046] t1_helper_5 -> 0 (rax)
-  [047] rbp - 64 -> 8 (r10)
-  [048] t12 -> 11 (r13)
-  [049] t1_helper_1 -> 0 (rax)
-  [050] t2_helper_5 -> 0 (rax)
-  [051] t3_helper_2 -> 0 (rax)
-  [052] t4_helper_2 -> 0 (rax)
-  [053] t10 -> 0 (rax)
-  [054] d_helper_4 -> 0 (rax)
-  [055] t7 -> 2 (rcx)
-  [056] t11 -> 0 (rax)
-  [057] d_helper_3 -> 0 (rax)
-  [058] rbp - 40 -> 1 (rbx)
-  [059] c_helper_4 -> 0 (rax)
-  [060] cmp1_helper_2 -> 2 (rcx)
-  [061] t3_helper_3 -> 0 (rax)
-  [062] cmp1_helper_3 -> 2 (rcx)
-  [063] c_helper_5 -> 0 (rax)
-  [064] rbp - 16 -> 1 (rbx)
-  [065] t2_helper_6 -> 0 (rax)
-  [066] cmp2_helper_3 -> 2 (rcx)
+  [001] cmp -> 4 (rsi)
+  [002] b_helper_1 -> 0 (rax)
+  [003] t4_helper_2 -> 2 (rcx)
+  [004] a_helper_3 -> 0 (rax)
+  [005] t4_helper_1 -> 0 (rax)
+  [006] cmp7_helper_2 -> 0 (rax)
+  [007] cmp7_helper_1_helper_2 -> 0 (rax)
+  [008] cmp7_helper_1_helper_1_helper_2 -> 0 (rax)
+  [009] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 -> 0 (rax)
+  [010] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 -> 0 (rax)
+  [011] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 -> 0 (rax)
+  [012] cmp2_helper_3 -> 0 (rax)
+  [013] rbp - 288 -> 11 (r13)
+  [014] h_helper_2 -> 0 (rax)
+  [015] a_helper_2 -> 3 (rdx)
+  [016] t9 -> 0 (rax)
+  [017] u1 -> 0 (rax)
+  [018] t4_helper_10 -> 0 (rax)
+  [019] rbp - 152 -> 11 (r13)
+  [020] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 -> 0 (rax)
+  [021] x -> 0 (rax)
+  [022] t4_helper_9 -> 0 (rax)
+  [023] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1  [024] a_helper_1 -> 0 (rax)
+  [025] cmp5 -> 10 (r12)
+  [026] rbp - 160 -> 11 (r13)
+  [027] rbp - 120 -> 11 (r13)
+  [028] cmp2_helper_2 -> 0 (rax)
+  [029] cmp6 -> 1 (rbx)
+  [030] c_helper_4 -> 0 (rax)
+  [031] rbp - 296 -> 11 (r13)
+  [032] t4_helper_7 -> 0 (rax)
+  [033] d_helper_4 -> 0 (rax)
+  [034] a_helper_5 -> 0 (rax)
+  [035] b_helper_7 -> 0 (rax)
+  [036] t10 -> 0 (rax)
+  [037] rbp - 48 -> 11 (r13)
+  [038] e_helper_1 -> 0 (rax)
+  [039] rbp - 312 -> 11 (r13)
+  [040] z -> 10 (r12)
+  [041] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 -> 0 (rax)
+  [042] b_helper_4 -> 0 (rax)
+  [043] t16 -> 0 (rax)
+  [044] f_helper_1 -> 0 (rax)
+  [045] a_helper_4 -> 0 (rax)
+  [046] t12 -> 5 (rdi)
+  [047] b_helper_3 -> 0 (rax)
+  [048] rbp - 112 -> 11 (r13)
+  [049] b_helper_5 -> 0 (rax)
+  [050] a_helper_8 -> 0 (rax)
+  [051] rbp - 232 -> 11 (r13)
+  [052] rbp - 144 -> 11 (r13)
+  [053] t2 -> 0 (rax)
+  [054] c_helper_1 -> 0 (rax)
+  [055] b_helper_6 -> 2 (rcx)
+  [056] t8 -> 0 (rax)
+  [057] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 -> 0 (rax)
+  [058] rbp - 16 -> 6 (r8)
+  [059] rbp - 64 -> 6 (r8)
+  [060] rbp - 280 -> 11 (r13)
+  [061] t7 -> 2 (rcx)
+  [062] t4_helper_8 -> 0 (rax)
+  [063] rbp - 176 -> 11 (r13)
+  [064] d_helper_2 -> 2 (rcx)
+  [065] cmp2_helper_1 -> 4 (rsi)
+  [066] rbp - 320 -> 11 (r13)
+  [067] rbp - 32 -> 8 (r10)
+  [068] t5 -> 2 (rcx)
+  [069] rbp - 304 -> 11 (r13)
+  [070] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 -> 0 (rax)
+  [071] rbp - 136 -> 11 (r13)
+  [072] t6 -> 2 (rcx)
+  [073] rbp - 80 -> 6 (r8)
+  [074] a_helper_7 -> 0 (rax)
+  [075] t4_helper_4 -> 0 (rax)
+  [076] e_helper_2 -> 0 (rax)
+  [077] b_helper_8 -> 0 (rax)
+  [078] cmp1 -> 7 (r9)
+  [079] ret1 -> 2 (rcx)
+  [080] t3 -> 3 (rdx)
+  [081] g_helper_1 -> 0 (rax)
+  [082] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 -> 0 (rax)
+  [083] ptr_helper_1 -> 0 (rax)
+  [084] c_helper_2 -> 2 (rcx)
+  [085] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 -> 0 (rax)
+  [086] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 -> 0 (rax)
+  [087] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2  [088] d_helper_3 -> 0 (rax)
+  [089] b_helper_2 -> 0 (rax)
+  [090] cmp7_helper_1_helper_1_helper_1_helper_1_helper_2 -> 0 (rax)
+  [091] t11 -> 0 (rax)
+  [092] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1  [093] rbp - 264 -> 11 (r13)
+  [094] rbp - 40 -> 11 (r13)
+  [095] a_helper_9 -> 0 (rax)
+  [096] t1 -> 2 (rcx)
+  [097] b_helper_9 -> 0 (rax)
+  [098] c_helper_5 -> 0 (rax)
+  [099] d_helper_5 -> 0 (rax)
+  [100] rbp - 24 -> 8 (r10)
+  [101] g_helper_2 -> 0 (rax)
+  [102] h_helper_1 -> 0 (rax)
+  [103] rbp - 272 -> 11 (r13)
+  [104] rbp - 256 -> 11 (r13)
+  [105] f_helper_2 -> 0 (rax)
+  [106] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 -> 0 (rax)
+  [107] cmp4 -> 9 (r11)
+  [108] u2 -> 3 (rdx)
+  [109] a_helper_6 -> 0 (rax)
+  [110] rbp - 8 -> 11 (r13)
+  [111] rbp - 72 -> 6 (r8)
+  [112] rbp - 200 -> 11 (r13)
+  [113] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1  [114] y -> 1 (rbx)
+  [115] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1  [116] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1  [117] rbp - 248 -> 11 (r13)
+  [118] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 -> 0 (rax)
+  [119] rbp - 224 -> 11 (r13)
+  [120] rbp - 208 -> 11 (r13)
+  [121] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 -> 0 (ra  [122] rbp - 192 -> 11 (r13)
+  [123] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 -> 0 (rax)
+  [124] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 -> 0 (rax)
+  [125] rbp - 184 -> 11 (r13)
+  [126] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 -> 0 (rax)
+  [127] rbp - 216 -> 11 (r13)
+  [128] rbp - 168 -> 11 (r13)
+  [129] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 -> 0 (rax)
+  [130] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 -> 0 (rax)
+  [131] rbp - 104 -> 11 (r13)
+  [132] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 -> 0 (rax)
+  [133] rbp - 240 -> 11 (r13)
+  [134] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 -> 0 (rax)
+  [135] cmp3 -> 12 (r14)
+  [136] rbp - 96 -> 11 (r13)
+  [137] rbp - 88 -> 11 (r13)
+  [138] c_helper_3 -> 0 (rax)
+  [139] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 -> 0 (rax)
+  [140] d_helper_1 -> 0 (rax)
+  [141] ptr -> 11 (r13)
+  [142] arr -> 11 (r13)
+  [143] t14 -> 0 (rax)
+  [144] t4_helper_5 -> 2 (rcx)
+  [145] t15 -> 2 (rcx)
+  [146] cmp7_helper_1_helper_1_helper_1_helper_2 -> 0 (rax)
+  [147] rbp - 128 -> 11 (r13)
+  [148] t13 -> 0 (rax)
 
 Spill Needed Stack (Node IDs):
   None
 
 Variable to Function Context Map:
-  [001] c_helper_4 -> main
-  [002] c_helper_2 -> main
-  [003] d_helper_5 -> main
-  [004] d_helper_2 -> main
-  [005] d_helper_1 -> main
-  [006] c_helper_5 -> main
-  [007] cmp1_helper_3 -> main
-  [008] cmp1_helper_2 -> main
-  [009] rbp - 48 -> main
-  [010] cmp1_helper_1 -> main
-  [011] t3_helper_4 -> main
-  [012] t1_helper_6 -> main
-  [013] t2_helper_6 -> main
-  [014] cmp2_helper_3 -> main
-  [015] t3_helper_3 -> main
-  [016] t4_helper_3 -> main
-  [017] rbp - 64 -> main
-  [018] t1_helper_5 -> main
-  [019] c_helper_3 -> main
-  [020] cmp2 -> main
-  [021] t3 -> main
-  [022] t12 -> main
-  [023] rbp - 56 -> main
-  [024] t8 -> main
-  [025] t1 -> main
-  [026] math_ops -> math_ops
-  [027] c_helper_1 -> main
-  [028] t2 -> main
-  [029] d -> main
-  [030] cmp1 -> main
-  [031] ret1 -> main
-  [032] m1 -> math_ops
-  [033] t11 -> main
-  [034] t7 -> main
-  [035] t10 -> main
-  [036] L3 -> main
-  [037] m2 -> math_ops
-  [038] t3_helper_2 -> main
-  [039] L2 -> foo
-  [040] c -> main
-  [041] main -> main
-  [042] t6 -> main
-  [043] b -> main
-  [044] t2_helper_4 -> main
-  [045] t4_helper_1 -> main
-  [046] foo -> foo
-  [047] t2_helper_2 -> main
-  [048] rbp - 8 -> main
-  [049] t9 -> main
-  [050] L7 -> main
-  [051] res -> foo
-  [052] d_helper_4 -> main
-  [053] t4 -> main
-  [054] t5 -> main
-  [055] m3 -> math_ops
-  [056] m4 -> math_ops
-  [057] L1 -> foo
-  [058] arr -> main
-  [059] cmp3 -> main
-  [060] cmp4 -> main
-  [061] cmp5 -> main
+  [001] rbp - 320 -> main
+  [002] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1  [003] a_helper_9 -> main
+  [004] a_helper_8 -> main
+  [005] a_helper_5 -> main
+  [006] a_helper_4 -> main
+  [007] a_helper_3 -> foo
+  [008] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1  [009] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1  [010] rbp - 304 -> main
+  [011] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1  [012] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1  [013] rbp - 296 -> main
+  [014] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2  [015] rbp - 288 -> main
+  [016] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 -> main
+  [017] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 -> main
+  [018] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 -> main
+  [019] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 -> main
+  [020] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1  [021] rbp - 256 -> main
+  [022] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 -> main
+  [023] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1 -> main
+  [024] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 -> main
+  [025] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 -> main
+  [026] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1 -> main
+  [027] rbp - 248 -> main
+  [028] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 -> main
+  [029] a_helper_7 -> main
+  [030] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1 -> main
+  [031] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 -> main
+  [032] rbp - 224 -> main
+  [033] rbp - 208 -> main
+  [034] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 -> main
+  [035] rbp - 192 -> main
+  [036] rbp - 184 -> main
+  [037] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1 -> main
+  [038] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 -> main
+  [039] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1 -> main
+  [040] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 -> main
+  [041] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1 -> main
+  [042] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 -> main
+  [043] g_helper_1 -> main
+  [044] rbp - 312 -> main
+  [045] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1 -> main
+  [046] t4_helper_2 -> foo
+  [047] t14 -> main
+  [048] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1 -> main
+  [049] d -> main
+  [050] L5 -> main
+  [051] L4 -> main
+  [052] u1 -> main
+  [053] t4_helper_10 -> main
+  [054] rbp - 152 -> main
+  [055] t16 -> main
+  [056] b_helper_4 -> main
+  [057] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1  [058] y -> main
+  [059] rbp - 136 -> main
+  [060] x -> main
+  [061] t4_helper_9 -> main
   [062] cmp6 -> main
-  [063] ptr -> main
-  [064] rbp - 24 -> main
-  [065] L6 -> main
-  [066] cmp2_helper_2 -> main
-  [067] rbp - 32 -> main
-  [068] t2_helper_1 -> main
-  [069] y -> main
-  [070] L4 -> main
-  [071] L5 -> main
-  [072] t2_helper_5 -> main
-  [073] t1_helper_1 -> main
-  [074] t1_helper_2 -> main
-  [075] t4_helper_4 -> main
-  [076] x -> main
-  [077] t1_helper_4 -> main
-  [078] t3_helper_1 -> main
-  [079] d_helper_3 -> main
-  [080] rbp - 40 -> main
-  [081] rbp - 16 -> main
-  [082] t4_helper_2 -> main
-  [083] a -> main
-  [084] cmp2_helper_1 -> main
+  [063] rbp - 120 -> main
+  [064] rbp - 160 -> main
+  [065] t4 -> foo
+  [066] t4_helper_7 -> foo
+  [067] d_helper_4 -> main
+  [068] rbp - 216 -> main
+  [069] rbp - 168 -> main
+  [070] c -> main
+  [071] a_helper_2 -> foo
+  [072] t9 -> main
+  [073] h_helper_2 -> main
+  [074] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1 -> main
+  [075] c_helper_1 -> main
+  [076] ret1 -> main
+  [077] cmp1 -> main
+  [078] L2 -> foo
+  [079] cmp -> foo
+  [080] t4_helper_4 -> foo
+  [081] e_helper_2 -> main
+  [082] a_helper_6 -> main
+  [083] rbp - 8 -> foo
+  [084] foo -> foo
+  [085] z -> main
+  [086] rbp - 32 -> main
+  [087] main -> main
+  [088] t5 -> main
+  [089] t6 -> main
+  [090] t4_helper_1 -> foo
+  [091] a -> foo
+  [092] cmp2_helper_1 -> main
+  [093] e -> main
+  [094] rbp - 272 -> main
+  [095] h_helper_1 -> main
+  [096] cmp7_helper_1_helper_1_helper_2 -> main
+  [097] t3 -> foo
+  [098] cmp7_helper_2 -> main
+  [099] f -> main
+  [100] L1 -> foo
+  [101] f_helper_2 -> main
+  [102] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 -> main
+  [103] g -> main
+  [104] t4_helper_8 -> main
+  [105] b -> foo
+  [106] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 -> main
+  [107] h -> main
+  [108] t15 -> main
+  [109] t4_helper_5 -> foo
+  [110] rbp - 280 -> main
+  [111] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1 -> main
+  [112] t7 -> main
+  [113] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1  [114] cmp7_helper_1_helper_1_helper_1_helper_1_helper_2 -> main
+  [115] b_helper_2 -> foo
+  [116] t11 -> main
+  [117] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1 -> main
+  [118] L3 -> main
+  [119] a_helper_1 -> foo
+  [120] cmp5 -> main
+  [121] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1 -> main
+  [122] cmp7 -> main
+  [123] t8 -> main
+  [124] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1 -> main
+  [125] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 -> main
+  [126] f_helper_1 -> main
+  [127] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1 -> main
+  [128] t12 -> main
+  [129] u2 -> main
+  [130] cmp4 -> main
+  [131] t10 -> main
+  [132] rbp - 48 -> main
+  [133] b_helper_7 -> main
+  [134] rbp - 16 -> main
+  [135] t13 -> main
+  [136] cmp7_helper_1_helper_1_helper_1_helper_2 -> main
+  [137] rbp - 128 -> main
+  [138] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1 -> main
+  [139] cmp2_helper_2 -> main
+  [140] ptr -> main
+  [141] d_helper_1 -> main
+  [142] rbp - 264 -> main
+  [143] rbp - 40 -> main
+  [144] d_helper_3 -> main
+  [145] cmp2_helper_3 -> main
+  [146] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1 -> main
+  [147] b_helper_5 -> main
+  [148] rbp - 232 -> main
+  [149] t2 -> foo
+  [150] rbp - 144 -> main
+  [151] rbp - 64 -> main
+  [152] rbp - 200 -> main
+  [153] rbp - 72 -> main
+  [154] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1  [155] rbp - 80 -> main
+  [156] c_helper_2 -> main
+  [157] rbp - 176 -> main
+  [158] d_helper_2 -> main
+  [159] c_helper_4 -> main
+  [160] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1 -> main
+  [161] c_helper_5 -> main
+  [162] arr -> main
+  [163] cmp7_helper_1_helper_1_helper_1 -> main
+  [164] d_helper_5 -> main
+  [165] e_helper_1 -> main
+  [166] cmp7_helper_1_helper_1 -> main
+  [167] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 -> main
+  [168] cmp2 -> main
+  [169] rbp - 88 -> main
+  [170] cmp7_helper_1_helper_2 -> main
+  [171] b_helper_1 -> foo
+  [172] rbp - 112 -> main
+  [173] b_helper_3 -> foo
+  [174] b_helper_6 -> main
+  [175] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1 -> main
+  [176] cmp7_helper_1 -> main
+  [177] b_helper_8 -> main
+  [178] t1 -> foo
+  [179] b_helper_9 -> main
+  [180] cmp3 -> main
+  [181] rbp - 96 -> main
+  [182] rbp - 24 -> main
+  [183] g_helper_2 -> main
+  [184] cmp7_helper_1_helper_1_helper_1_helper_1 -> main
+  [185] rbp - 104 -> main
+  [186] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1 -> main
+  [187] ptr_helper_1 -> main
+  [188] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1 -> main
+  [189] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 -> main
+  [190] rbp - 240 -> main
+  [191] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 -> main
+  [192] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 -> main
+  [193] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1 -> main
+  [194] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1 -> main
+  [195] c_helper_3 -> main
+  [196] cmp7_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_1_helper_2 -> main

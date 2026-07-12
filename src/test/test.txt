@@ -1,47 +1,50 @@
-func math_ops:
-m1 = 10
-m2 = 20
-m3 = m1 + m2
-m4 = m3 * 2
-return m4
-
 func foo:
-param m1
-param m2
-res = call math_ops, 2
-if res > 50 goto L1
-res = res + 10
+param a
+param b
+
+t1 = a + b
+t2 = t1 * a
+t3 = t2 - b
+
+cmp = t3 > t1
+
+if cmp goto L1
+
+t4 = t3 + a
 goto L2
+
 L1:
-res = res - 10
+t4 = t3 - b
+
 L2:
-return res
+return t4
 
 func main:
+
 a = 5
 b = 10
 c = 15
 d = 20
+e = 25
+f = 30
+g = 35
+h = 40
 
-// Math
 t1 = a + b
 t2 = t1 * c
 t3 = t2 / d
 t4 = t3 % b
+
 t5 = t4 & a
 t6 = t5 | c
 t7 = t6 ^ d
-
-// Bitwise
 t8 = t7 << 3
 t9 = t8 >> 1
 
-// Unary
 t10 = -t9
 t11 = ~t10
 t12 = !t11
 
-// Conditionals
 cmp1 = t12 == a
 cmp2 = t12 != b
 cmp3 = t12 < c
@@ -49,12 +52,10 @@ cmp4 = t12 <= d
 cmp5 = t12 > a
 cmp6 = t12 >= b
 
-// Pointers
 ptr = &t12
 *ptr = cmp1
 x = *ptr
 
-// Arrays
 arr[0] = x
 arr[1] = cmp2
 arr[2] = cmp3
@@ -63,40 +64,39 @@ arr[4] = cmp5
 arr[5] = cmp6
 
 y = arr[5]
+z = arr[0]
 
-// Function Calls (8 params to test stack pushing)
 param a
 param b
 param c
 param d
-param t1
-param t2
-param t3
-param t4
+param e
+param f
+param g
+param h
+
 ret1 = call foo, 8
 
-// Loops and Jumps
-if cmp1 goto L3
-ifFalse cmp2 goto L4
-if t1 < t2 goto L5
-ifFalse t3 >= t4 goto L6
+u1 = ret1 + y
+u2 = u1 * z
 
-goto L7
+cmp7 = u2 > t4
+
+if cmp7 goto L3
+
+ifFalse cmp2 goto L4
+
+goto L5
 
 L3:
-return ret1
+t13 = u2 + ret1
+return t13
 
 L4:
-return
+t14 = arr[3]
+t15 = *ptr
+t16 = t14 + t15
+return t16
 
 L5:
-param x
-call foo, 1
-goto L7
-
-L6:
-t13 = arr[3]
-t14 = *ptr
-
-L7:
 return y

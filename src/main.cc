@@ -65,13 +65,30 @@ int main() {
         for (const auto& instr : final_code) {
             instr.printWithSeq(seq_counter++);
         }
+        freopen("output/08_final_assembly.txt", "w", stdout);
+        std::cout << ".intel_syntax noprefix\n";
+        std::cout << ".global main\n";
         
+        for (const auto& instr : final_code) {
+            if (instr.getOpcode() == "FUNC") {
+                std::cout << "\n" << instr.getOperand1() << ":\n";
+            } else if (instr.getOperand1() == "" && instr.getOpcode() != "CQO" && instr.getOpcode() != "ret") {
+                // If it has no operands and isn't CQO or ret, it's a label (e.g. L1)
+                std::cout << instr.getOpcode() << ":\n";
+            } else {
+                std::cout << "    " << instr.getOpcode();
+                if (instr.getOperand1() != "") std::cout << " " << instr.getOperand1();
+                if (instr.getOperand2() != "" && instr.getOpcode() != "CALL") std::cout << ", " << instr.getOperand2();
+                std::cout << "\n";
+            }
+        }
+
         // Ensure all output is fully written to the disk before combining
         std::cout.flush();
         std::fflush(stdout);
 
         // Concatenate all files into a master 00 file
-        system("cat output/01_3-addr_code.txt output/02_2-addr_code.txt output/03_cfg.txt output/04_optimized_2-addr_code.txt output/05_interference_graph.txt output/06_stack.txt output/07_mapping_and_spills.txt > output/00_all_in_one.txt");
+        system("cat output/01_3-addr_code.txt output/02_2-addr_code.txt output/03_cfg.txt output/04_optimized_2-addr_code.txt output/05_interference_graph.txt output/06_stack.txt output/07_mapping_and_spills.txt output/08_final_assembly.txt > output/00_all_in_one.txt");
         
     } else {
         std::cerr << "Failed to parse input file.\n";

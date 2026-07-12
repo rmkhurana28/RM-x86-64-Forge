@@ -1,0 +1,274 @@
+.intel_syntax noprefix
+.global main
+
+foo:
+    PUSH rbp
+    MOV rbp, rsp
+    SUB rsp, 32
+    MOV rax, [r10]
+    MOV rcx, rax
+    MOV rax, [r8]
+    ADD rcx, rax
+    MOV rax, rcx
+    MOV rdx, [r10]
+    IMUL rax, rdx
+    MOV rdx, rax
+    MOV rax, [r8]
+    SUB rdx, rax
+    CMP rdx, rcx
+    SETG al
+    MOVZX rsi, al
+    CMP rsi, 0
+    JNE L1
+    MOV rax, rdx
+    MOV [r13], rax
+    MOV rcx, [r13]
+    MOV rax, [r10]
+    ADD rcx, rax
+    MOV [r13], rcx
+    JMP L2
+L1:
+    MOV rax, rdx
+    MOV [r13], rax
+    MOV rcx, [r13]
+    MOV rax, [r8]
+    SUB rcx, rax
+    MOV [r13], rcx
+L2:
+    MOV rax, [r13]
+    MOV rax, rax
+    MOV rsp, rbp
+    POP rbp
+    ret
+
+main:
+    PUSH rbp
+    MOV rbp, rsp
+    SUB rsp, 352
+    MOV [rbp - 344], rbx
+    MOV [rbp - 352], r15
+    MOV [rbp - 336], r12
+    MOV [rbp - 328], r14
+    MOV rax, 5
+    MOV [r10], rax
+    MOV rax, 10
+    MOV [r8], rax
+    MOV rax, 15
+    MOV [r8], rax
+    MOV rax, 20
+    MOV [r8], rax
+    MOV rax, 25
+    MOV [r8], rax
+    MOV rax, 30
+    MOV [r13], rax
+    MOV rax, 35
+    MOV [r10], rax
+    MOV rax, 40
+    MOV [r10], rax
+    MOV rax, [r10]
+    MOV rcx, rax
+    MOV rax, [r8]
+    ADD rcx, rax
+    MOV rax, rcx
+    MOV rcx, [r8]
+    IMUL rax, rcx
+    MOV rax, rax
+    CQO
+    MOV rcx, [r8]
+    IDIV rcx
+    MOV rdx, rax
+    MOV rax, rdx
+    CQO
+    MOV rcx, [r8]
+    IDIV rcx
+    MOV rax, rdx
+    MOV [r13], rax
+    MOV rax, [r13]
+    MOV rcx, rax
+    MOV rax, [r10]
+    AND rcx, rax
+    MOV rcx, rcx
+    MOV rax, [r8]
+    OR rcx, rax
+    MOV rcx, rcx
+    MOV rax, [r8]
+    XOR rcx, rax
+    MOV rax, rcx
+    MOV rcx, 3
+    SHL rax, cl
+    MOV rax, rax
+    MOV rcx, 1
+    SAR rax, cl
+    MOV rax, rax
+    NEG rax
+    MOV rax, rax
+    NOT rax
+    CMP rax, 0
+    SETE al
+    MOVZX rdi, al
+    MOV rax, [r10]
+    CMP rdi, rax
+    SETE al
+    MOVZX r9, al
+    MOV rax, [r8]
+    CMP rdi, rax
+    SETNE al
+    MOVZX rsi, al
+    MOV [r13], rsi
+    MOV rax, [r8]
+    CMP rdi, rax
+    SETL al
+    MOVZX r14, al
+    MOV rax, [r8]
+    CMP rdi, rax
+    SETLE al
+    MOVZX r11, al
+    MOV rax, [r10]
+    CMP rdi, rax
+    SETG al
+    MOVZX r12, al
+    MOV rax, [r8]
+    CMP rdi, rax
+    SETGE al
+    MOVZX rbx, al
+    LEA rax, [rdi]
+    MOV [r8], rax
+    MOV [r13], r9
+    MOV rax, [r13]
+    MOV [r13 + 0*8], rax
+    MOV rax, [r13]
+    MOV [r13 + 1*8], rax
+    MOV [r13 + 2*8], r14
+    MOV [r13 + 3*8], r11
+    MOV [r13 + 4*8], r12
+    MOV [r13 + 5*8], rbx
+    MOV rbx, [r13 + 5*8]
+    MOV r12, [r13 + 0*8]
+    MOV rax, [r10]
+    MOV rdi, rax
+    MOV rax, [r8]
+    MOV rsi, rax
+    MOV rax, [r8]
+    MOV rdx, rax
+    MOV rax, [r8]
+    MOV rcx, rax
+    MOV rax, [r8]
+    MOV r8, rax
+    MOV rax, [r13]
+    MOV r9, rax
+    MOV rax, [r10]
+    PUSH rax
+    MOV rax, [r10]
+    PUSH rax
+    CALL foo
+    MOV rcx, rax
+    ADD rsp, 16
+    MOV rax, rcx
+    ADD rax, rbx
+    MOV rdx, rax
+    IMUL rdx, r12
+    MOV rax, [r13]
+    CMP rdx, rax
+    SETG al
+    MOVZX r15, al
+    MOV [r13], r15
+    MOV rax, [r13]
+    MOV [r13], rax
+    MOV rax, [r13]
+    MOV [r13], rax
+    MOV rax, [r13]
+    MOV [r13], rax
+    MOV rax, [r13]
+    MOV [r13], rax
+    MOV rax, [r13]
+    MOV [r13], rax
+    MOV rax, [r13]
+    MOV [r13], rax
+    MOV rax, [r13]
+    MOV [r13], rax
+    MOV rax, [r13]
+    MOV [r13], rax
+    MOV rax, [r13]
+    MOV [r13], rax
+    MOV rax, [r13]
+    MOV [r13], rax
+    MOV rax, [r13]
+    MOV [r13], rax
+    MOV rax, [r13]
+    MOV [r13], rax
+    MOV rax, [r13]
+    MOV [r13], rax
+    MOV rax, [r13]
+    MOV [r13], rax
+    MOV rax, [r13]
+    MOV [r13], rax
+    MOV rax, [r13]
+    MOV [r13], rax
+    MOV rax, [r13]
+    MOV [r13], rax
+    MOV rax, [r13]
+    MOV [r13], rax
+    MOV rax, [r13]
+    MOV [r13], rax
+    MOV rax, [r13]
+    MOV [r13], rax
+    MOV rax, [r13]
+    MOV [r13], rax
+    MOV rax, [r13]
+    MOV [r13], rax
+    MOV rax, [r13]
+    MOV [r13], rax
+    MOV rax, [r13]
+    MOV [r13], rax
+    MOV rax, [r13]
+    MOV [r13], rax
+    MOV rax, [r13]
+    MOV [r13], rax
+    MOV rax, [r13]
+    MOV [r13], rax
+    MOV rax, [r13]
+    MOV [r13], rax
+    MOV rax, [r13]
+    MOV [r13], rax
+    MOV rax, [r13]
+    MOV [r13], rax
+    MOV rax, [r13]
+    CMP rax, 0
+    JNE L3
+    MOV rax, [r13]
+    CMP rax, 0
+    JE L4
+    JMP L5
+L3:
+    MOV rax, rdx
+    ADD rax, rcx
+    MOV rax, rax
+    MOV rbx, [rbp - 344]
+    MOV r15, [rbp - 352]
+    MOV r12, [rbp - 336]
+    MOV r14, [rbp - 328]
+    MOV rsp, rbp
+    POP rbp
+    ret
+L4:
+    MOV rax, [r13 + 3*8]
+    MOV rcx, [r13]
+    MOV rax, rax
+    ADD rax, rcx
+    MOV rax, rax
+    MOV rbx, [rbp - 344]
+    MOV r15, [rbp - 352]
+    MOV r12, [rbp - 336]
+    MOV r14, [rbp - 328]
+    MOV rsp, rbp
+    POP rbp
+    ret
+L5:
+    MOV rax, rbx
+    MOV rbx, [rbp - 344]
+    MOV r15, [rbp - 352]
+    MOV r12, [rbp - 336]
+    MOV r14, [rbp - 328]
+    MOV rsp, rbp
+    POP rbp
+    ret
