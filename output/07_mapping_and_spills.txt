@@ -1,282 +1,337 @@
 
 --- Phase 4: Register Mapping and Spills ---
 Mapping (Var -> Physical Color ID):
-  [001] a_helper_1 -> 0 (rax)
-  [002] b_helper_3 -> 0 (rax)
-  [003] a_helper_4 -> 0 (rax)
-  [004] t9_helper_3 -> 0 (rax)
-  [005] u5_helper_2 -> 7 (r9)
-  [006] u5_helper_1 -> 0 (rax)
-  [007] h_helper_3 -> 0 (rax)
-  [008] e_helper_4 -> 0 (rax)
-  [009] c_helper_5 -> 0 (rax)
-  [010] a_helper_9 -> 0 (rax)
-  [011] x -> 0 (rax)
-  [012] k_helper_5 -> 2 (rcx)
-  [013] arr_helper_10 -> 0 (rax)
-  [014] arr_helper_9 -> 0 (rax)
-  [015] k_helper_4 -> 2 (rcx)
-  [016] arr_helper_8 -> 0 (rax)
-  [017] u5_helper_4 -> 7 (r9)
-  [018] arr_helper_4 -> 0 (rax)
-  [019] cmp2_helper_2 -> 0 (rax)
-  [020] x1 -> 0 (rax)
-  [021] f_helper_3 -> 2 (rcx)
-  [022] t17_helper_7 -> 0 (rax)
-  [023] t17_helper_6 -> 0 (rax)
-  [024] t17_helper_5 -> 0 (rax)
-  [025] c_helper_4 -> 2 (rcx)
-  [026] b_helper_7 -> 2 (rcx)
-  [027] t17_helper_2 -> 0 (rax)
-  [028] t15 -> 0 (rax)
-  [029] d_helper_6 -> 0 (rax)
-  [030] arr_helper_1 -> 2 (rcx)
-  [031] t14 -> 0 (rax)
-  [032] t12 -> 2 (rcx)
-  [033] t10 -> 2 (rcx)
-  [034] a_helper_7 -> 0 (rax)
-  [035] b_helper_1 -> 0 (rax)
-  [036] arr_helper_7 -> 0 (rax)
-  [037] t9_helper_2 -> 0 (rax)
-  [038] t9_helper_1 -> 0 (rax)
-  [039] b_helper_6 -> 2 (rcx)
-  [040] arr_helper_16 -> 0 (rax)
-  [041] y4_helper_1 -> 0 (rax)
-  [042] y2 -> 12 (r14)
-  [043] v5 -> 0 (rax)
-  [044] arr_helper_5 -> 0 (rax)
-  [045] ptr1 -> 0 (rax)
-  [046] u3 -> 6 (r8)
-  [047] cmp3 -> 6 (r8)
-  [048] d_helper_3 -> 2 (rcx)
-  [049] t8 -> 12 (r14)
-  [050] a_helper_2 -> 3 (rdx)
-  [051] arr_helper_11 -> 0 (rax)
-  [052] k_helper_2 -> 0 (rax)
-  [053] a_helper_3 -> 4 (rsi)
-  [054] g_helper_3 -> 0 (rax)
-  [055] t13 -> 0 (rax)
-  [056] u5_helper_6 -> 0 (rax)
-  [057] t17_helper_3 -> 0 (rax)
-  [058] t11 -> 2 (rcx)
-  [059] t7 -> 11 (r13)
-  [060] y1 -> 11 (r13)
-  [061] ret1 -> 10 (r12)
-  [062] cmp1 -> 13 (r15)
-  [063] t16 -> 0 (rax)
-  [064] b_helper_4 -> 0 (rax)
-  [065] i -> 10 (r12)
-  [066] cmp7_helper_2 -> 0 (rax)
-  [067] arr_helper_6 -> 0 (rax)
-  [068] t3 -> 11 (r13)
-  [069] h_helper_1 -> 0 (rax)
-  [070] cmp2_helper_1 -> 5 (rdi)
-  [071] y3 -> 13 (r15)
-  [072] t17_helper_4 -> 0 (rax)
-  [073] t17_helper_1 -> 4 (rsi)
-  [074] cmp5 -> 8 (r10)
-  [075] cmp4 -> 7 (r9)
-  [076] b_helper_2 -> 4 (rsi)
-  [077] u2 -> 3 (rdx)
-  [078] ret2 -> 2 (rcx)
-  [079] arr_helper_15 -> 0 (rax)
-  [080] cmp6 -> 9 (r11)
-  [081] d_helper_4 -> 0 (rax)
-  [082] t4 -> 12 (r14)
-  [083] t5 -> 2 (rcx)
-  [084] u5_helper_5 -> 0 (rax)
-  [085] h_helper_2 -> 3 (rdx)
-  [086] b_helper_8 -> 0 (rax)
-  [087] arr_helper_14 -> 0 (rax)
-  [088] arr_helper_3 -> 0 (rax)
-  [089] v2 -> 2 (rcx)
-  [090] c_helper_2 -> 0 (rax)
-  [091] d_helper_5 -> 2 (rcx)
-  [092] v3 -> 0 (rax)
-  [093] c_helper_3 -> 0 (rax)
-  [094] v4 -> 2 (rcx)
-  [095] arr_helper_13 -> 0 (rax)
-  [096] g_helper_2 -> 3 (rdx)
-  [097] arr_helper_2 -> 2 (rcx)
-  [098] ptr2 -> 0 (rax)
-  [099] t6 -> 3 (rdx)
-  [100] v1 -> 0 (rax)
-  [101] a_helper_8 -> 2 (rcx)
-  [102] b_helper_5 -> 0 (rax)
-  [103] cmp2_helper_3 -> 0 (rax)
-  [104] k_helper_1 -> 0 (rax)
-  [105] a_helper_5 -> 0 (rax)
-  [106] t2 -> 0 (rax)
-  [107] c_helper_1 -> 0 (rax)
-  [108] y4_helper_2 -> 0 (rax)
-  [109] e_helper_1 -> 0 (rax)
-  [110] f_helper_1 -> 0 (rax)
-  [111] arr_helper_12 -> 0 (rax)
-  [112] g_helper_1 -> 0 (rax)
-  [113] j -> 2 (rcx)
-  [114] e_helper_3 -> 2 (rcx)
-  [115] cmp7_helper_1 -> 1 (rbx)
-  [116] d_helper_1 -> 0 (rax)
-  [117] a_helper_6 -> 0 (rax)
-  [118] f_helper_4 -> 0 (rax)
-  [119] u4 -> 4 (rsi)
-  [120] d_helper_2 -> 3 (rdx)
-  [121] t1 -> 2 (rcx)
-  [122] e_helper_2 -> 3 (rdx)
-  [123] u1 -> 5 (rdi)
-  [124] f_helper_2 -> 3 (rdx)
+  [001] kernel_res -> 2 (rcx)
+  [002] tmp5 -> 4 (rsi)
+  [003] tmp4 -> 3 (rdx)
+  [004] tmp2 -> 2 (rcx)
+  [005] tmp1 -> 4 (rsi)
+  [006] cmp1_helper_2 -> 0 (rax)
+  [007] v19 -> 3 (rdx)
+  [008] v17 -> 0 (rax)
+  [009] p2_helper_2 -> 5 (rdi)
+  [010] p6_helper_1 -> 2 (rcx)
+  [011] p2_helper_1 -> 0 (rax)
+  [012] v30_helper_2 -> 2 (rcx)
+  [013] v30_helper_1 -> 2 (rcx)
+  [014] v29_helper_2 -> 2 (rcx)
+  [015] v29_helper_1 -> 2 (rcx)
+  [016] v24_helper_4 -> 2 (rcx)
+  [017] v28_helper_2 -> 3 (rdx)
+  [018] v4_helper_5 -> 4 (rsi)
+  [019] v3_helper_7 -> 3 (rdx)
+  [020] v2_helper_7 -> 2 (rcx)
+  [021] v3_helper_5 -> 0 (rax)
+  [022] d3 -> 13 (r15)
+  [023] v1_helper_6 -> 0 (rax)
+  [024] ptr -> 2 (rcx)
+  [025] v3_helper_2 -> 0 (rax)
+  [026] v5_helper_1 -> 0 (rax)
+  [027] v10_helper_1 -> 0 (rax)
+  [028] res_deref -> 0 (rax)
+  [029] v8_helper_7 -> 4 (rsi)
+  [030] v22_helper_4 -> 2 (rcx)
+  [031] m4 -> 6 (r8)
+  [032] m2 -> 2 (rcx)
+  [033] m7 -> 8 (r10)
+  [034] g -> 9 (r11)
+  [035] v7_helper_1 -> 0 (rax)
+  [036] f -> 7 (r9)
+  [037] b -> 11 (r13)
+  [038] v27 -> 0 (rax)
+  [039] c -> 3 (rdx)
+  [040] v12 -> 4 (rsi)
+  [041] d5 -> 3 (rdx)
+  [042] v23_helper_1 -> 0 (rax)
+  [043] v25 -> 11 (r13)
+  [044] v26 -> 10 (r12)
+  [045] final -> 0 (rax)
+  [046] v6_helper_7 -> 4 (rsi)
+  [047] p4 -> 3 (rdx)
+  [048] d6 -> 1 (rbx)
+  [049] v10_helper_2 -> 0 (rax)
+  [050] a_val -> 2 (rcx)
+  [051] v13 -> 5 (rdi)
+  [052] p1 -> 8 (r10)
+  [053] p6_helper_2 -> 1 (rbx)
+  [054] d4 -> 0 (rax)
+  [055] m5 -> 10 (r12)
+  [056] d2 -> 5 (rdi)
+  [057] p5 -> 7 (r9)
+  [058] d -> 0 (rax)
+  [059] v16 -> 13 (r15)
+  [060] v11 -> 2 (rcx)
+  [061] res_helper_1 -> 0 (rax)
+  [062] v7_helper_8 -> 4 (rsi)
+  [063] ptr2 -> 0 (rax)
+  [064] v29_helper_4 -> 0 (rax)
+  [065] v14 -> 4 (rsi)
+  [066] v9 -> 3 (rdx)
+  [067] d8 -> 2 (rcx)
+  [068] arr2 -> 9 (r11)
+  [069] v8_helper_2 -> 2 (rcx)
+  [070] m6 -> 7 (r9)
+  [071] p3 -> 0 (rax)
+  [072] v20 -> 1 (rbx)
+  [073] v15 -> 5 (rdi)
+  [074] v7_helper_2 -> 2 (rcx)
+  [075] v21_helper_2 -> 7 (r9)
+  [076] v22_helper_1 -> 0 (rax)
+  [077] cmp1_helper_1 -> 6 (r8)
+  [078] d7 -> 12 (r14)
+  [079] d1 -> 4 (rsi)
+  [080] h -> 8 (r10)
+  [081] p7 -> 12 (r14)
+  [082] e -> 6 (r8)
+  [083] a -> 1 (rbx)
+  [084] b_val -> 0 (rax)
+  [085] v1_helper_1 -> 2 (rcx)
+  [086] arr1 -> 9 (r11)
+  [087] v7_helper_5 -> 0 (rax)
+  [088] m8 -> 9 (r11)
+  [089] v18 -> 2 (rcx)
+  [090] v5_helper_5 -> 4 (rsi)
+  [091] v10_helper_5 -> 0 (rax)
+  [092] m1 -> 0 (rax)
+  [093] v4_helper_2 -> 0 (rax)
+  [094] cmp -> 10 (r12)
+  [095] ret_val -> 0 (rax)
+  [096] v30_helper_4 -> 0 (rax)
+  [097] v23_helper_4 -> 2 (rcx)
+  [098] final_val -> 2 (rcx)
+  [099] v28_helper_4 -> 0 (rax)
+  [100] p2_helper_3 -> 0 (rax)
+  [101] v6_helper_6 -> 2 (rcx)
+  [102] v7_helper_6 -> 0 (rax)
+  [103] v6_helper_4 -> 0 (rax)
+  [104] v24_helper_1 -> 0 (rax)
+  [105] p6_helper_3 -> 2 (rcx)
+  [106] v7_helper_7 -> 0 (rax)
+  [107] v5_helper_4 -> 0 (rax)
+  [108] v6_helper_1 -> 0 (rax)
+  [109] tmp_val -> 0 (rax)
+  [110] v10_helper_4 -> 0 (rax)
+  [111] p8 -> 2 (rcx)
+  [112] v1_helper_4 -> 0 (rax)
+  [113] v10_helper_6 -> 0 (rax)
+  [114] v2_helper_6 -> 0 (rax)
+  [115] v3_helper_6 -> 0 (rax)
+  [116] v8_helper_6 -> 0 (rax)
+  [117] v4_helper_4 -> 0 (rax)
+  [118] v8_helper_4 -> 0 (rax)
+  [119] v21_helper_5 -> 0 (rax)
+  [120] v8_helper_5 -> 0 (rax)
+  [121] v22_helper_5 -> 0 (rax)
+  [122] v23_helper_5 -> 0 (rax)
+  [123] tmp3 -> 0 (rax)
+  [124] v1_helper_2 -> 2 (rcx)
+  [125] v24_helper_5 -> 0 (rax)
+  [126] c_val -> 3 (rdx)
+  [127] v2_helper_1 -> 2 (rcx)
+  [128] v2_helper_5 -> 0 (rax)
+  [129] v2_helper_2 -> 2 (rcx)
+  [130] v3_helper_1 -> 0 (rax)
+  [131] v4_helper_1 -> 0 (rax)
+  [132] v2_helper_4 -> 0 (rax)
+  [133] m3 -> 3 (rdx)
+  [134] v24_helper_2 -> 7 (r9)
+  [135] v6_helper_2 -> 2 (rcx)
+  [136] v3_helper_4 -> 0 (rax)
+  [137] v5_helper_2 -> 0 (rax)
+  [138] v8_helper_1 -> 0 (rax)
+  [139] v7_helper_4 -> 0 (rax)
+  [140] v1_helper_5 -> 0 (rax)
+  [141] tmp6 -> 0 (rax)
+  [142] v1_helper_7 -> 0 (rax)
+  [143] v6_helper_5 -> 0 (rax)
+  [144] v4_helper_3 -> 0 (rax)
+  [145] v28_helper_1 -> 2 (rcx)
+  [146] v22_helper_2 -> 7 (r9)
+  [147] v5_helper_3 -> 0 (rax)
+  [148] v23_helper_2 -> 7 (r9)
+  [149] v21_helper_1 -> 0 (rax)
+  [150] v21_helper_4 -> 2 (rcx)
 
 Spill Needed Stack (Node IDs):
   None
 
 Variable to Function Context Map:
-  [001] a_helper_8 -> main
-  [002] a_helper_6 -> main
-  [003] k_helper_2 -> main
-  [004] k_helper_1 -> main
-  [005] a_helper_5 -> main
-  [006] a_helper_4 -> helper1
-  [007] a_helper_3 -> helper1
-  [008] u5_helper_6 -> main
-  [009] arr_helper_16 -> main
-  [010] arr_helper_15 -> main
-  [011] u5_helper_5 -> main
-  [012] arr_helper_14 -> main
-  [013] y4_helper_1 -> main
-  [014] arr_helper_13 -> main
-  [015] cmp2_helper_3 -> main
-  [016] cmp7_helper_2 -> main
-  [017] L4 -> main
-  [018] t17_helper_4 -> main
-  [019] b_helper_4 -> main
-  [020] i -> main
-  [021] cmp6 -> main
-  [022] y4 -> main
-  [023] u5 -> main
-  [024] u2 -> main
-  [025] cmp4 -> main
-  [026] L6 -> main
-  [027] ret1 -> main
-  [028] cmp1 -> helper1
-  [029] cmp3 -> main
-  [030] u3 -> main
-  [031] ptr1 -> main
-  [032] cmp2 -> main
-  [033] arr_helper_9 -> main
-  [034] t15 -> main
-  [035] L5 -> main
-  [036] t13 -> main
-  [037] k_helper_4 -> main
-  [038] d -> main
-  [039] g_helper_3 -> main
-  [040] t12 -> main
-  [041] y1 -> main
-  [042] y3 -> main
-  [043] x -> helper2
-  [044] helper2 -> helper2
-  [045] a_helper_2 -> helper1
-  [046] t17_helper_1 -> main
-  [047] t9 -> main
-  [048] h_helper_2 -> main
-  [049] t4 -> helper1
-  [050] y4_helper_2 -> main
-  [051] h -> main
-  [052] t2 -> helper1
-  [053] c_helper_1 -> main
-  [054] k -> main
-  [055] L2 -> helper1
-  [056] y2 -> main
-  [057] t1 -> helper1
-  [058] e_helper_2 -> main
-  [059] t14 -> main
-  [060] u1 -> main
-  [061] arr_helper_1 -> main
-  [062] a_helper_7 -> main
-  [063] d_helper_6 -> main
-  [064] e -> main
-  [065] cmp2_helper_1 -> main
-  [066] b -> helper1
-  [067] arr_helper_5 -> main
-  [068] u5_helper_2 -> main
-  [069] v1 -> main
-  [070] x1 -> main
-  [071] helper1 -> helper1
-  [072] f_helper_3 -> main
-  [073] t5 -> helper1
-  [074] main -> main
-  [075] t3 -> helper1
-  [076] t6 -> helper2
-  [077] arr_helper_6 -> main
-  [078] c -> main
-  [079] f -> main
-  [080] a -> helper1
-  [081] u4 -> main
-  [082] t17 -> main
-  [083] arr -> main
-  [084] g -> main
-  [085] t7 -> main
-  [086] b_helper_2 -> helper1
-  [087] t11 -> main
-  [088] v4 -> main
-  [089] t17_helper_3 -> main
-  [090] arr_helper_8 -> main
-  [091] L3 -> main
-  [092] a_helper_1 -> helper1
-  [093] cmp5 -> main
-  [094] cmp7 -> main
-  [095] t10 -> main
-  [096] t8 -> main
-  [097] L7 -> main
-  [098] u5_helper_1 -> main
-  [099] j -> main
-  [100] L1 -> helper1
-  [101] ptr2 -> main
-  [102] d_helper_2 -> main
-  [103] arr_helper_2 -> main
-  [104] v2 -> main
-  [105] ret2 -> main
-  [106] arr_helper_3 -> main
-  [107] v3 -> main
-  [108] v5 -> main
-  [109] b_helper_1 -> helper1
-  [110] a_helper_9 -> main
-  [111] t9_helper_2 -> main
-  [112] arr_helper_7 -> main
-  [113] b_helper_3 -> helper1
-  [114] d_helper_1 -> main
-  [115] e_helper_3 -> main
-  [116] e_helper_1 -> main
-  [117] f_helper_1 -> main
-  [118] g_helper_1 -> main
-  [119] arr_helper_12 -> main
-  [120] h_helper_1 -> main
-  [121] b_helper_5 -> main
-  [122] c_helper_2 -> main
-  [123] g_helper_2 -> main
-  [124] d_helper_3 -> main
-  [125] b_helper_6 -> main
-  [126] t9_helper_1 -> main
-  [127] t17_helper_2 -> main
-  [128] b_helper_7 -> main
-  [129] c_helper_4 -> main
-  [130] d_helper_4 -> main
-  [131] f_helper_4 -> main
-  [132] t17_helper_5 -> main
-  [133] t17_helper_6 -> main
-  [134] t17_helper_7 -> main
-  [135] k_helper_5 -> main
-  [136] cmp2_helper_2 -> main
-  [137] arr_helper_4 -> main
-  [138] u5_helper_4 -> main
-  [139] f_helper_2 -> main
-  [140] arr_helper_10 -> main
-  [141] arr_helper_11 -> main
-  [142] cmp7_helper_1 -> main
-  [143] b_helper_8 -> main
-  [144] c_helper_5 -> main
-  [145] c_helper_3 -> main
-  [146] e_helper_4 -> main
-  [147] t16 -> main
-  [148] h_helper_3 -> main
-  [149] d_helper_5 -> main
-  [150] t9_helper_3 -> main
+  [001] p6_helper_3 -> compute_heavy
+  [002] p6_helper_1 -> compute_heavy
+  [003] v29_helper_4 -> compute_heavy
+  [004] v8_helper_7 -> compute_heavy
+  [005] v4_helper_5 -> compute_heavy
+  [006] v3_helper_7 -> compute_heavy
+  [007] v2_helper_7 -> compute_heavy
+  [008] v7_helper_7 -> compute_heavy
+  [009] v7_helper_6 -> compute_heavy
+  [010] v6_helper_6 -> compute_heavy
+  [011] v28_helper_4 -> compute_heavy
+  [012] p2_helper_3 -> compute_heavy
+  [013] v22_helper_5 -> compute_heavy
+  [014] v21_helper_5 -> compute_heavy
+  [015] v8_helper_6 -> compute_heavy
+  [016] v4_helper_4 -> compute_heavy
+  [017] v3_helper_6 -> compute_heavy
+  [018] v2_helper_6 -> compute_heavy
+  [019] cmp1_helper_2 -> compute_heavy
+  [020] p2_helper_2 -> compute_heavy
+  [021] p2_helper_1 -> compute_heavy
+  [022] v30_helper_2 -> compute_heavy
+  [023] v30_helper_1 -> compute_heavy
+  [024] v29_helper_2 -> compute_heavy
+  [025] v29_helper_1 -> compute_heavy
+  [026] v24_helper_4 -> compute_heavy
+  [027] v28_helper_2 -> compute_heavy
+  [028] v8_helper_5 -> compute_heavy
+  [029] v24_helper_1 -> compute_heavy
+  [030] v7_helper_5 -> compute_heavy
+  [031] v23_helper_2 -> compute_heavy
+  [032] v23_helper_1 -> compute_heavy
+  [033] p4 -> compute_heavy
+  [034] v2 -> compute_heavy
+  [035] v25 -> compute_heavy
+  [036] v5 -> compute_heavy
+  [037] v22 -> compute_heavy
+  [038] v10 -> compute_heavy
+  [039] v1_helper_7 -> compute_heavy
+  [040] v6_helper_5 -> compute_heavy
+  [041] tmp6 -> math_kernel
+  [042] v23_helper_5 -> compute_heavy
+  [043] L4 -> compute_heavy
+  [044] v21 -> compute_heavy
+  [045] b -> compute_heavy
+  [046] v27 -> compute_heavy
+  [047] v24 -> compute_heavy
+  [048] c -> compute_heavy
+  [049] v12 -> compute_heavy
+  [050] res_helper_1 -> main
+  [051] v7_helper_8 -> compute_heavy
+  [052] v11 -> compute_heavy
+  [053] v7 -> compute_heavy
+  [054] p1 -> compute_heavy
+  [055] v13 -> compute_heavy
+  [056] v8 -> compute_heavy
+  [057] m8 -> math_kernel
+  [058] v2_helper_4 -> compute_heavy
+  [059] m1 -> math_kernel
+  [060] v5_helper_5 -> compute_heavy
+  [061] v10_helper_5 -> compute_heavy
+  [062] v18 -> compute_heavy
+  [063] d1 -> compute_heavy
+  [064] d -> compute_heavy
+  [065] p5 -> compute_heavy
+  [066] tmp4 -> math_kernel
+  [067] v23 -> compute_heavy
+  [068] f -> compute_heavy
+  [069] v24_helper_5 -> compute_heavy
+  [070] v1_helper_2 -> compute_heavy
+  [071] tmp3 -> math_kernel
+  [072] m7 -> math_kernel
+  [073] v17 -> compute_heavy
+  [074] v22_helper_4 -> compute_heavy
+  [075] m4 -> math_kernel
+  [076] v24_helper_2 -> compute_heavy
+  [077] m3 -> math_kernel
+  [078] v5_helper_2 -> compute_heavy
+  [079] v3 -> compute_heavy
+  [080] L2 -> compute_heavy
+  [081] compute_heavy -> compute_heavy
+  [082] res -> main
+  [083] v3_helper_1 -> compute_heavy
+  [084] h -> compute_heavy
+  [085] m2 -> math_kernel
+  [086] v30 -> compute_heavy
+  [087] tmp1 -> math_kernel
+  [088] v8_helper_1 -> compute_heavy
+  [089] d2 -> compute_heavy
+  [090] m5 -> math_kernel
+  [091] d3 -> compute_heavy
+  [092] v29 -> compute_heavy
+  [093] tmp5 -> math_kernel
+  [094] d5 -> compute_heavy
+  [095] v6 -> compute_heavy
+  [096] v16 -> compute_heavy
+  [097] tmp2 -> math_kernel
+  [098] v10_helper_2 -> compute_heavy
+  [099] a_val -> compute_heavy
+  [100] L5 -> compute_heavy
+  [101] g -> compute_heavy
+  [102] v7_helper_1 -> compute_heavy
+  [103] p7 -> compute_heavy
+  [104] v30_helper_4 -> compute_heavy
+  [105] ret_val -> compute_heavy
+  [106] v1 -> compute_heavy
+  [107] v4 -> compute_heavy
+  [108] v28 -> compute_heavy
+  [109] kernel_res -> math_kernel
+  [110] v21_helper_4 -> compute_heavy
+  [111] v21_helper_1 -> compute_heavy
+  [112] v3_helper_5 -> compute_heavy
+  [113] a -> compute_heavy
+  [114] p2 -> compute_heavy
+  [115] b_val -> compute_heavy
+  [116] v1_helper_1 -> compute_heavy
+  [117] e -> compute_heavy
+  [118] p6_helper_2 -> compute_heavy
+  [119] d4 -> compute_heavy
+  [120] d6 -> compute_heavy
+  [121] cmp1_helper_1 -> compute_heavy
+  [122] d7 -> compute_heavy
+  [123] v14 -> compute_heavy
+  [124] v9 -> compute_heavy
+  [125] d8 -> compute_heavy
+  [126] arr2 -> compute_heavy
+  [127] v15 -> compute_heavy
+  [128] v7_helper_2 -> compute_heavy
+  [129] v21_helper_2 -> compute_heavy
+  [130] v22_helper_1 -> compute_heavy
+  [131] v19 -> compute_heavy
+  [132] p3 -> compute_heavy
+  [133] v20 -> compute_heavy
+  [134] cmp1 -> compute_heavy
+  [135] v7_helper_4 -> compute_heavy
+  [136] v1_helper_5 -> compute_heavy
+  [137] arr1 -> compute_heavy
+  [138] c_val -> compute_heavy
+  [139] L3 -> compute_heavy
+  [140] tmp_val -> compute_heavy
+  [141] v10_helper_6 -> compute_heavy
+  [142] p8 -> compute_heavy
+  [143] v1_helper_4 -> compute_heavy
+  [144] v10_helper_4 -> compute_heavy
+  [145] v23_helper_4 -> compute_heavy
+  [146] final_val -> compute_heavy
+  [147] v6_helper_7 -> compute_heavy
+  [148] main -> main
+  [149] v6_helper_4 -> compute_heavy
+  [150] v1_helper_6 -> compute_heavy
+  [151] ptr -> main
+  [152] v3_helper_2 -> compute_heavy
+  [153] v5_helper_1 -> compute_heavy
+  [154] math_kernel -> math_kernel
+  [155] m6 -> math_kernel
+  [156] v8_helper_2 -> compute_heavy
+  [157] v10_helper_1 -> compute_heavy
+  [158] res_deref -> main
+  [159] v4_helper_2 -> compute_heavy
+  [160] cmp -> main
+  [161] END -> main
+  [162] L1 -> compute_heavy
+  [163] ptr2 -> main
+  [164] v26 -> compute_heavy
+  [165] final -> main
+  [166] v2_helper_1 -> compute_heavy
+  [167] v2_helper_5 -> compute_heavy
+  [168] v2_helper_2 -> compute_heavy
+  [169] v4_helper_1 -> compute_heavy
+  [170] v5_helper_4 -> compute_heavy
+  [171] v6_helper_1 -> compute_heavy
+  [172] v6_helper_2 -> compute_heavy
+  [173] v3_helper_4 -> compute_heavy
+  [174] v8_helper_4 -> compute_heavy
+  [175] v28_helper_1 -> compute_heavy
+  [176] v22_helper_2 -> compute_heavy
+  [177] v4_helper_3 -> compute_heavy
+  [178] p6 -> compute_heavy
+  [179] v5_helper_3 -> compute_heavy

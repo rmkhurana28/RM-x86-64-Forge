@@ -1,101 +1,140 @@
-func helper1:
-param a
-param b
+func math_kernel:
+tmp1 = m1 * m2
+tmp2 = m3 / m4
+tmp3 = m5 % m6
+tmp4 = m7 + m8
+tmp5 = tmp1 - tmp2
+tmp6 = tmp3 & tmp4
+kernel_res = tmp5 | tmp6
+return kernel_res
 
-t1 = a + b
-t2 = t1 * a
-t3 = t2 / b
-t4 = t3 % a
+func compute_heavy:
+v1 = a + b
+v2 = c - d
+v3 = e * f
+v4 = g / h
+v5 = a % h
+v6 = v1 & v2
+v7 = v3 | v4
+v8 = v5 ^ v6
+v9 = v7 << 1
+v10 = v8 >> 2
+v11 = -v9
+v12 = ~v10
+v13 = !v11
 
-cmp1 = t4 > t1
+v21 = v1 + v2
+v22 = v3 + v4
+v23 = v5 + v6
+v24 = v7 + v8
+v25 = v9 + v10
+v26 = v11 + v12
+v27 = v13 + v21
+v28 = v22 + v23
+v29 = v24 + v25
+v30 = v26 + v27
 
+p1 = &v1
+p2 = &v2
+p3 = &v3
+p4 = &v4
+p5 = &v21
+p6 = &v22
+p7 = &v23
+p8 = &v24
+
+d1 = *p1
+d2 = *p2
+d3 = *p3
+d4 = *p4
+d5 = *p5
+d6 = *p6
+d7 = *p7
+d8 = *p8
+
+v14 = d1 + d2
+v15 = d3 * d4
+v16 = d5 - d6
+v17 = d7 / d8
+v18 = v14 + v15
+v19 = v16 + v17
+v20 = v18 & v19
+
+cmp1 = v20 > v1
 if cmp1 goto L1
-
-t5 = t4 + b
 goto L2
 
 L1:
-t5 = t4 - a
+arr1[0] = v2
+arr1[1] = v3
+arr1[2] = v4
+arr1[3] = v5
+arr1[4] = v21
+arr1[5] = v22
+arr1[6] = v23
+arr1[7] = v24
+
+a_val = arr1[2]
+b_val = arr1[6]
+c_val = a_val + b_val
+*p1 = c_val
+*p5 = a_val
+goto L3
 
 L2:
-return t5
+*p2 = v6
+*p6 = v7
+arr2[0] = v7
+arr2[1] = v8
+arr2[2] = v25
+arr2[3] = v26
+tmp_val = arr2[3]
+v20 = tmp_val - v10
+goto L3
 
-func helper2:
-param x
+L3:
+m1 = v1
+m2 = v2
+m3 = v3
+m4 = v4
+m5 = v5
+m6 = v6
+m7 = v7
+m8 = v8
+param m1
+param m2
+param m3
+param m4
+param m5
+param m6
+param m7
+param m8
+ret_val = call math_kernel, 8
 
-t1 = x + x
-t2 = t1 << 2
-t3 = t2 >> 1
-t4 = -t3
-t5 = ~t4
-t6 = !t5
+final_val = ret_val + v20
+final_val = final_val + v28
+final_val = final_val + v29
+final_val = final_val + v30
 
-return t6
+if final_val goto L4
+goto L5
+
+L4:
+final_val = final_val + 1
+goto L5
+
+L5:
+return final_val
 
 func main:
-
-a = 5
-b = 10
-c = 15
-d = 20
-e = 25
-f = 30
-g = 35
-h = 40
-
-i = 2
-j = 3
-k = i + j
-
-t1 = a + b
-t2 = c + d
-t3 = e + f
-t4 = g + h
-
-t5 = t1 * t2
-t6 = t3 * t4
-t7 = t5 + t6
-t8 = t7 / d
-t9 = t8 % b
-
-t10 = t9 & a
-t11 = t10 | c
-t12 = t11 ^ d
-
-t13 = t12 << 3
-t14 = t13 >> 2
-
-t15 = -t14
-t16 = ~t15
-t17 = !t16
-
-cmp1 = t17 == a
-cmp2 = t17 != b
-cmp3 = t17 < c
-cmp4 = t17 <= d
-cmp5 = t17 > e
-cmp6 = t17 >= f
-
-ptr1 = &t17
-
-*ptr1 = cmp1
-
-x1 = *ptr1
-
-arr[0] = x1
-arr[1] = cmp2
-arr[2] = cmp3
-arr[3] = cmp4
-arr[4] = cmp5
-arr[5] = cmp6
-
-arr[i] = t7
-arr[k] = t8
-
-y1 = arr[0]
-y2 = arr[1]
-y3 = arr[i]
-y4 = arr[k]
+a = 10
+b = 20
+c = 30
+d = 40
+e = 50
+f = 60
+g = 70
+h = 80
 
 param a
 param b
@@ -105,65 +144,18 @@ param e
 param f
 param g
 param h
+res = call compute_heavy, 8
 
-ret1 = call helper1, 8
+ptr = &res
+*ptr = a
+res_deref = *ptr
 
-param ret1
+cmp = res_deref == 10
+ifFalse cmp goto END
 
-ret2 = call helper2, 1
+ptr2 = ptr
+*ptr2 = b
 
-u1 = ret1 + ret2
-u2 = u1 + y1
-u3 = u2 + y2
-u4 = u3 + y3
-u5 = u4 + y4
-
-cmp7 = u5 > t9
-
-if cmp7 goto L3
-
-ifFalse cmp2 goto L4
-
-if u1 < u2 goto L5
-
-ifFalse u3 >= u4 goto L6
-
-goto L7
-
-L3:
-
-ptr2 = &u5
-
-*ptr2 = ret2
-
-v1 = *ptr2
-
-return v1
-
-L4:
-
-v2 = arr[3]
-v3 = arr[4]
-v4 = v2 + v3
-
-return v4
-
-L5:
-
-param u5
-
-call helper2, 1
-
-goto L7
-
-L6:
-
-arr[6] = ret2
-
-v5 = arr[6]
-
-return v5
-
-L7:
-
-return u5
+END:
+final = *ptr2
+return final
