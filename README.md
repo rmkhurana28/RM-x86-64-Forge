@@ -12,24 +12,24 @@ A from-scratch x86-64 compiler backend that takes Three-Address Code as input an
 
 ```
 ┌──────────────┐     ┌─────────────────────┐     ┌───────────────┐
-│  TAC Parser  │ ──▶ │ Instruction Select.  │ ──▶ │ CFG Builder   │
-│  (3-Address)  │     │  (TAC → 2AC)        │     │ (Basic Blocks) │
+│  TAC Parser  │ ──▶│ Instruction Select. │ ──▶│ CFG Builder   │
+│  (3-Address) │     │  (TAC → 2AC)        │     │ (Basic Blocks)│
 └──────────────┘     └─────────────────────┘     └──────┬────────┘
                                                         │
                      ┌─────────────────────┐            ▼
-                     │  Dead Code Elim.     │ ◀── Liveness Analysis
-                     │  (Iterative DCE)     │     (USE/DEF/IN/OUT)
+                     │  Dead Code Elim.    │ ◀── Liveness Analysis
+                     │  (Iterative DCE)    │     (USE/DEF/IN/OUT)
                      └──────────┬──────────┘
                                 │
                                 ▼
                      ┌─────────────────────┐     ┌───────────────────┐
-                     │ Interference Graph   │ ──▶ │ Graph Coloring    │
-                     │ (Adjacency Lists)    │     │ (Chaitin + Spill) │
+                     │ Interference Graph  │ ──▶│ Graph Coloring    │
+                     │ (Adjacency Lists)   │     │ (Chaitin + Spill) │
                      └─────────────────────┘     └──────┬────────────┘
                                                         │
                      ┌─────────────────────┐            ▼
-                     │  x86-64 Assembly     │ ◀── Register Mapping
-                     │  (.intel_syntax)     │     & Stack Layout
+                     │  x86-64 Assembly    │ ◀── Register Mapping
+                     │  (.intel_syntax)    │     & Stack Layout
                      └─────────────────────┘
 ```
 
