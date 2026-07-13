@@ -5,7 +5,6 @@ A from-scratch x86-64 compiler backend that takes Three-Address Code as input an
 **Developer:** Ridham Khurana  
 **Language:** C++17  
 **Target ISA:** x86-64 (Intel syntax)  
-**Dependencies:** None (standard library only)
 
 ---
 
@@ -38,17 +37,15 @@ Each stage writes its output to a numbered file under `output/`, so you can trac
 
 ---
 
-## ⚙️ What It Does
+## ⚙️ Pipeline Stages
 
-- **Parses** a custom Three-Address Code IR (supports 17 instruction types)
-- **Lowers** 3-address instructions into 2-address form suitable for x86
-- **Builds** a Control Flow Graph with basic blocks and edge connectivity
-- **Computes** liveness via iterative dataflow (USE/DEF/IN/OUT fixed-point)
-- **Eliminates** dead code through cascading iterative deletion
-- **Constructs** an interference graph from liveness sets
-- **Colors** the graph using Chaitin's algorithm with Kempe's simplification theorem
-- **Spills** variables that exceed register pressure, rewriting the IR and re-running allocation until convergence
-- **Emits** `.intel_syntax noprefix` x86-64 assembly with proper stack frames, callee-saved preservation, and SysV calling convention
+1. TAC Parsing → Instruction Selection (3AC → 2AC)
+2. CFG Construction → Iterative Liveness Analysis (fixed-point)
+3. Dead Code Elimination (cascading)
+4. Interference Graph Construction
+5. Chaitin's Graph Coloring (Kempe simplification, k=14)
+6. Spill Rewrite → Re-run from Stage 2 until convergence
+7. x86-64 Assembly Emission (`.intel_syntax noprefix`, SysV AMD64 ABI)
 
 ---
 
@@ -72,7 +69,7 @@ Each stage writes its output to a numbered file under `output/`, so you can trac
 - Handles edge cases where both operands of an instruction reference the same spilled variable
 
 ### Calling Convention (System V AMD64 ABI)
-- First 6 integer arguments passed in `rdi, rsi, rdx, rcx, r8, r9`
+- First 6 arguments passed in `rdi, rsi, rdx, rcx, r8, r9`
 - Overflow arguments pushed to the stack (right-to-left)
 - Caller cleans up stack after call returns
 - Callee-saved registers (`rbx, r12-r15`) are preserved across function boundaries
